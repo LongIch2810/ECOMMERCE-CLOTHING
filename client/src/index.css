@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+}
+
+.product-list .swiper-slide {
+  width: 300px;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+  right: 10px;
+  padding: 30px;
+  color: #fff !important;
+}
