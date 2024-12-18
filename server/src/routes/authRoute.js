@@ -5,10 +5,12 @@ const {
   forgotPassword,
   logout,
 } = require("../controllers/authController");
+const validateLogin = require("../middlewares/validateLogin");
+const validateRegister = require("../middlewares/validateRegister");
 const authRouter = express.Router();
 
-authRouter.post("/login", login);
-authRouter.post("/register", register);
+authRouter.post("/login", validateLogin, login);
+authRouter.post("/register", validateRegister, register);
 authRouter.post("/forgot-password", forgotPassword);
 authRouter.post("/logout", logout);
 

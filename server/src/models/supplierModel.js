@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const supplierSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     description: { type: String, required: true },
   },
@@ -17,6 +17,6 @@ supplierSchema.plugin(mongooseDelete, {
   overrideMethods: "all",
 });
 
-const Supplier = mongoose.model("Category", supplierSchema);
+const Supplier = mongoose.model("Supplier", supplierSchema);
 
 module.exports = Supplier;

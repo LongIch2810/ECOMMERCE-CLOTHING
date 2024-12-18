@@ -22,6 +22,6 @@ typeProductSchema.plugin(mongooseDelete, {
   overrideMethods: "all",
 });
 
-const TypeProduct = mongoose.model("Category", typeProductSchema);
+const TypeProduct = mongoose.model("TypeProduct", typeProductSchema);
 
 module.exports = TypeProduct;
