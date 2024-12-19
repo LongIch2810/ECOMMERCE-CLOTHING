@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+  body {
+    font-family: Roboto, sans-serif;
+  }
 }
 
 .product-list .swiper-slide {

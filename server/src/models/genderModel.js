@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const mongooseDelete = require("mongoose-delete");
 const { Schema } = mongoose;
 
-const categorySchema = new Schema(
+const genderSchema = new Schema(
   {
     name: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
@@ -11,11 +11,11 @@ const categorySchema = new Schema(
 );
 
 // Kích hoạt xóa mềm với mongoose-delete
-categorySchema.plugin(mongooseDelete, {
+genderSchema.plugin(mongooseDelete, {
   deletedAt: true,
   overrideMethods: "all",
 });
 
-const Category = mongoose.model("Category", categorySchema);
+const Gender = mongoose.model("Gender", genderSchema);
 
-module.exports = Category;
+module.exports = Gender;

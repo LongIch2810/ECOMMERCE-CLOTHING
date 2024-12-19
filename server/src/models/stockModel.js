@@ -5,12 +5,23 @@ const { Schema } = mongoose;
 const stockSchema = new Schema(
   {
     product: { type: mongoose.Types.ObjectId, ref: "Product", required: true },
-    size: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    status: {
-      type: String,
-      enum: ["Available", "Unavailable", "Limited Stock", "Coming soon"],
-      default: "Coming soon",
+    sizes: {
+      type: [
+        {
+          size: {
+            type: String,
+            enum: ["XS", "S", "M", "L", "XL", "XXL"],
+            required: true,
+          },
+          quantity: { type: Number, required: true },
+          status: {
+            type: String,
+            enum: ["Available", "Unavailable", "Limited Stock", "Coming soon"],
+            default: "Coming soon",
+            required: true,
+          },
+        },
+      ],
       required: true,
     },
   },

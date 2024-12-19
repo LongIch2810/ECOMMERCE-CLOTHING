@@ -5,11 +5,10 @@ const { Schema } = mongoose;
 const typeProductSchema = new Schema(
   {
     name: { type: String, required: true },
-    description: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
-    subcategory: {
+    category: {
       type: mongoose.Types.ObjectId,
-      ref: "Subcategory",
+      ref: "Category",
       required: true,
     },
   },

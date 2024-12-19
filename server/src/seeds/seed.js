@@ -1,11 +1,14 @@
 const Category = require("../models/categoryModel");
-const Subcategory = require("../models/subcategoryModel");
+const Gender = require("../models/genderModel");
+const Product = require("../models/productModel");
+const Stock = require("../models/stockModel");
 const Supplier = require("../models/supplierModel");
 const TypeProduct = require("../models/typeProductModel");
 const User = require("../models/userModel");
 const countDocuments = require("../utils/countDocuments");
 const seedCategory = require("./categorySeed");
-const seedSubcategory = require("./subcategorySeed");
+const seedGender = require("./genderSeed");
+const seedProduct = require("./productSeed");
 const seedSupplier = require("./supplierSeed");
 const seedTypeProduct = require("./typeProductSeed");
 const seedUser = require("./userSeed");
@@ -31,15 +34,20 @@ const seed = async () => {
     }
 
     // Kiểm tra bảng Subcategory
-    if ((await countDocuments(Subcategory)) === 0) {
-      console.log("Seeding Subcategories...");
-      await seedSubcategory();
+    if ((await countDocuments(Gender)) === 0) {
+      console.log("Seeding Genders...");
+      await seedGender();
     }
 
     // Kiểm tra bảng TypeProduct
     if ((await countDocuments(TypeProduct)) === 0) {
       console.log("Seeding TypeProducts...");
       await seedTypeProduct();
+    }
+
+    if ((await countDocuments(Product)) === 0) {
+      console.log("Seeding Products...");
+      await seedProduct();
     }
 
     console.log("Seeding process completed.");

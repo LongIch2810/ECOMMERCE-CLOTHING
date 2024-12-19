@@ -24,7 +24,7 @@ const CartItem = () => {
       </div>
 
       <div className="flex items-center gap-10">
-        <span className="text-sm text-secondary">30.000đ</span>
+        <span className="text-sm font-medium text-gray-500">30.000đ</span>
         <InputQuantity></InputQuantity>
       </div>
 

@@ -8,7 +8,8 @@ const productSchema = new Schema(
     price: { type: Number, required: true },
     description: { type: String, required: true },
     averageReview: { type: Number, required: true },
-    images: [{ type: String, required: true }],
+    images: { type: [{ type: String, required: true }], required: true },
+    gender: { type: mongoose.Types.ObjectId, ref: "Gender", required: true },
     type_product: {
       type: mongoose.Types.ObjectId,
       ref: "TypeProduct",

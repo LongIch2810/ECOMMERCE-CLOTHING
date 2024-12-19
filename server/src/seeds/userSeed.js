@@ -1,4 +1,5 @@
 require("dotenv").config();
+const Cart = require("../models/cartModel");
 const User = require("../models/userModel");
 
 const users = [
@@ -22,7 +23,13 @@ const seedUser = async () => {
   try {
     const addUsers = users.map(async (user) => {
       const newUser = await User.create(user);
-      return await newUser.save();
+      await newUser.save();
+      if (user.role === "Customer") {
+        await Cart.create({
+          user: newUser._id,
+        });
+      }
+      return newUser;
     });
     const results = await Promise.all(addUsers);
     if (results.length > 0) {
