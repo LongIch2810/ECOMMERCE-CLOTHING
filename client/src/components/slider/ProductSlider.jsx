@@ -10,7 +10,7 @@ import { Navigation } from "swiper/modules";
 
 import ProductCard from "../card/ProductCard";
 
-const ProductSlider = () => {
+const ProductSlider = ({ list }) => {
   return (
     <div className="product-list">
       <Swiper
@@ -20,30 +20,13 @@ const ProductSlider = () => {
         slidesPerView={"auto"}
         modules={[Navigation]}
       >
-        <SwiperSlide>
-          <ProductCard></ProductCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard></ProductCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard></ProductCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard></ProductCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard></ProductCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard></ProductCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard></ProductCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <ProductCard></ProductCard>
-        </SwiperSlide>
+        {list &&
+          list.length > 0 &&
+          list.map((item) => (
+            <SwiperSlide key={item._id}>
+              <ProductCard item={item}></ProductCard>
+            </SwiperSlide>
+          ))}
       </Swiper>
     </div>
   );

@@ -1,4 +1,8 @@
-const { getProductsService } = require("../services/productService");
+const {
+  getProductsService,
+  getMenProductsService,
+  getWomenProductsService,
+} = require("../services/productService");
 
 const getProducts = async (req, res) => {
   const { genderSlug } = req.params;

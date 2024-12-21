@@ -5,10 +5,8 @@ const getProductsService = async ({ genderSlug, page = 1, limit = 10 }) => {
   try {
     const gender = await Gender.findOne({ slug: genderSlug });
     const results = {};
-    const total_products = await Product.countDocuments();
-    const total_pages = Math.ceil(total_products / limit);
-    const current_page = page > total_pages ? total_pages : page;
-    const skip = (current_page - 1) * limit;
+    const skip = (page - 1) * limit;
+    const total_products = (await Product.find({ gender: gender._id })).length;
     const products = await Product.find({ gender: gender._id })
       .limit(limit)
       .skip(skip)
@@ -16,10 +14,9 @@ const getProductsService = async ({ genderSlug, page = 1, limit = 10 }) => {
       .populate("supplier")
       .populate("gender")
       .exec();
-
     results.total_products = total_products;
-    results.total_pages = total_pages;
-    results.current_page = current_page;
+    results.total_pages = Math.ceil(total_products / limit);
+    results.current_page = page;
     results.products = products;
     return { SC: 200, success: true, results };
   } catch (error) {
@@ -28,4 +25,6 @@ const getProductsService = async ({ genderSlug, page = 1, limit = 10 }) => {
   }
 };
 
-module.exports = { getProductsService };
+module.exports = {
+  getProductsService,
+};

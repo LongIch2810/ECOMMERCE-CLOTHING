@@ -6,6 +6,8 @@ const productSlice = createSlice({
   initialState: {
     loading: false,
     products: [],
+    menProducts: [],
+    womenProducts: [],
     current_page: 1,
     total_products: 0,
     total_pages: 1,

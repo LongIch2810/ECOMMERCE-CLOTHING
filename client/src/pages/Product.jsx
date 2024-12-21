@@ -12,14 +12,19 @@ const Product = () => {
   const { slug } = useParams();
   if (slug !== "men" && slug !== "women") return <div>Error 404 page</div>;
   const dispatch = useDispatch();
-  const { products, total_pages, total_products, current_page } = useSelector(
+  const { products, total_products, current_page } = useSelector(
     (state) => state.product
   );
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleChangePage = (page) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [slug]);
 
   useEffect(() => {
     dispatch(
@@ -67,7 +72,7 @@ const Product = () => {
         </div>
         <div className="flex items-center justify-center">
           <Pagination
-            current={current_page}
+            current={currentPage}
             total={total_products}
             pageSize={10}
             onChange={handleChangePage}
