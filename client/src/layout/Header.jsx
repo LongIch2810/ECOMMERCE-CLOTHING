@@ -1,74 +1,72 @@
 import HeaderItem from "@/components/header/HeaderItem";
 import IconCart from "@/components/icons/IconCart";
-import IconSearch from "@/components/icons/IconSearch";
 import IconUser from "@/components/icons/IconUser";
 import Logo from "@/components/logo/Logo";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { logout } from "@/store/features/auth/authThunk";
+import { getGenders } from "@/store/features/gender/genderThunk";
+import { getProducts } from "@/store/features/product/productThunk";
+import { getUserInfo } from "@/store/features/user/userThunk";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const menuItem = [
+  // {
+  //   id: 1,
+  //   text: "Nam",
+  //   to: "/men",
+  // },
+  // {
+  //   id: 2,
+  //   text: "Nữ",
+  //   to: "/women",
+  // },
   {
     id: 1,
-    text: "Trang chủ",
-    to: "/",
-  },
-  {
-    id: 2,
-    text: "Nam",
-    to: "/men",
-  },
-  {
-    id: 3,
-    text: "Nữ",
-    to: "/women",
-  },
-  {
-    id: 4,
-    text: "Trẻ em",
-    to: "/kid",
-  },
-  {
-    id: 5,
     text: "Mã giảm giá",
     to: "/voucher",
   },
   {
-    id: 6,
+    id: 2,
     text: "Liên hệ",
     to: "/contact",
   },
   {
-    id: 7,
+    id: 3,
     text: "Giới thiệu",
     to: "/about",
   },
 ];
 
-const menuItemRight = [
-  {
-    id: 1,
-    icon: <IconCart></IconCart>,
-    to: "/cart",
-  },
-  {
-    id: 2,
-    icon: <IconSearch></IconSearch>,
-    to: "/search",
-  },
-  {
-    id: 3,
-    icon: <IconUser></IconUser>,
-    to: "/profile",
-  },
-];
-
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { genders } = useSelector((state) => state.gender);
+  useEffect(() => {
+    if (!user?._id) {
+      dispatch(getUserInfo());
+    }
+  }, [user?._id]);
+
+  useEffect(() => {
+    dispatch(getGenders());
+  }, []);
   return (
     <div className="fixed top-0 left-0 right-0 flex items-center justify-between p-3 bg-gray-100 z-[999]">
       <div>
         <Logo></Logo>
       </div>
+      {genders &&
+        genders.length > 0 &&
+        genders.map((item) => (
+          <HeaderItem
+            to={item.slug === "nam" ? "/men" : "/women"}
+            key={item._id}
+          >
+            {item.name}
+          </HeaderItem>
+        ))}
       {menuItem.map((item) => (
         <HeaderItem to={item.to} key={item.id}>
           {item.text}
@@ -84,11 +82,48 @@ const Header = () => {
             <span>0</span>
           </div>
         </div>
-        <div
-          onClick={() => navigate("/profile")}
-          className="p-2 text-lg font-semibold cursor-pointer"
-        >
-          <IconUser></IconUser>
+        <div className="p-2 text-lg font-semibold cursor-pointer">
+          <div className="relative flex items-center p-2 gap-x-3 group">
+            <IconUser></IconUser>
+            {user ? <span>{user?.name}</span> : ""}
+            <div className="absolute hidden p-5 rotate-45 bg-primary left-3/4 -translate-x-3/4 top-full group-hover:block"></div>
+            <div className="absolute hidden w-[140px] p-2 rounded shadow-xl bg-primary top-full left-3/4 -translate-x-3/4 group-hover:block">
+              {user ? (
+                <ul>
+                  <li
+                    className="block text-sm font-bold text-gray-500 hover:text-[#1ac5ae] p-2 border-b border-black"
+                    onClick={() => navigate("/profile")}
+                  >
+                    Tài khoản của tôi
+                  </li>
+                  <li className="block text-sm font-bold text-gray-500 hover:text-[#1ac5ae] p-2 border-b border-black">
+                    Đơn mua
+                  </li>
+                  <li
+                    className="block text-sm font-bold text-gray-500 hover:text-[#1ac5ae] p-2"
+                    onClick={() => dispatch(logout())}
+                  >
+                    Đăng xuất
+                  </li>
+                </ul>
+              ) : (
+                <ul>
+                  <li
+                    className="block text-sm font-bold text-gray-500 hover:text-[#1ac5ae] p-2 border-b border-black"
+                    onClick={() => navigate("/sign-in")}
+                  >
+                    Đăng nhập
+                  </li>
+                  <li
+                    className="block text-sm font-bold text-gray-500 hover:text-[#1ac5ae] p-2"
+                    onClick={() => navigate("/sign-up")}
+                  >
+                    Đăng ký
+                  </li>
+                </ul>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

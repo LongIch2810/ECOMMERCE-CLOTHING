@@ -9,7 +9,7 @@ const Voucher = () => {
       <div className="flex items-center justify-center my-8">
         <Title className="text-4xl font-bold" text="Mã giảm giá"></Title>
       </div>
-      <div className="grid grid-cols-5 gap-5">
+      <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
         <VoucherCard
           value={15}
           type="%"
@@ -21,12 +21,6 @@ const Voucher = () => {
           type="%"
           discount_max={200}
           min_order_price={400}
-        ></VoucherCard>
-        <VoucherCard
-          value={5}
-          type="%"
-          discount_max={100}
-          min_order_price={200}
         ></VoucherCard>
         <VoucherCard
           value={7}

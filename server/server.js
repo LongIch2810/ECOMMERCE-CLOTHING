@@ -6,6 +6,7 @@ const authRouter = require("./src/routes/authRoute");
 const userRouter = require("./src/routes/userRoute");
 const productRouter = require("./src/routes/productRoute");
 const cartRouter = require("./src/routes/cartRoute");
+const genderRouter = require("./src/routes/genderRoute");
 
 //create app
 const app = express();
@@ -24,5 +25,6 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/gender", genderRouter);
 
 app.listen(PORT, () => console.log(`Server is now running on ${PORT}`));

@@ -2,10 +2,59 @@ import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
 import Label from "@/components/label/Label";
 import Logo from "@/components/logo/Logo";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "@/store/features/auth/authThunk";
+import { getUserInfo } from "@/store/features/user/userThunk";
+import { getUserInfoAPI } from "@/store/features/user/userAPI";
+
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+  })
+  .required();
 
 const SignIn = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(schema),
+  });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, isLoggedIn } = useSelector((state) => state.auth);
+  useEffect(() => {
+    const arrError = Object.values(errors);
+    if (arrError.length > 0) {
+      toast.error(arrError[0].message);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
+
+  const handleSignIn = (values) => {
+    if (!isValid) return;
+    dispatch(login(values));
+  };
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -27,13 +76,18 @@ const SignIn = () => {
               Welcome to Dirty Clothes
             </h1>
 
-            <form action="#" className="grid grid-cols-6 gap-6 mt-8">
+            <form
+              action="#"
+              className="grid grid-cols-6 gap-6 mt-8"
+              onSubmit={handleSubmit(handleSignIn)}
+            >
               <div className="col-span-6">
                 <Label htmlFor="email">
                   <span>Email</span>
                   <span className="text-secondary">*</span>
                 </Label>
                 <Input
+                  control={control}
                   type="email"
                   name="email"
                   className="w-full p-2"
@@ -48,6 +102,7 @@ const SignIn = () => {
                 </Label>
 
                 <Input
+                  control={control}
                   type="password"
                   name="password"
                   className="w-full p-2"

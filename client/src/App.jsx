@@ -6,9 +6,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
-import MenProduct from "./pages/MenProduct";
-import WomenProduct from "./pages/WomenProduct";
-import KidProduct from "./pages/KidProduct";
+import Product from "./pages/Product";
 import Voucher from "./pages/Voucher";
 import Address from "./pages/Address";
 import Payment from "./pages/Payment";
@@ -27,9 +25,7 @@ function App() {
       <Route path="/contact" element={<Contact />}></Route>
       <Route path="/profile" element={<Profile />}></Route>
       <Route path="/about" element={<About />}></Route>
-      <Route path="/men" element={<MenProduct />}></Route>
-      <Route path="/women" element={<WomenProduct />}></Route>
-      <Route path="/kid" element={<KidProduct />}></Route>
+      <Route path="/:slug" element={<Product />}></Route>
       <Route path="/voucher" element={<Voucher />}></Route>
     </Routes>
   );

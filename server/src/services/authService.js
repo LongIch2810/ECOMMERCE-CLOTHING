@@ -36,7 +36,7 @@ const registerService = async (data) => {
       return {
         SC: 400,
         success: false,
-        message: "Username, email or phone already exists !",
+        message: "Account already exists !",
       };
     }
 

@@ -2,10 +2,72 @@ import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
 import Label from "@/components/label/Label";
 import Logo from "@/components/logo/Logo";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "@/store/features/auth/authThunk";
+
+const schema = yup
+  .object({
+    name: yup
+      .string()
+      .min(6, "Username must be at least 6 characters")
+      .required(),
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    phone: yup
+      .string()
+      .matches(/^(84|0)([3|5|7|8|9])+([0-9]{8})$/, "Invalid phone number")
+      .required(),
+    password: yup
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+    confirm: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Passwords must match")
+      .required("Confirm Password is required"),
+  })
+  .required();
 
 const SignUp = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(schema),
+  });
+
+  const dispatch = useDispatch();
+  const { loading, isLoggedIn } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const arrError = Object.values(errors);
+    if (arrError.length > 0) {
+      toast.error(arrError[0].message);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
+
+  const handleSignUp = (values) => {
+    if (!isValid) return;
+    const { name, email, phone, password } = values;
+    dispatch(register({ name, email, phone, password }));
+  };
+
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -27,13 +89,18 @@ const SignUp = () => {
               Welcome to Dirty Clothes
             </h1>
 
-            <form action="#" className="grid grid-cols-6 gap-6 mt-8">
+            <form
+              action="#"
+              className="grid grid-cols-6 gap-6 mt-8"
+              onSubmit={handleSubmit(handleSignUp)}
+            >
               <div className="col-span-6">
                 <Label htmlFor="name">
                   <span>Username</span>
                   <span className="text-secondary">*</span>
                 </Label>
                 <Input
+                  control={control}
                   name="name"
                   className="w-full p-2"
                   placeholder="Hãy nhập username"
@@ -46,6 +113,7 @@ const SignUp = () => {
                   <span className="text-secondary">*</span>
                 </Label>
                 <Input
+                  control={control}
                   type="email"
                   name="email"
                   className="w-full p-2"
@@ -59,6 +127,7 @@ const SignUp = () => {
                   <span className="text-secondary">*</span>
                 </Label>
                 <Input
+                  control={control}
                   name="phone"
                   className="w-full p-2"
                   placeholder="Hãy nhập số điện thoại"
@@ -72,6 +141,7 @@ const SignUp = () => {
                 </Label>
 
                 <Input
+                  control={control}
                   type="password"
                   name="password"
                   className="w-full p-2"
@@ -86,6 +156,7 @@ const SignUp = () => {
                 </Label>
 
                 <Input
+                  control={control}
                   type="password"
                   name="confirm"
                   className="w-full p-2"

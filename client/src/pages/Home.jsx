@@ -10,9 +10,8 @@ const Home = () => {
     <Layout>
       <section>
         <Banner className="object-cover w-full mb-20"></Banner>
-        <ContentItem title="Thời trang nam" icon={<IconMen />}></ContentItem>
-        <ContentItem title="Thời trang nữ" icon={<IconWomen />}></ContentItem>
-        <ContentItem title="Thời trang trẻ em" icon={<IconKid />}></ContentItem>
+        {/* <ContentItem title="Thời trang nam" icon={<IconMen />}></ContentItem>
+        <ContentItem title="Thời trang nữ" icon={<IconWomen />}></ContentItem> */}
       </section>
     </Layout>
   );
