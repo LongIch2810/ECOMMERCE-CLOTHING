@@ -28,7 +28,7 @@ const getMenProductsService = async ({ slug }) => {
   try {
     const results = {};
     const gender = await Gender.findOne({ slug });
-    const products = await Product.find({ gender: gender._id }).limit(6);
+    const products = await Product.find({ gender: gender._id }).limit(10);
     results.products = products;
     return { SC: 200, success: true, results };
   } catch (error) {
@@ -41,7 +41,7 @@ const getWomenProductsService = async ({ slug }) => {
   try {
     const results = {};
     const gender = await Gender.findOne({ slug });
-    const products = await Product.find({ gender: gender._id }).limit(6);
+    const products = await Product.find({ gender: gender._id }).limit(10);
     results.products = products;
     return { SC: 200, success: true, results };
   } catch (error) {

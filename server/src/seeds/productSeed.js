@@ -493,7 +493,7 @@ const womenProducts = [
     name: "NikeCourt Slam Tennis Skirt",
     price: 280,
     description:
-      "Chân váy liền thân NikeCourt Slam Tennis Skirt thoàng mát, nhẹ nhàng, thu hút",
+      "Chân váy NikeCourt Slam Tennis Skirt thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734794068/image%20clothing/image%20product/mjotkcigxipk7iqazhqv.png",
@@ -506,7 +506,7 @@ const womenProducts = [
     name: "Nike Skirt ACG 'Snowgrass'",
     price: 280,
     description:
-      "Chân váy liền thân Nike Skirt ACG 'Snowgrass' thoàng mát, nhẹ nhàng, thu hút",
+      "Chân váy Nike Skirt ACG 'Snowgrass' thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734794178/image%20clothing/image%20product/nxgiahvdc5ewrjaooewg.png",
@@ -519,7 +519,7 @@ const womenProducts = [
     name: "Nike Skirt Sportswear Chill Rib",
     price: 280,
     description:
-      "Chân váy liền thân Nike Skirt Sportswear Chill Rib thoàng mát, nhẹ nhàng, thu hút",
+      "Chân váy Nike Skirt Sportswear Chill Rib thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734794338/image%20clothing/image%20product/mseevruuzrjrkgp3ec9s.png",
