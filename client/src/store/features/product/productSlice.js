@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProducts } from "./productThunk";
+import { getMenProducts, getProducts, getWomenProducts } from "./productThunk";
 
 const productSlice = createSlice({
   name: "product",
@@ -29,8 +29,15 @@ const productSlice = createSlice({
       .addCase(getProducts.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
+      })
+      .addCase(getMenProducts.fulfilled, (state, action) => {
+        state.menProducts = action.payload?.results?.products;
+      })
+      .addCase(getWomenProducts.fulfilled, (state, action) => {
+        state.womenProducts = action.payload?.results?.products;
       });
   },
 });
 
+export const { setMenProducts, setWomenProducts } = productSlice.actions;
 export default productSlice.reducer;

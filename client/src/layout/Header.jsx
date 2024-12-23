@@ -23,16 +23,21 @@ const menuItem = [
   // },
   {
     id: 1,
+    text: "Sản phẩm",
+    to: "/product",
+  },
+  {
+    id: 2,
     text: "Mã giảm giá",
     to: "/voucher",
   },
   {
-    id: 2,
+    id: 3,
     text: "Liên hệ",
     to: "/contact",
   },
   {
-    id: 3,
+    id: 4,
     text: "Giới thiệu",
     to: "/about",
   },
@@ -42,31 +47,16 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const { genders } = useSelector((state) => state.gender);
   useEffect(() => {
     if (!user?._id) {
       dispatch(getUserInfo());
     }
   }, [user?._id]);
-
-  useEffect(() => {
-    dispatch(getGenders());
-  }, []);
   return (
     <div className="fixed top-0 left-0 right-0 flex items-center justify-between p-3 bg-gray-100 z-[999]">
       <div>
         <Logo></Logo>
       </div>
-      {genders &&
-        genders.length > 0 &&
-        genders.map((item) => (
-          <HeaderItem
-            to={item.slug === "nam" ? "/men" : "/women"}
-            key={item._id}
-          >
-            {item.name}
-          </HeaderItem>
-        ))}
       {menuItem.map((item) => (
         <HeaderItem to={item.to} key={item.id}>
           {item.text}

@@ -8,14 +8,29 @@ import ProductCard from "../card/ProductCard";
 import IconDress from "../icons/IconDress";
 import ProductSlider from "../slider/ProductSlider";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "@/store/features/product/productThunk";
+import {
+  getMenProducts,
+  getProducts,
+  getWomenProducts,
+} from "@/store/features/product/productThunk";
 import generateSlug from "@/utils/generateSlug";
+import {
+  setMenProducts,
+  setWomenProducts,
+} from "@/store/features/product/productSlice";
 
 const ContentItem = ({ title = "", icon = "" }) => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
+  const { menProducts, womenProducts } = useSelector((state) => state.product);
+  console.log(title);
+  console.log(menProducts);
+  console.log(womenProducts);
   useEffect(() => {
-    dispatch(getProducts({ slug: generateSlug(title) }));
+    if (title === "Nam") {
+      dispatch(getMenProducts());
+    } else {
+      dispatch(getWomenProducts());
+    }
   }, []);
   return (
     <div className="mb-20">
@@ -34,7 +49,9 @@ const ContentItem = ({ title = "", icon = "" }) => {
           </Button>
         </div>
       </div>
-      <ProductSlider list={products}></ProductSlider>
+      <ProductSlider
+        list={title === "Nam" ? menProducts : womenProducts}
+      ></ProductSlider>
     </div>
   );
 };

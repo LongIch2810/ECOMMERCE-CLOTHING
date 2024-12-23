@@ -1,13 +1,12 @@
 const Gender = require("../models/genderModel");
 const Product = require("../models/productModel");
 
-const getProductsService = async ({ genderSlug, page = 1, limit = 10 }) => {
+const getProductsService = async ({ page = 1, limit = 10 }) => {
   try {
-    const gender = await Gender.findOne({ slug: genderSlug });
     const results = {};
     const skip = (page - 1) * limit;
-    const total_products = (await Product.find({ gender: gender._id })).length;
-    const products = await Product.find({ gender: gender._id })
+    const total_products = await Product.countDocuments();
+    const products = await Product.find({})
       .limit(limit)
       .skip(skip)
       .populate("type_product")
@@ -25,6 +24,34 @@ const getProductsService = async ({ genderSlug, page = 1, limit = 10 }) => {
   }
 };
 
+const getMenProductsService = async ({ slug }) => {
+  try {
+    const results = {};
+    const gender = await Gender.findOne({ slug });
+    const products = await Product.find({ gender: gender._id }).limit(6);
+    results.products = products;
+    return { SC: 200, success: true, results };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getWomenProductsService = async ({ slug }) => {
+  try {
+    const results = {};
+    const gender = await Gender.findOne({ slug });
+    const products = await Product.find({ gender: gender._id }).limit(6);
+    results.products = products;
+    return { SC: 200, success: true, results };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 module.exports = {
   getProductsService,
+  getMenProductsService,
+  getWomenProductsService,
 };

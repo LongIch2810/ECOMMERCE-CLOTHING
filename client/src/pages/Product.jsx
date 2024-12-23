@@ -9,36 +9,27 @@ import { useParams } from "react-router-dom";
 import Pagination from "rc-pagination";
 
 const Product = () => {
-  const { slug } = useParams();
-  if (slug !== "men" && slug !== "women") return <div>Error 404 page</div>;
   const dispatch = useDispatch();
   const { products, total_products, current_page } = useSelector(
     (state) => state.product
   );
 
-  const [currentPage, setCurrentPage] = useState(1);
+  console.log(products);
+
+  const [currentPage, setCurrentPage] = useState(current_page);
 
   const handleChangePage = (page) => {
     setCurrentPage(page);
   };
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [slug]);
-
-  useEffect(() => {
-    dispatch(
-      getProducts({ slug: slug === "men" ? "nam" : "nu", page: currentPage })
-    );
-  }, [slug, currentPage]);
+    dispatch(getProducts({ page: currentPage }));
+  }, [currentPage]);
   return (
     <Layout>
       <section>
         <div className="flex items-center justify-center my-8">
-          <Title
-            className="text-4xl font-bold"
-            text={`Thời trang ${slug === "men" ? "Nam" : "Nữ"}`}
-          ></Title>
+          <Title className="text-4xl font-bold" text="Sản phẩm"></Title>
         </div>
         <div className="flex gap-10 mb-10">
           {/* <div className="flex flex-col p-2 gap-y-5">
