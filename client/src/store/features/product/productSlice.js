@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMenProducts, getProducts, getWomenProducts } from "./productThunk";
+import {
+  getMenProducts,
+  getProductDetail,
+  getProducts,
+  getWomenProducts,
+} from "./productThunk";
 
 const productSlice = createSlice({
   name: "product",
@@ -8,6 +13,7 @@ const productSlice = createSlice({
     products: [],
     menProducts: [],
     womenProducts: [],
+    productInfo: null,
     current_page: 1,
     total_products: 0,
     total_pages: 1,
@@ -35,6 +41,17 @@ const productSlice = createSlice({
       })
       .addCase(getWomenProducts.fulfilled, (state, action) => {
         state.womenProducts = action.payload?.results?.products;
+      })
+      .addCase(getProductDetail.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getProductDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.productInfo = action.payload?.result;
+      })
+      .addCase(getProductDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       });
   },
 });

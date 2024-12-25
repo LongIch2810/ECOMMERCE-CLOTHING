@@ -3,8 +3,6 @@ import IconCart from "@/components/icons/IconCart";
 import IconUser from "@/components/icons/IconUser";
 import Logo from "@/components/logo/Logo";
 import { logout } from "@/store/features/auth/authThunk";
-import { getGenders } from "@/store/features/gender/genderThunk";
-import { getProducts } from "@/store/features/product/productThunk";
 import { getUserInfo } from "@/store/features/user/userThunk";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

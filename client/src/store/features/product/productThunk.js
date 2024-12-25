@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   getMenProductsAPI,
+  getProductDetailAPI,
   getProductsAPI,
   getWomenProductsAPI,
 } from "./productAPI";
@@ -50,4 +51,18 @@ const getWomenProducts = createAsyncThunk("product/women", async () => {
   }
 });
 
-export { getProducts, getMenProducts, getWomenProducts };
+const getProductDetail = createAsyncThunk("product/detail", async ({ id }) => {
+  try {
+    const data = await getProductDetailAPI({ id });
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      console.log(error.response.data.message);
+      return error.response.data;
+    }
+    console.log(error);
+    return error;
+  }
+});
+
+export { getProducts, getMenProducts, getWomenProducts, getProductDetail };

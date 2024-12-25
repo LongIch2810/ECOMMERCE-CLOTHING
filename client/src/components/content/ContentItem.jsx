@@ -10,21 +10,12 @@ import ProductSlider from "../slider/ProductSlider";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getMenProducts,
-  getProducts,
   getWomenProducts,
 } from "@/store/features/product/productThunk";
-import generateSlug from "@/utils/generateSlug";
-import {
-  setMenProducts,
-  setWomenProducts,
-} from "@/store/features/product/productSlice";
 
 const ContentItem = ({ title = "", icon = "" }) => {
   const dispatch = useDispatch();
   const { menProducts, womenProducts } = useSelector((state) => state.product);
-  console.log(title);
-  console.log(menProducts);
-  console.log(womenProducts);
   useEffect(() => {
     if (title === "Nam") {
       dispatch(getMenProducts());
@@ -42,9 +33,9 @@ const ContentItem = ({ title = "", icon = "" }) => {
         ></Title>
         <div className="flex flex-col justify-end gap-5 md:flex-row">
           <Button className="flex items-center gap-3 p-3 bg-primary">
-            <span>Xem tất cả</span>
+            <span className="text-main">Xem tất cả</span>
             <span>
-              <IconEye></IconEye>
+              <IconEye className="size-6 text-main"></IconEye>
             </span>
           </Button>
         </div>

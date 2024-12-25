@@ -77,7 +77,6 @@ const SignIn = () => {
             </h1>
 
             <form
-              action="#"
               className="grid grid-cols-6 gap-6 mt-8"
               onSubmit={handleSubmit(handleSignIn)}
             >
@@ -117,7 +116,7 @@ const SignIn = () => {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <Button className="inline-block px-12 py-3 text-sm bg-primary border-primary shrink-0 ">
+                <Button className="inline-block px-12 py-3 text-sm text-main bg-primary border-primary shrink-0 ">
                   Login
                 </Button>
 

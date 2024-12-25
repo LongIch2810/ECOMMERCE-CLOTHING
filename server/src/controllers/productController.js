@@ -2,7 +2,7 @@ const {
   getProductsService,
   getMenProductsService,
   getWomenProductsService,
-  getProductsByGenderService,
+  getProductDetailService,
 } = require("../services/productService");
 
 const getProducts = async (req, res) => {
@@ -36,4 +36,20 @@ const getWomenProducts = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
-module.exports = { getProducts, getMenProducts, getWomenProducts };
+const getProductDetail = async (req, res) => {
+  const { id } = req.params;
+  const data = await getProductDetailService({ id });
+  if (data.SC === 200 && data?.result) {
+    return res.status(200).json({ success: true, result: data.result });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
+module.exports = {
+  getProducts,
+  getMenProducts,
+  getWomenProducts,
+  getProductDetail,
+};

@@ -15,4 +15,14 @@ const getWomenProductsAPI = async () => {
   return response.data;
 };
 
-export { getProductsAPI, getMenProductsAPI, getWomenProductsAPI };
+const getProductDetailAPI = async ({ id }) => {
+  const response = await axios.get(`/product/${id}`);
+  return response.data;
+};
+
+export {
+  getProductsAPI,
+  getMenProductsAPI,
+  getWomenProductsAPI,
+  getProductDetailAPI,
+};
