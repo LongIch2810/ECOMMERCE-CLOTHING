@@ -3,7 +3,7 @@ import Input from "@/components/input/Input";
 import Label from "@/components/label/Label";
 import Logo from "@/components/logo/Logo";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -45,7 +45,7 @@ const SignUp = () => {
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, isLoggedIn } = useSelector((state) => state.auth);
 

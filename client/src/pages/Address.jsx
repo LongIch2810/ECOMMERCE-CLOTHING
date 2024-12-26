@@ -74,7 +74,7 @@ const Address = () => {
 
                   <Button
                     onClick={() => navigate("/payment")}
-                    className="flex items-center px-5 py-3 border bg-primary gap-x-3 hover:border-primary hover:bg-white"
+                    className="flex items-center px-5 py-3 border bg-primary gap-x-3 text-main"
                   >
                     <span>Tiếp tục</span>
                     <span>

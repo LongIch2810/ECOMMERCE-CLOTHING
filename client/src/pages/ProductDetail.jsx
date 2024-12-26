@@ -1,18 +1,34 @@
 import Button from "@/components/button/Button";
 import IconCart from "@/components/icons/IconCart";
+import InputQuantity from "@/components/input/InputQuantity";
 import Title from "@/components/title/Title";
 import Layout from "@/layout/Layout";
 import { getProductDetail } from "@/store/features/product/productThunk";
 import { formatCurrency } from "@/utils/format";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ProductDetail = () => {
   const { id } = useParams();
   if (!id) return <>404 Page Not Found !</>;
   const dispatch = useDispatch();
   const { productInfo, loading } = useSelector((state) => state.product);
+  const [quantity, setQuantity] = useState(1);
+  const [maxQuantity, setMaxQuantity] = useState(0);
+  const [size, setSize] = useState("default");
+  const handleAddProductToCart = ({ product_id, size, quantity }) => {};
+  const handleChooseSize = (e) => {
+    const newSize = e.target.value;
+    const index = productInfo.sizes.findIndex((item) => item.size === newSize);
+    if (index === -1) {
+      toast.error("Size not found !");
+    } else {
+      setSize(newSize);
+      setMaxQuantity(productInfo.sizes[index].quantity);
+    }
+  };
   useEffect(() => {
     dispatch(getProductDetail({ id }));
   }, [id]);
@@ -156,11 +172,15 @@ const ProductDetail = () => {
                 <p className="leading-relaxed">
                   {productInfo.product.description}
                 </p>
-                <div className="flex items-center pb-5 mt-6 mb-5 border-b-2 border-gray-100">
+                <div className="flex flex-col pb-5 mt-6 mb-5 border-b-2 border-gray-100 gap-y-5">
                   <div className="flex items-center">
                     <span className="mr-3">Size</span>
                     <div className="relative">
-                      <select className="py-2 pl-3 pr-10 text-base border border-gray-300 rounded appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500">
+                      <select
+                        onChange={handleChooseSize}
+                        className="py-2 pl-3 pr-10 text-base border border-gray-300 rounded appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
+                      >
+                        <option value="default">Chọn size</option>
                         {productInfo.sizes.map((item) => (
                           <option key={item._id}>{item.size}</option>
                         ))}
@@ -178,6 +198,19 @@ const ProductDetail = () => {
                           <path d="M6 9l6 6 6-6" />
                         </svg>
                       </span>
+                    </div>
+                  </div>
+                  {maxQuantity !== 0 && (
+                    <p className="text-sm text-secondary">{`Số lượng còn lại: ${maxQuantity}`}</p>
+                  )}
+                  <div className="flex items-center">
+                    <span className="mr-3">Số lượng</span>
+                    <div className="relative">
+                      <InputQuantity
+                        value={quantity}
+                        setValue={setQuantity}
+                        maxValue={maxQuantity}
+                      ></InputQuantity>
                     </div>
                   </div>
                 </div>

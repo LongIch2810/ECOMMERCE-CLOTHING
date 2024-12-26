@@ -9,7 +9,7 @@ require("dotenv").config();
 const menProducts = [
   {
     name: "Nike Club Futura",
-    price: 200,
+    price: 200000,
     description: "Áo khoác Nike Club Futura giày ấm, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -21,7 +21,7 @@ const menProducts = [
   },
   {
     name: "Nike Windrunner",
-    price: 300,
+    price: 300000,
     description: "Áo khoác Nike Windrunner thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -33,7 +33,7 @@ const menProducts = [
   },
   {
     name: "Nike Fancy Matic",
-    price: 300,
+    price: 300000,
     description: "Áo khoác Nike Fancy Matic thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -45,7 +45,7 @@ const menProducts = [
   },
   {
     name: "Nike Wind z10",
-    price: 250,
+    price: 250000,
     description: "Áo sweater Nike Wind z10 thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -57,7 +57,7 @@ const menProducts = [
   },
   {
     name: "Nike T-Shirt alpha",
-    price: 250,
+    price: 250000,
     description: "Áo phông Nike T-Shirt alpha thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -69,7 +69,7 @@ const menProducts = [
   },
   {
     name: "Nike T-Shirt beta",
-    price: 250,
+    price: 250000,
     description: "Áo phông Nike T-Shirt beta thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -81,7 +81,7 @@ const menProducts = [
   },
   {
     name: "Nike T-Shirt omega",
-    price: 250,
+    price: 250000,
     description: "Áo phông Nike T-Shirt omega  thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -93,7 +93,7 @@ const menProducts = [
   },
   {
     name: "Nike T-Shirt Cuaaaa",
-    price: 250,
+    price: 250000,
     description: "Áo phông Nike T-Shirt Cuaaaa thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -105,7 +105,7 @@ const menProducts = [
   },
   {
     name: "Nike Polo alpha",
-    price: 250,
+    price: 250000,
     description: "Áo polo Nike Polo alpha  thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -117,7 +117,7 @@ const menProducts = [
   },
   {
     name: "Nike Polo beta",
-    price: 250,
+    price: 250000,
     description: "Áo polo Nike Polo beta thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -129,7 +129,7 @@ const menProducts = [
   },
   {
     name: "Nike Shirts Yellow Dark",
-    price: 280,
+    price: 280000,
     description:
       "Áo sơ mi Nike Shirts Yellow Dark thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -142,7 +142,7 @@ const menProducts = [
   },
   {
     name: "Nike Shirts White",
-    price: 280,
+    price: 280000,
     description: "Áo sơ mi Nike Shirts White thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -154,7 +154,7 @@ const menProducts = [
   },
   {
     name: "Nike Sweater Red Dark",
-    price: 280,
+    price: 280000,
     description:
       "Áo sweater Nike Sweater Red Dark thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -167,7 +167,7 @@ const menProducts = [
   },
   {
     name: "Nike Sweater Gray",
-    price: 280,
+    price: 280000,
     description: "Áo sweater Nike Sweater Gray thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -179,7 +179,7 @@ const menProducts = [
   },
   {
     name: "Nike Sweater Mixed Classic",
-    price: 280,
+    price: 280000,
     description:
       "Áo sweater Nike Sweater Mixed Classic thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -192,7 +192,7 @@ const menProducts = [
   },
   {
     name: "Nike Jeans Basic",
-    price: 280,
+    price: 280000,
     description: "Quần jeans Nike Jeans Basic thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -204,7 +204,7 @@ const menProducts = [
   },
   {
     name: "Nike Wind Pant Beige",
-    price: 280,
+    price: 280000,
     description: "Quần gió Nike Wind Pant Beige thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -216,7 +216,7 @@ const menProducts = [
   },
   {
     name: "Nike Wind Pant Black",
-    price: 280,
+    price: 280000,
     description: "Quần gió Nike Wind Pant Black thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
     images: [
@@ -228,7 +228,7 @@ const menProducts = [
   },
   {
     name: "Nike Kaki Pant Black",
-    price: 280,
+    price: 280000,
     description:
       "Quần kaki Nike Kaki Pant Black thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -254,7 +254,7 @@ const menProducts = [
   },
   {
     name: "Nike Short Black Cool",
-    price: 280,
+    price: 280000,
     description:
       "Quần đùi Nike Short Black Cool thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -309,7 +309,7 @@ const womenProducts = [
   },
   {
     name: "Nike T-Shirt Sportswear Short-Sleeve",
-    price: 280,
+    price: 280000,
     description:
       "Áo phông Nike T-Shirt Sportswear Short-Sleeve thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -322,7 +322,7 @@ const womenProducts = [
   },
   {
     name: "Jordan Artist Series by Darien Birks",
-    price: 280,
+    price: 280000,
     description:
       "Áo phông Jordan Artist Series by Darien Birks thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -335,7 +335,7 @@ const womenProducts = [
   },
   {
     name: "Nike T-Shirt Sportswear Essential",
-    price: 280,
+    price: 280000,
     description:
       "Áo phông Nike T-Shirt Sportswear Essential thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -348,7 +348,7 @@ const womenProducts = [
   },
   {
     name: "Nike T-Shirt Sportswear Classic",
-    price: 280,
+    price: 280000,
     description:
       "Áo phông Nike T-Shirt Sportswear Classic thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -361,7 +361,7 @@ const womenProducts = [
   },
   {
     name: "Nike Sweater Sportswear Phoenix Fleece",
-    price: 280,
+    price: 280000,
     description:
       "Áo sweater Nike Sweater Sportswear Phoenix Fleece thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -374,7 +374,7 @@ const womenProducts = [
   },
   {
     name: "Nike Sweater Crew-Neck French",
-    price: 280,
+    price: 280000,
     description:
       "Áo sweater Nike Sweater Crew-Neck French thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -387,7 +387,7 @@ const womenProducts = [
   },
   {
     name: "Nike Short-sleeve Polo Top",
-    price: 250,
+    price: 250000,
     description:
       "Áo polo Nike Short-sleeve Polo Top thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -400,7 +400,7 @@ const womenProducts = [
   },
   {
     name: "Nike Polo Women by YOON",
-    price: 250,
+    price: 250000,
     description:
       "Áo polo Nike Polo Women by YOON thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -413,7 +413,7 @@ const womenProducts = [
   },
   {
     name: "Nike Shirts Woven Crop Top",
-    price: 250,
+    price: 250000,
     description:
       "Áo sơ mi Nike Shirts Woven Crop Top thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -426,7 +426,7 @@ const womenProducts = [
   },
   {
     name: "Nike Sportswear Oversized Full-Zip French Terry Hoodie",
-    price: 200,
+    price: 200000,
     description:
       "Áo khoác Nike Sportswear Oversized Full-Zip French Terry Hoodie giày ấm, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -439,7 +439,7 @@ const womenProducts = [
   },
   {
     name: "Nike Air Jordan Knit Shorts",
-    price: 280,
+    price: 280000,
     description:
       "Quần đùi Nike Air Jordan Knit Shorts thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -452,7 +452,7 @@ const womenProducts = [
   },
   {
     name: "Nike Short Sportswear Chill Terry",
-    price: 280,
+    price: 280000,
     description:
       "Quần đùi Nike Short Sportswear Chill Terry thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -465,7 +465,7 @@ const womenProducts = [
   },
   {
     name: "Dress NikeCourt Slam",
-    price: 280,
+    price: 280000,
     description:
       "Váy liền thân Dress NikeCourt Slam thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -478,7 +478,7 @@ const womenProducts = [
   },
   {
     name: "Dress Nike Air Jordan Knit",
-    price: 280,
+    price: 280000,
     description:
       "Váy liền thân Dress Nike Air Jordan Knit thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -491,7 +491,7 @@ const womenProducts = [
   },
   {
     name: "NikeCourt Slam Tennis Skirt",
-    price: 280,
+    price: 280000,
     description:
       "Chân váy NikeCourt Slam Tennis Skirt thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -504,7 +504,7 @@ const womenProducts = [
   },
   {
     name: "Nike Skirt ACG 'Snowgrass'",
-    price: 280,
+    price: 280000,
     description:
       "Chân váy Nike Skirt ACG 'Snowgrass' thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -517,7 +517,7 @@ const womenProducts = [
   },
   {
     name: "Nike Skirt Sportswear Chill Rib",
-    price: 280,
+    price: 280000,
     description:
       "Chân váy Nike Skirt Sportswear Chill Rib thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -530,7 +530,7 @@ const womenProducts = [
   },
   {
     name: "Nike Wind Pant High-Waisted Woven Open-Hem",
-    price: 280,
+    price: 280000,
     description:
       "Quần gió Nike Wind Pant High-Waisted Woven Open-Hem thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -543,7 +543,7 @@ const womenProducts = [
   },
   {
     name: "Nike Wind Pant Everything Wovens",
-    price: 280,
+    price: 280000,
     description:
       "Quần gió Nike Wind Pant Everything Wovens thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -556,7 +556,7 @@ const womenProducts = [
   },
   {
     name: "Nike Kaki Pant Sustainable Materials",
-    price: 280,
+    price: 280000,
     description:
       "Quần gió Nike Kaki Pant Sustainable Materials thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,

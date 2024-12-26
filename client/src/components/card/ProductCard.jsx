@@ -76,7 +76,7 @@ const ProductCard = ({ item, onClick = () => {} }) => {
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-secondary dark:text-white">
+          <span className="text-lg font-bold text-secondary dark:text-white">
             {formatCurrency(item.price)}
           </span>
           <Button className="text-main bg-gray-900 px-5 py-2.5">

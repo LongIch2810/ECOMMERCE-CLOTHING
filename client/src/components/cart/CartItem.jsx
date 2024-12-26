@@ -2,35 +2,40 @@ import React from "react";
 import InputQuantity from "../input/InputQuantity";
 import IconBin from "../icons/IconBin";
 import Button from "../button/Button";
+import { formatCurrency } from "@/utils/format";
 
-const CartItem = () => {
+const CartItem = ({ item }) => {
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center">
+      <div className="flex items-center gap-x-2">
         <img
-          src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=830&q=80"
+          src={item.product.images[0]}
           alt=""
           className="object-cover rounded size-16"
         />
         <div>
-          <h3 className="text-sm text-gray-900">Basic Tee 6-Pack</h3>
+          <h3 className="text-sm text-gray-900">{item.product.name}</h3>
           <div className="mt-0.5 space-y-px text-[10px] text-gray-600">
             <div>
               <span className="inline">Size:</span>
-              <span className="inline">XXS</span>
+              <span className="inline">{item.size}</span>
             </div>
           </div>
         </div>
       </div>
 
       <div className="flex items-center gap-10">
-        <span className="text-sm font-medium text-gray-500">30.000đ</span>
-        <InputQuantity></InputQuantity>
+        <span className="text-sm font-medium text-gray-500">
+          {formatCurrency(item.product.price)}
+        </span>
+        <InputQuantity value={item.quantity}></InputQuantity>
       </div>
 
       <div className="flex items-center gap-10">
         <div>
-          <span className="text-sm text-secondary">30.000đ</span>
+          <span className="text-sm text-secondary">
+            {formatCurrency(item.product.price * item.quantity)}
+          </span>
         </div>
         <div>
           <Button>

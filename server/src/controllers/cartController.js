@@ -56,7 +56,11 @@ const updateProductToCart = async (req, res) => {
       .json({ success: false, message: "Quantity must be greater than 0 !" });
   }
 
-  const data = await updateProductToCartService({ user_id, id, quantity });
+  const data = await updateProductToCartService({
+    user_id,
+    id,
+    quantity,
+  });
 
   return res
     .status(data.SC)

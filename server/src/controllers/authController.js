@@ -5,12 +5,13 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const data = { email, password };
   const result = await loginService(data);
-  if (result?.SC === 200 && result?.token) {
+  if (result?.SC === 200 && result.token) {
     res.cookie("token", result.token, {
       httpOnly: true,
       secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+    return res.status(200).json({ success: true, message: result.message });
   }
   return res
     .status(result.SC)

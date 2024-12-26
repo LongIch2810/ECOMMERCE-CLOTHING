@@ -68,25 +68,27 @@ const Product = () => {
                 </div>
               </div>
             </div>
-            <div className="grid flex-1 grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-              {products &&
-                products.length > 0 &&
-                products.map((item) => (
-                  <ProductCard
-                    key={item._id}
-                    item={item}
-                    onClick={() => navigate(`/product-detail/${item._id}`)}
-                  ></ProductCard>
-                ))}
+            <div className="flex-1">
+              <div className="grid grid-cols-1 gap-10 mb-10 md:grid-cols-2 lg:grid-cols-3">
+                {products &&
+                  products.length > 0 &&
+                  products.map((item) => (
+                    <ProductCard
+                      key={item._id}
+                      item={item}
+                      onClick={() => navigate(`/product-detail/${item._id}`)}
+                    ></ProductCard>
+                  ))}
+              </div>
+              <div className="flex items-center justify-center">
+                <Pagination
+                  current={currentPage}
+                  total={total_products}
+                  pageSize={limit}
+                  onChange={handleChangePage}
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex items-center justify-center">
-            <Pagination
-              current={currentPage}
-              total={total_products}
-              pageSize={limit}
-              onChange={handleChangePage}
-            />
           </div>
         </div>
       </section>

@@ -86,7 +86,7 @@ const Payment = () => {
                     </span>
                     <span>Trở về</span>
                   </Button>
-                  <Button className="flex items-center px-5 py-3 border bg-primary gap-x-3 hover:border-primary hover:bg-white">
+                  <Button className="flex items-center px-5 py-3 border bg-primary gap-x-3 text-main">
                     <span>Thanh toán</span>
                     <span>
                       <IconPayment></IconPayment>

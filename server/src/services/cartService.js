@@ -9,29 +9,41 @@ const addProductToCartService = async ({
   quantity,
 }) => {
   try {
-    // Kiểm tra tính hợp lệ của product_id
+    // Kiểm tra tính hợp lệ của id
     if (!mongoose.Types.ObjectId.isValid(product_id)) {
-      return { SC: 400, success: false, message: "Invalid product ID" };
+      return { SC: 400, success: false, message: "Invalid product ID!" };
     }
 
-    const cart = await Cart.findOne({ user: user_id });
-    if (!cart) {
-      return { SC: 404, success: false, message: "Cart not found !" };
+    // Kiểm tra số lượng
+    if (!Number.isInteger(quantity) || quantity < 0) {
+      return { SC: 400, success: false, message: "Invalid quantity value!" };
     }
 
-    const idProduct = new mongoose.Types.ObjectId(product_id);
-    console.log(idProduct);
-    const products = [...cart.products];
-    const indexProduct = products.findIndex(
-      (item) => item.product.equals(idProduct) && item.size === size
+    const cart = await Cart.findOneAndUpdate(
+      { user: user_id, "products.product": product_id, "products.size": size },
+      {
+        $inc: { "products.$[item].quantity": quantity },
+      },
+      {
+        new: true,
+        arrayFilters: [{ "item.product": product_id, "item.size": size }],
+      }
     );
-    if (indexProduct !== -1) {
-      products[indexProduct].quantity += quantity;
-    } else {
-      products.push({ product: product_id, size, quantity });
+
+    if (!cart) {
+      await Cart.findOneAndUpdate(
+        { user: user_id },
+        {
+          $push: {
+            products: {
+              $each: [{ product: product_id, size, quantity }],
+              $position: 0,
+            },
+          },
+        },
+        { new: true }
+      );
     }
-    cart.products = products;
-    await cart.save();
     return { SC: 201, success: true, message: "Product added to cart !" };
   } catch (error) {
     console.log(error);
@@ -52,22 +64,15 @@ const updateProductToCartService = async ({ user_id, id, quantity }) => {
       return { SC: 400, success: false, message: "Invalid quantity value!" };
     }
 
-    const cart = await Cart.findOne({ user: user_id });
+    const cart = await Cart.findOneAndUpdate(
+      { user: user_id, "products._id": id },
+      { "products.$[item].quantity": quantity },
+      { new: true, arrayFilters: [{ "item._id": id }] }
+    );
     if (!cart) {
       return { SC: 404, success: false, message: "Cart not found !" };
     }
-    const itemId = new mongoose.Types.ObjectId(id);
 
-    const products = [...cart.products];
-    const indexProduct = products.findIndex((item) => item._id.equals(itemId));
-
-    if (indexProduct === -1) {
-      return { SC: 404, success: false, message: "Product not found !" };
-    }
-
-    products[indexProduct].quantity = quantity;
-    cart.products = products;
-    await cart.save();
     return { SC: 200, success: true, message: "Product updated to cart !" };
   } catch (error) {
     console.log(error);
@@ -83,23 +88,18 @@ const deleteProductToCartService = async ({ user_id, id }) => {
       return { SC: 400, success: false, message: "Invalid product ID!" };
     }
 
-    const cart = await Cart.findOne({ user: user_id });
+    const cart = await Cart.findOneAndUpdate(
+      {
+        user: user_id,
+        "products._id": id,
+      },
+      { $pull: { products: { _id: id } } },
+      { new: true }
+    );
     if (!cart) {
-      return { SC: 404, success: false, message: "Cart not found !" };
+      return { SC: 404, success: false, message: "Not found !" };
     }
 
-    const itemId = new mongoose.Types.ObjectId(id);
-
-    const products = [...cart.products];
-    const indexProduct = products.findIndex((item) => item._id.equals(itemId));
-    if (indexProduct === -1) {
-      return { SC: 404, success: false, message: "Product not found !" };
-    }
-    const newProducts = products.filter((item) => !item._id.equals(itemId));
-
-    console.log(newProducts);
-    cart.products = newProducts;
-    await cart.save();
     return {
       SC: 200,
       success: true,
@@ -114,7 +114,9 @@ const deleteProductToCartService = async ({ user_id, id }) => {
 //Lay tat ca san pham trong gio hang
 const getProductsToCartService = async ({ user_id }) => {
   try {
-    const cart = await Cart.findOne({ user: user_id });
+    const cart = await Cart.findOne({ user: user_id }).populate(
+      "products.product"
+    );
     if (!cart) {
       return { SC: 404, success: false, message: "Cart not found !" };
     }
