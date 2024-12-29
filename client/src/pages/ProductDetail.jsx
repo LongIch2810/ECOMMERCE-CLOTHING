@@ -3,6 +3,7 @@ import IconCart from "@/components/icons/IconCart";
 import InputQuantity from "@/components/input/InputQuantity";
 import Title from "@/components/title/Title";
 import Layout from "@/layout/Layout";
+import { addProductToCart } from "@/store/features/cart/cartThunk";
 import { getProductDetail } from "@/store/features/product/productThunk";
 import { formatCurrency } from "@/utils/format";
 import React, { useEffect, useState } from "react";
@@ -18,7 +19,6 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [maxQuantity, setMaxQuantity] = useState(0);
   const [size, setSize] = useState("default");
-  const handleAddProductToCart = ({ product_id, size, quantity }) => {};
   const handleChooseSize = (e) => {
     const newSize = e.target.value;
     const index = productInfo.sizes.findIndex((item) => item.size === newSize);
@@ -28,6 +28,13 @@ const ProductDetail = () => {
       setSize(newSize);
       setMaxQuantity(productInfo.sizes[index].quantity);
     }
+  };
+  const handleAddProductToCart = ({ product_id, size, quantity }) => {
+    if (size === "default") {
+      toast.error("Please choose size");
+      return;
+    }
+    dispatch(addProductToCart({ product_id, size, quantity }));
   };
   useEffect(() => {
     dispatch(getProductDetail({ id }));
@@ -218,7 +225,16 @@ const ProductDetail = () => {
                   <span className="text-2xl font-medium text-secondary title-font">
                     {formatCurrency(productInfo.product.price)}
                   </span>
-                  <Button className="flex px-6 py-2 bg-primary text-main">
+                  <Button
+                    className="flex px-6 py-2 bg-primary text-main"
+                    onClick={() =>
+                      handleAddProductToCart({
+                        product_id: productInfo.product._id,
+                        size,
+                        quantity,
+                      })
+                    }
+                  >
                     <span>Add to cart</span>
                     <span>
                       <IconCart></IconCart>

@@ -35,9 +35,10 @@ const addProductToCart = async (req, res) => {
     quantity,
   });
 
-  return res
-    .status(data.SC)
-    .json({ success: data.success, message: data.message });
+  return res.status(data.SC).json({
+    success: data.success,
+    message: data.message,
+  });
 };
 const updateProductToCart = async (req, res) => {
   const { id: user_id } = req.user;

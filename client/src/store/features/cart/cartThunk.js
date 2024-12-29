@@ -1,14 +1,23 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addProductToCartAPI, getProductsAPI } from "./cartAPI";
+import {
+  addProductToCartAPI,
+  deleteProductToCartAPI,
+  getProductsAPI,
+} from "./cartAPI";
 import { toast } from "react-toastify";
 
 const addProductToCart = createAsyncThunk(
   "cart/add",
   async ({ product_id, size, quantity }) => {
     try {
-      const data = await addProductToCartAPI({ product_id, size, quantity });
-      toast.success(data.message);
-      return data;
+      const dataAddProduct = await addProductToCartAPI({
+        product_id,
+        size,
+        quantity,
+      });
+      const dataCart = await getProductsAPI();
+      toast.success(dataAddProduct.message);
+      return { dataAddProduct, dataCart };
     } catch (error) {
       if (error.response && error.response.data.message) {
         toast.error(error.response.data.message);
@@ -19,6 +28,21 @@ const addProductToCart = createAsyncThunk(
     }
   }
 );
+
+const deleteProductToCart = createAsyncThunk("cart/delete", async ({ id }) => {
+  try {
+    const dataDeleteProduct = await deleteProductToCartAPI({ id });
+    toast.success(dataDeleteProduct.message);
+    const dataCart = await getProductsAPI();
+    return { dataDeleteProduct, dataCart };
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      return error.response.data;
+    }
+    console.log(error);
+    return error;
+  }
+});
 
 const getProducts = createAsyncThunk("cart/list", async () => {
   try {
@@ -34,4 +58,4 @@ const getProducts = createAsyncThunk("cart/list", async () => {
   }
 });
 
-export { addProductToCart, getProducts };
+export { addProductToCart, getProducts, deleteProductToCart };

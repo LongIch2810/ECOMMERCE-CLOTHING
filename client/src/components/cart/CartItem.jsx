@@ -3,8 +3,14 @@ import InputQuantity from "../input/InputQuantity";
 import IconBin from "../icons/IconBin";
 import Button from "../button/Button";
 import { formatCurrency } from "@/utils/format";
+import { useDispatch } from "react-redux";
+import { deleteProductToCart } from "@/store/features/cart/cartThunk";
 
 const CartItem = ({ item }) => {
+  const dispatch = useDispatch();
+  const handleDeleteItem = (id) => {
+    dispatch(deleteProductToCart({ id }));
+  };
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-x-2">
@@ -38,7 +44,7 @@ const CartItem = ({ item }) => {
           </span>
         </div>
         <div>
-          <Button>
+          <Button onClick={() => handleDeleteItem(item._id)}>
             <IconBin></IconBin>
           </Button>
         </div>

@@ -20,7 +20,10 @@ const addProductToCartService = async ({
     }
 
     const cart = await Cart.findOneAndUpdate(
-      { user: user_id, "products.product": product_id, "products.size": size },
+      {
+        user: user_id,
+        products: { $elemMatch: { product: product_id, size } },
+      },
       {
         $inc: { "products.$[item].quantity": quantity },
       },
@@ -29,7 +32,6 @@ const addProductToCartService = async ({
         arrayFilters: [{ "item.product": product_id, "item.size": size }],
       }
     );
-
     if (!cart) {
       await Cart.findOneAndUpdate(
         { user: user_id },
@@ -65,10 +67,11 @@ const updateProductToCartService = async ({ user_id, id, quantity }) => {
     }
 
     const cart = await Cart.findOneAndUpdate(
-      { user: user_id, "products._id": id },
+      { user: user_id, products: { _id: id } },
       { "products.$[item].quantity": quantity },
       { new: true, arrayFilters: [{ "item._id": id }] }
     );
+
     if (!cart) {
       return { SC: 404, success: false, message: "Cart not found !" };
     }

@@ -20,7 +20,6 @@ const Cart = () => {
   useEffect(() => {
     dispatch(getProducts());
   }, []);
-  console.log(products);
   return (
     <Layout>
       {products && products.length > 0 && (

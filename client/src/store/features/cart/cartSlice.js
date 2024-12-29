@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addProductToCart, getProducts } from "./cartThunk";
+import {
+  addProductToCart,
+  deleteProductToCart,
+  getProducts,
+} from "./cartThunk";
 
 const cartSlice = createSlice({
   name: "cart",
@@ -27,9 +31,22 @@ const cartSlice = createSlice({
       })
       .addCase(addProductToCart.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.message = action.payload?.message;
+        state.products = action.payload?.dataCart?.cart;
+        state.message = action.payload?.dataAddProduct?.message;
       })
       .addCase(addProductToCart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(deleteProductToCart.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProductToCart.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.products = action.payload?.dataCart?.cart;
+        state.message = action.payload?.dataDeleteProduct?.message;
+      })
+      .addCase(deleteProductToCart.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.payload?.message;
       });

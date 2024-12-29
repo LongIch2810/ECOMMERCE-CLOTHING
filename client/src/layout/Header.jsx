@@ -3,6 +3,7 @@ import IconCart from "@/components/icons/IconCart";
 import IconUser from "@/components/icons/IconUser";
 import Logo from "@/components/logo/Logo";
 import { logout } from "@/store/features/auth/authThunk";
+import { getProducts } from "@/store/features/cart/cartThunk";
 import { getUserInfo } from "@/store/features/user/userThunk";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,9 +46,12 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const { products } = useSelector((state) => state.cart);
   useEffect(() => {
     if (!user?._id) {
       dispatch(getUserInfo());
+    } else {
+      dispatch(getProducts());
     }
   }, [user?._id]);
   return (
@@ -66,8 +70,10 @@ const Header = () => {
           className="relative p-2 text-lg font-semibold cursor-pointer"
         >
           <IconCart></IconCart>
-          <div className="absolute top-0 flex items-center justify-center w-5 h-5 text-white bg-black rounded-full left-2/4">
-            <span>0</span>
+          <div className="absolute top-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-black rounded-full left-2/4">
+            {user?._id && products?.length >= 0 && (
+              <span>{products.length}</span>
+            )}
           </div>
         </div>
         <div className="p-2 text-lg font-semibold cursor-pointer">

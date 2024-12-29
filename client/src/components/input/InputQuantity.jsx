@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 
-const InputQuantity = ({ value, maxValue = 10 }) => {
-  const [quantity, setQuantity] = useState(value);
+const InputQuantity = ({ value, setValue, maxValue = 10 }) => {
   const handleDecrement = () => {
-    if (quantity === 1) return;
-    setQuantity(quantity - 1);
+    if (value === 1) return;
+    setValue(value - 1);
   };
   const handleIncrement = () => {
-    if (quantity === maxValue) return;
-    setQuantity(quantity + 1);
+    if (value === maxValue) return;
+    setValue(value + 1);
   };
 
   const handleInputChange = (e) => {
@@ -37,7 +36,7 @@ const InputQuantity = ({ value, maxValue = 10 }) => {
         <input
           type="text"
           id="Quantity"
-          value={quantity}
+          value={value}
           min={1}
           onChange={handleInputChange}
           onBlur={() => setValue(1)}
