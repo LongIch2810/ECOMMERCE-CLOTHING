@@ -3,6 +3,7 @@ import {
   addProductToCart,
   deleteProductToCart,
   getProducts,
+  updateProductToCart,
 } from "./cartThunk";
 
 const cartSlice = createSlice({
@@ -47,6 +48,18 @@ const cartSlice = createSlice({
         state.message = action.payload?.dataDeleteProduct?.message;
       })
       .addCase(deleteProductToCart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(updateProductToCart.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProductToCart.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.products = action.payload?.dataCart?.cart;
+        state.message = action.payload?.dataUpdateProduct?.message;
+      })
+      .addCase(updateProductToCart.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.payload?.message;
       });

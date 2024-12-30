@@ -43,8 +43,16 @@ const Address = () => {
                 <div>
                   <SubTitle icon={<IconAddress />} text="Địa chỉ"></SubTitle>
                   <div>
-                    <Radio text1="Ích Trác Huy Long" text2="0822917787"></Radio>
-                    <Radio text1="Đoàn Văn Khoan" text2="0123567721"></Radio>
+                    <Radio
+                      name="address"
+                      text1="Ích Trác Huy Long"
+                      text2="0822917787"
+                    ></Radio>
+                    <Radio
+                      name="address"
+                      text1="Đoàn Văn Khoan"
+                      text2="0123567721"
+                    ></Radio>
                   </div>
                 </div>
                 <div>
@@ -53,9 +61,13 @@ const Address = () => {
                     text="Phương thức vận chuyển"
                   ></SubTitle>
                   <div>
-                    <Radio text1="Tiết kiệm" text2="20000"></Radio>
-                    <Radio text1="Nhanh" text2="30000"></Radio>
-                    <Radio text1="Hỏa tốc" text2="50000"></Radio>
+                    <Radio
+                      name="method"
+                      text1="Tiết kiệm"
+                      text2="20000"
+                    ></Radio>
+                    <Radio name="method" text1="Nhanh" text2="30000"></Radio>
+                    <Radio name="method" text1="Hỏa tốc" text2="50000"></Radio>
                   </div>
                 </div>
               </div>

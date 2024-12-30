@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import InputQuantity from "../input/InputQuantity";
 import IconBin from "../icons/IconBin";
 import Button from "../button/Button";
 import { formatCurrency } from "@/utils/format";
 import { useDispatch } from "react-redux";
-import { deleteProductToCart } from "@/store/features/cart/cartThunk";
+import {
+  deleteProductToCart,
+  updateProductToCart,
+} from "@/store/features/cart/cartThunk";
 
 const CartItem = ({ item }) => {
+  const [quantity, setQuantity] = useState(item?.quantity);
   const dispatch = useDispatch();
   const handleDeleteItem = (id) => {
     dispatch(deleteProductToCart({ id }));
@@ -34,7 +38,12 @@ const CartItem = ({ item }) => {
         <span className="text-sm font-medium text-gray-500">
           {formatCurrency(item.product.price)}
         </span>
-        <InputQuantity value={item.quantity}></InputQuantity>
+        <InputQuantity
+          idItem={item._id}
+          isHandleUpdate={true}
+          value={quantity}
+          setValue={setQuantity}
+        ></InputQuantity>
       </div>
 
       <div className="flex items-center gap-10">

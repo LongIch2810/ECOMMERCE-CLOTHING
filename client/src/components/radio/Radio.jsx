@@ -1,13 +1,13 @@
 import React from "react";
 
-const Radio = ({ text1 = "", text2 = "" }) => {
+const Radio = ({ name = "", text1 = "", text2 = "" }) => {
   return (
     <fieldset className="space-y-4">
       <legend className="sr-only">Delivery</legend>
 
       <div>
         <label
-          htmlFor="DeliveryStandard"
+          htmlFor={name}
           className="flex cursor-pointer justify-between gap-4 rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-sm hover:border-gray-200 has-[:checked]:border-primary has-[:checked]:ring-1 has-[:checked]:ring-primary"
         >
           <div>
@@ -18,11 +18,10 @@ const Radio = ({ text1 = "", text2 = "" }) => {
 
           <input
             type="radio"
-            name="DeliveryOption"
+            name={name}
             value="DeliveryStandard"
-            id="DeliveryStandard"
+            id={name}
             className="border-gray-300 size-5"
-            checked
           />
         </label>
       </div>

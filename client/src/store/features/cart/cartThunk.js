@@ -3,6 +3,7 @@ import {
   addProductToCartAPI,
   deleteProductToCartAPI,
   getProductsAPI,
+  updateProductToCartAPI,
 } from "./cartAPI";
 import { toast } from "react-toastify";
 
@@ -37,12 +38,32 @@ const deleteProductToCart = createAsyncThunk("cart/delete", async ({ id }) => {
     return { dataDeleteProduct, dataCart };
   } catch (error) {
     if (error.response && error.response.data.message) {
+      toast.error(error.response.data.message);
       return error.response.data;
     }
     console.log(error);
     return error;
   }
 });
+
+const updateProductToCart = createAsyncThunk(
+  "cart/update",
+  async ({ id, quantity }) => {
+    try {
+      const dataUpdateProduct = await updateProductToCartAPI({ id, quantity });
+      toast.success(dataUpdateProduct.message);
+      const dataCart = await getProductsAPI();
+      return { dataUpdateProduct, dataCart };
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        toast.error(error.response.data.message);
+        return error.response.data;
+      }
+      console.log(error);
+      return error;
+    }
+  }
+);
 
 const getProducts = createAsyncThunk("cart/list", async () => {
   try {
@@ -58,4 +79,9 @@ const getProducts = createAsyncThunk("cart/list", async () => {
   }
 });
 
-export { addProductToCart, getProducts, deleteProductToCart };
+export {
+  addProductToCart,
+  getProducts,
+  deleteProductToCart,
+  updateProductToCart,
+};

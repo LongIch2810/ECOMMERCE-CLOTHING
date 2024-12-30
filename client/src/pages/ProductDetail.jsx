@@ -19,6 +19,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [maxQuantity, setMaxQuantity] = useState(0);
   const [size, setSize] = useState("default");
+  console.log(typeof quantity, " ", quantity);
   const handleChooseSize = (e) => {
     const newSize = e.target.value;
     const index = productInfo.sizes.findIndex((item) => item.size === newSize);
@@ -231,7 +232,7 @@ const ProductDetail = () => {
                       handleAddProductToCart({
                         product_id: productInfo.product._id,
                         size,
-                        quantity,
+                        quantity: Number(quantity),
                       })
                     }
                   >

@@ -67,7 +67,7 @@ const updateProductToCartService = async ({ user_id, id, quantity }) => {
     }
 
     const cart = await Cart.findOneAndUpdate(
-      { user: user_id, products: { _id: id } },
+      { user: user_id, products: { $elemMatch: { _id: id } } },
       { "products.$[item].quantity": quantity },
       { new: true, arrayFilters: [{ "item._id": id }] }
     );

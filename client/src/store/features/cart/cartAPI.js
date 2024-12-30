@@ -13,11 +13,19 @@ const deleteProductToCartAPI = async ({ id }) => {
   return response.data;
 };
 
-const updateProductToCartAPI = async ({ id, quantity }) => {};
+const updateProductToCartAPI = async ({ id, quantity }) => {
+  const response = await axios.put(`/cart/update/${id}`, { quantity });
+  return response.data;
+};
 
 const getProductsAPI = async () => {
   const response = await axios.get("/cart");
   return response.data;
 };
 
-export { addProductToCartAPI, getProductsAPI, deleteProductToCartAPI };
+export {
+  addProductToCartAPI,
+  getProductsAPI,
+  deleteProductToCartAPI,
+  updateProductToCartAPI,
+};
