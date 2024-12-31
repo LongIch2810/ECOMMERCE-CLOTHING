@@ -5,6 +5,7 @@ import {
   getProductsAPI,
   getWomenProductsAPI,
 } from "./productAPI";
+import { getReviewsAPI } from "../review/reviewAPI";
 
 const getProducts = createAsyncThunk(
   "product/list",
@@ -54,7 +55,8 @@ const getWomenProducts = createAsyncThunk("product/women", async () => {
 const getProductDetail = createAsyncThunk("product/detail", async ({ id }) => {
   try {
     const data = await getProductDetailAPI({ id });
-    return data;
+    const dataReview = await getReviewsAPI({ product_id: id });
+    return { data, dataReview };
   } catch (error) {
     if (error.response && error.response.data.message) {
       console.log(error.response.data.message);

@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const formatCurrency = (price) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -5,4 +7,10 @@ const formatCurrency = (price) => {
   }).format(price);
 };
 
-export { formatCurrency };
+const formatDate = (date) => {
+  const tempDate = moment(date);
+  const formattedDate = tempDate.format("DD/MM/YYYY HH:mm:ss");
+  return formattedDate;
+};
+
+export { formatCurrency, formatDate };
