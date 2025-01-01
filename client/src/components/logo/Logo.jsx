@@ -5,8 +5,8 @@ const Logo = ({ onClick = () => {} }) => {
   return (
     <Link to="/">
       <img
-        src="/public/logo.png"
-        className="md:w-[200px] w-[100px] cursor-pointer rounded-lg"
+        src="https://res.cloudinary.com/dbfat0hl6/image/upload/v1735714133/logo/ipbtk8kjhzkeeqianoin.avif"
+        className="md:w-[70px] w-[50px] cursor-pointer rounded-lg"
         onClick={onClick}
       ></img>
     </Link>

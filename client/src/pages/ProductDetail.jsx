@@ -43,6 +43,9 @@ const ProductDetail = () => {
   const dispatch = useDispatch();
   const { productInfo, loading } = useSelector((state) => state.product);
   const { reviews, success } = useSelector((state) => state.review);
+  const [image, setImage] = useState("");
+  const [zoomScale, setZoomScale] = useState(1);
+  const [transformOrigin, setTransformOrigin] = useState("center center");
   const [quantity, setQuantity] = useState(1);
   const [maxQuantity, setMaxQuantity] = useState(0);
   const [size, setSize] = useState("default");
@@ -81,6 +84,21 @@ const ProductDetail = () => {
       dispatch(addReview({ star: count, content: comment, product_id: id }));
     }
   };
+
+  const handleMoveZoomImage = (e) => {
+    const rect = e.target.getBoundingClientRect();
+    const offsetXPercent = ((e.clientX - rect.left) / rect.width) * 100;
+    const offsetYPercent = ((e.clientY - rect.top) / rect.height) * 100;
+
+    setZoomScale(3);
+    setTransformOrigin(`${offsetXPercent}% ${offsetYPercent}%`);
+  };
+
+  const handleLeaveZoomImage = () => {
+    setZoomScale(1);
+    setTransformOrigin("center center");
+  };
+
   useEffect(() => {
     dispatch(getProductDetail({ id }));
   }, [id]);
@@ -91,6 +109,12 @@ const ProductDetail = () => {
       setSuccess(false);
     }
   }, [success]);
+
+  useEffect(() => {
+    if (productInfo) {
+      setImage(productInfo.product.images[0]);
+    }
+  }, [productInfo]);
   return (
     <Layout>
       {loading ? <p>Loading ...</p> : ""}
@@ -104,11 +128,20 @@ const ProductDetail = () => {
           <div className="container py-24 max-w-[800px]">
             <div className="flex">
               <div className="flex flex-col flex-1 w-full gap-5">
-                <div>
+                <div
+                  className="w-full h-full overflow-hidden cursor-zoom-in"
+                  onMouseMove={handleMoveZoomImage}
+                  onMouseLeave={handleLeaveZoomImage}
+                >
                   <img
                     alt="ecommerce"
-                    className="object-cover w-full"
-                    src={productInfo.product.images[0]}
+                    className="object-cover object-center w-full zoomImage"
+                    src={image}
+                    style={{
+                      transform: `scale(${zoomScale})`,
+                      transformOrigin: transformOrigin,
+                      imageRendering: "pixelated",
+                    }}
                   />
                 </div>
                 <div className="grid grid-cols-4 gap-5">
@@ -117,7 +150,8 @@ const ProductDetail = () => {
                       key={item}
                       alt="ecommerce"
                       src={item}
-                      className="object-cover"
+                      onClick={() => setImage(item)}
+                      className="object-cover cursor-pointer hover:opacity-60"
                     />
                   ))}
                 </div>
