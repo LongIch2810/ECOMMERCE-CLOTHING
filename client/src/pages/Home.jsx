@@ -4,7 +4,6 @@ import Banner from "@/components/banner/Banner";
 import ContentItem from "@/components/content/ContentItem";
 import IconMen from "@/components/icons/IconMen";
 import IconWomen from "@/components/icons/IconWomen";
-import IconKid from "@/components/icons/IconKid";
 const Home = () => {
   return (
     <Layout>

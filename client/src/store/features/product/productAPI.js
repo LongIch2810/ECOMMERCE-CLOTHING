@@ -15,6 +15,11 @@ const getWomenProductsAPI = async () => {
   return response.data;
 };
 
+const getRelatedProductsAPI = async ({ id }) => {
+  const response = await axios.get(`/product/related-products/${id}`);
+  return response.data;
+};
+
 const getProductDetailAPI = async ({ id }) => {
   const response = await axios.get(`/product/${id}`);
   return response.data;
@@ -24,5 +29,6 @@ export {
   getProductsAPI,
   getMenProductsAPI,
   getWomenProductsAPI,
+  getRelatedProductsAPI,
   getProductDetailAPI,
 };

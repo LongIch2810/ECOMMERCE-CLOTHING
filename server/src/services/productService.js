@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Gender = require("../models/genderModel");
 const Product = require("../models/productModel");
 const Stock = require("../models/stockModel");
+const TypeProduct = require("../models/typeProductModel");
 
 const getProductsService = async ({ page = 1, limit = 10 }) => {
   try {
@@ -52,6 +53,22 @@ const getWomenProductsService = async ({ slug }) => {
   }
 };
 
+const getRelatedProductsService = async ({ id }) => {
+  try {
+    const results = {};
+    const product = await Product.findById(id);
+    const products = await Product.find({
+      type_product: product.type_product,
+      _id: { $ne: id },
+    }).limit(10);
+    results.products = products;
+    return { SC: 200, success: true, results };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 const getProductDetailService = async ({ id }) => {
   try {
     const product = await Stock.findOne({
@@ -78,5 +95,6 @@ module.exports = {
   getProductsService,
   getMenProductsService,
   getWomenProductsService,
+  getRelatedProductsService,
   getProductDetailService,
 };

@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import Title from "../title/Title";
 import Button from "../button/Button";
-import IconShirt from "../icons/IconShirt";
-import IconTrousers from "../icons/IconTrousers";
 import IconEye from "../icons/IconEye";
-import ProductCard from "../card/ProductCard";
-import IconDress from "../icons/IconDress";
 import ProductSlider from "../slider/ProductSlider";
 import { useDispatch, useSelector } from "react-redux";
 import {

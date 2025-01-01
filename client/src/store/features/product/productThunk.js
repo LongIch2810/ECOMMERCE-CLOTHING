@@ -3,6 +3,7 @@ import {
   getMenProductsAPI,
   getProductDetailAPI,
   getProductsAPI,
+  getRelatedProductsAPI,
   getWomenProductsAPI,
 } from "./productAPI";
 import { getReviewsAPI } from "../review/reviewAPI";
@@ -56,7 +57,8 @@ const getProductDetail = createAsyncThunk("product/detail", async ({ id }) => {
   try {
     const data = await getProductDetailAPI({ id });
     const dataReview = await getReviewsAPI({ product_id: id });
-    return { data, dataReview };
+    const dataRelatedProducts = await getRelatedProductsAPI({ id });
+    return { data, dataReview, dataRelatedProducts };
   } catch (error) {
     if (error.response && error.response.data.message) {
       console.log(error.response.data.message);
