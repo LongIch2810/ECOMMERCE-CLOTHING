@@ -1,6 +1,5 @@
 import React from "react";
-import IconAddress from "../icons/IconAddress";
-const steps = ["Details", "Address", "Payment"];
+const steps = ["Chi tiết", "Địa chỉ", "Thanh toán"];
 const Step = ({
   process = "w-5",
   details = false,

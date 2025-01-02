@@ -1,6 +1,5 @@
 import BillItem from "@/components/bill/BillItem";
 import Button from "@/components/button/Button";
-import IconArrowRight from "@/components/icons/IconArrowRight";
 import IconBack from "@/components/icons/IconBack";
 import IconBill from "@/components/icons/IconBill";
 import IconPayment from "@/components/icons/IconPayment";
@@ -78,7 +77,7 @@ const Payment = () => {
               <div className="flex flex-col justify-end pt-8 mt-8 border-t border-gray-100 gap-y-10">
                 <div className="flex justify-end gap-x-3">
                   <Button
-                    onClick={() => navigate("/cart")}
+                    onClick={() => navigate("/address")}
                     className="flex items-center px-5 py-3 text-sm border border-black gap-x-3"
                   >
                     <span>

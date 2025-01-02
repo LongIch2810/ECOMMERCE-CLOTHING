@@ -48,7 +48,7 @@ const Target = () => {
 
       <p>
         Với tất cả niềm tin, sứ mệnh trở thành Tập đoàn thời trang toàn cầu
-        trong tương lai, <strong>DIRTY CLOTHES</strong> cam kết
+        trong tương lai, <strong>DIRTY CLOTHES</strong> cam kết{" "}
         <strong>Tận tâm phục vụ</strong> - Luôn đặt lợi ích khách hàng lên hàng
         đầu.
       </p>

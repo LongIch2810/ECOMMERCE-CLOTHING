@@ -15,7 +15,7 @@ const Contact = () => {
   return (
     <Layout>
       <div className="flex items-center justify-center">
-        <Title className="block text-4xl" text="Liên hệ với chúng tôi"></Title>
+        <Title className="block text-4xl" text="Liên hệ"></Title>
       </div>
       <div className="flex gap-5">
         <img

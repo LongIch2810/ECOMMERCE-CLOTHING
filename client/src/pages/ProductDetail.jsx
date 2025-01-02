@@ -119,7 +119,6 @@ const ProductDetail = () => {
     }
   }, [productInfo]);
 
-  console.log(relatedProducts);
   return (
     <Layout>
       {loading ? <p>Loading ...</p> : ""}
