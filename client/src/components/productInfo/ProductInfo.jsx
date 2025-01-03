@@ -8,12 +8,11 @@ import { getProductDetail } from "@/store/features/product/productThunk";
 import { formatCurrency } from "@/utils/format";
 import { toast } from "react-toastify";
 import StarRating from "../star/StarRating";
+import Loading from "../loading/Loading";
 
 const ProductInfo = ({ id }) => {
   const dispatch = useDispatch();
-  const { productInfo, relatedProducts, loading } = useSelector(
-    (state) => state.product
-  );
+  const { productInfo, loadingDetail } = useSelector((state) => state.product);
   const [image, setImage] = useState("");
   const [zoomScale, setZoomScale] = useState(1);
   const [transformOrigin, setTransformOrigin] = useState("center center");
@@ -61,10 +60,9 @@ const ProductInfo = ({ id }) => {
     }
   }, [productInfo]);
 
-  console.log(productInfo);
   return (
     <>
-      {productInfo && (
+      {productInfo && !loadingDetail ? (
         <div className="container ">
           <div className="flex">
             <div className="flex flex-col flex-1 w-full gap-5">
@@ -182,6 +180,8 @@ const ProductInfo = ({ id }) => {
             </div>
           </div>
         </div>
+      ) : (
+        <Loading />
       )}
     </>
   );

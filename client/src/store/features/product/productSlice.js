@@ -10,6 +10,7 @@ const productSlice = createSlice({
   name: "product",
   initialState: {
     loading: false,
+    loadingDetail: false,
     products: [],
     menProducts: [],
     womenProducts: [],
@@ -44,16 +45,16 @@ const productSlice = createSlice({
         state.womenProducts = action.payload?.results?.products;
       })
       .addCase(getProductDetail.pending, (state, action) => {
-        state.loading = true;
+        state.loadingDetail = true;
       })
       .addCase(getProductDetail.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingDetail = false;
         state.productInfo = action.payload?.data?.result;
         state.relatedProducts =
           action.payload?.dataRelatedProducts?.results?.products;
       })
       .addCase(getProductDetail.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingDetail = false;
         state.message = action.payload?.message;
       });
   },

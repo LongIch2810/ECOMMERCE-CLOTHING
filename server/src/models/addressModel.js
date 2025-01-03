@@ -4,10 +4,9 @@ const { Schema } = mongoose;
 
 const addressSchema = new Schema(
   {
-    fullName: { type: String, required: true },
-    number: { type: String, required: true },
-    street: { type: String, required: true },
-    City: { type: String, required: true },
+    fullname: { type: String, required: true },
+    addressDetail: { type: String, required: true },
+    phone: { type: String, required: true },
     user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }
