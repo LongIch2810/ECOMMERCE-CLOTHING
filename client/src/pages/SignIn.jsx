@@ -10,8 +10,6 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/store/features/auth/authThunk";
-import { getUserInfo } from "@/store/features/user/userThunk";
-import { getUserInfoAPI } from "@/store/features/user/userAPI";
 
 const schema = yup
   .object({
@@ -44,8 +42,6 @@ const SignIn = () => {
       toast.error(arrError[0].message);
     }
   }, [errors]);
-
-  console.log(isLoggedIn);
 
   useEffect(() => {
     if (isLoggedIn) {

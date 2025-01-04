@@ -1,31 +1,40 @@
 import React from "react";
+import Label from "../label/Label";
 
-const Radio = ({ name = "", text1 = "", text2 = "" }) => {
+const Radio = ({
+  name = "",
+  text1 = "",
+  text2 = "",
+  text3 = "",
+  value = "",
+  checked = false,
+  onChange,
+}) => {
   return (
-    <fieldset className="space-y-4">
-      <legend className="sr-only">Delivery</legend>
-
-      <div>
-        <label
-          htmlFor={name}
-          className="flex cursor-pointer justify-between gap-4 rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-sm hover:border-gray-200 has-[:checked]:border-primary has-[:checked]:ring-1 has-[:checked]:ring-primary"
-        >
-          <div>
-            <p className="text-gray-700">{text1}</p>
-
-            <p className="mt-1 text-gray-900">{text2}</p>
-          </div>
-
-          <input
-            type="radio"
-            name={name}
-            value="DeliveryStandard"
-            id={name}
-            className="border-gray-300 size-5"
-          />
-        </label>
+    <Label
+      htmlFor={value}
+      className={`flex items-start p-2 border rounded-lg cursor-pointer gap-x-3 ${
+        checked ? "border-primary" : "border-gray-300"
+      }`}
+    >
+      <input
+        type="radio"
+        name={name}
+        id={value}
+        value={value}
+        checked={checked}
+        onChange={onChange}
+        className="hidden"
+      />
+      <div className="inline-flex items-center justify-center w-5 h-5 border rounded-full border-primary">
+        {checked && <div className="w-3 h-3 rounded-full bg-primary"></div>}
       </div>
-    </fieldset>
+      <div className="flex flex-col font-medium text-gray-500 gap-y-3">
+        <span>{text1}</span>
+        <span>{text2}</span>
+        <span>{text3}</span>
+      </div>
+    </Label>
   );
 };
 

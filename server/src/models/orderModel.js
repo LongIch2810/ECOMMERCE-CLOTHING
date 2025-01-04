@@ -19,15 +19,19 @@ const orderSchema = new Schema(
     total_price: { type: Number, required: true },
     discount: { type: Number, default: 0 },
     final_price: { type: Number, required: true },
-    address: { type: mongoose.Types.ObjectId, ref: "Address", required: true },
     status: {
       type: String,
       enum: ["New", "Processing", "Shipping", "Delivered", "Cancel"],
       default: "New",
     },
     user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
-    voucher: { type: mongoose.Types.ObjectId, ref: "Voucher", required: true },
+    voucher: { type: mongoose.Types.ObjectId, ref: "Voucher", default: null },
     payment: { type: mongoose.Types.ObjectId, ref: "Payment", required: true },
+    address: {
+      fullname: { type: String, required: true },
+      addressDetail: { type: String, required: true },
+      phone: { type: String, required: true },
+    },
     shipping: {
       type: mongoose.Types.ObjectId,
       ref: "Shipping",

@@ -241,7 +241,7 @@ const menProducts = [
   },
   {
     name: "Nike Kaki Pant Beige",
-    price: 280,
+    price: 280000,
     description:
       "Quần kaki Nike Kaki Pant Beige thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -267,7 +267,7 @@ const menProducts = [
   },
   {
     name: "Nike Short Basic Lonely",
-    price: 280,
+    price: 280000,
     description:
       "Quần đùi Nike Short Basic Lonely thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -280,7 +280,7 @@ const menProducts = [
   },
   {
     name: "Nike Short Red Light Basketball",
-    price: 280,
+    price: 280000,
     description:
       "Quần đùi Nike Short Red Light Basketball thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -296,7 +296,7 @@ const menProducts = [
 const womenProducts = [
   {
     name: "Nike T-Shirt Freestyle",
-    price: 280,
+    price: 280000,
     description:
       "Áo phông Nike T-Shirt Freestyle thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -530,7 +530,7 @@ const womenProducts = [
   },
   {
     name: "Nike Wind Pant High-Waisted Woven Open-Hem",
-    price: 280000,
+    price: 250000,
     description:
       "Quần gió Nike Wind Pant High-Waisted Woven Open-Hem thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,
@@ -543,7 +543,7 @@ const womenProducts = [
   },
   {
     name: "Nike Wind Pant Everything Wovens",
-    price: 280000,
+    price: 230000,
     description:
       "Quần gió Nike Wind Pant Everything Wovens thoàng mát, nhẹ nhàng, thu hút",
     averageReview: 4.9,

@@ -32,7 +32,9 @@ const TooltipCartDetail = ({ products }) => {
           </ul>
           <div className="flex items-center justify-between mt-2">
             <span className="text-xs text-main">
-              {`${products.length - 3} sản phẩm trong giỏ`}
+              {`${
+                products.length - 3 <= 0 ? 0 : products.length - 3
+              } sản phẩm trong giỏ`}
             </span>
             <Button
               className="p-2 text-xs text-main bg-secondary"

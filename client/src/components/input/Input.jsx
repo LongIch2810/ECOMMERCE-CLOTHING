@@ -20,7 +20,7 @@ const Input = ({
         type={type}
         id={name}
         name={name}
-        className={`${className} text-sm text-gray-700 bg-white border-gray-200 rounded-md shadow-sm outline-primary`}
+        className={`${className} text-sm text-gray-700 bg-white border-gray-200 rounded-md shadow-lg outline-primary`}
         {...rest}
         {...field}
       />

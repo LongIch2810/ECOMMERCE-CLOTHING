@@ -1,20 +1,21 @@
 import Button from "@/components/button/Button";
 import IconAdd from "@/components/icons/IconAdd";
 import IconAddress from "@/components/icons/IconAddress";
-import IconArrowRight from "@/components/icons/IconArrowRight";
 import IconBack from "@/components/icons/IconBack";
 import IconContinue from "@/components/icons/IconContinue";
 import IconShipping from "@/components/icons/IconShipping";
+import ModalAddress from "@/components/modal/ModalAddress";
 import Radio from "@/components/radio/Radio";
 import Step from "@/components/step/Step";
 import SubTitle from "@/components/title/SubTitle";
 import Title from "@/components/title/Title";
 import Layout from "@/layout/Layout";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Address = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Layout>
       <section className="mt-40">
@@ -33,7 +34,10 @@ const Address = () => {
             <div className="mt-8">
               <div className="flex flex-col gap-y-5">
                 <div>
-                  <Button className="flex items-center justify-center gap-2 p-2 text-sm border border-black">
+                  <Button
+                    onClick={() => setIsOpen(true)}
+                    className="flex items-center justify-center gap-2 p-2 text-sm border border-black"
+                  >
                     <span>
                       <IconAdd></IconAdd>
                     </span>
@@ -99,6 +103,7 @@ const Address = () => {
           </div>
         </div>
       </section>
+      {isOpen && <ModalAddress setIsOpen={setIsOpen} />}
     </Layout>
   );
 };
