@@ -8,7 +8,7 @@ const formatCurrency = (price) => {
 };
 
 const formatDate = (date) => {
-  const tempDate = moment(date);
+  const tempDate = moment(date).utc(); // Giữ nguyên thời gian UTC
   const formattedDate = tempDate.format("DD/MM/YYYY HH:mm:ss");
   return formattedDate;
 };

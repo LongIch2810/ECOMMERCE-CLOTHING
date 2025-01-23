@@ -6,7 +6,7 @@ const shippingSchema = new Schema(
   {
     shipping_method: {
       type: String,
-      enum: ["Economy", "Fast", "Express"],
+      enum: ["Tiết kiệm", "Nhanh", "Hỏa tốc"],
       required: true,
     },
     shipping_price: { type: Number, required: true },

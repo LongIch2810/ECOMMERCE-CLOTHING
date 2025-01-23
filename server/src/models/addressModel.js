@@ -7,6 +7,7 @@ const addressSchema = new Schema(
     fullname: { type: String, required: true },
     addressDetail: { type: String, required: true },
     phone: { type: String, required: true },
+    isDefault: { type: Boolean, default: false },
     user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }

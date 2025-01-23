@@ -16,8 +16,8 @@ const stockSchema = new Schema(
           quantity: { type: Number, required: true },
           status: {
             type: String,
-            enum: ["Available", "Unavailable", "Limited Stock", "Coming soon"],
-            default: "Coming soon",
+            enum: ["Có hàng", "Hết hàng", "Số lượng có hạn", "Đang về"],
+            default: "Đang về",
             required: true,
           },
         },

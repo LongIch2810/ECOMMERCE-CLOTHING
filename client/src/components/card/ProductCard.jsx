@@ -5,13 +5,13 @@ import Modal from "../modal/Modal";
 import IconCart from "../icons/IconCart";
 import ModalProductDetail from "../modal/ModalProductDetail";
 
-const ProductCard = ({ item, onClick = () => {} }) => {
+const ProductCard = ({ item, onClick = () => {}, className = "" }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <div
         onClick={onClick}
-        className="w-full flex cursor-pointer flex-col justify-between max-w-sm h-[500px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+        className={`w-full flex cursor-pointer flex-col justify-between max-w-sm  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ${className}`}
       >
         <div className="relative overflow-hidden rounded-t-lg group">
           <img
@@ -79,14 +79,14 @@ const ProductCard = ({ item, onClick = () => {} }) => {
             </span>
           </div>
           <div
-            className="flex items-center justify-between"
+            className="flex flex-col gap-y-3"
             onClick={(e) => e.stopPropagation()}
           >
             <span className="text-lg font-bold text-secondary dark:text-white">
               {formatCurrency(item.price)}
             </span>
             <Button
-              className="flex px-3 py-2 bg-gray-900 text-main"
+              className="flex items-center justify-center px-3 py-2 bg-gray-900 text-main"
               onClick={() => setIsOpen(true)}
             >
               <span>Thêm giỏ hàng</span>

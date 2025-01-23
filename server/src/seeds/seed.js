@@ -1,7 +1,7 @@
 const Category = require("../models/categoryModel");
 const Gender = require("../models/genderModel");
 const Product = require("../models/productModel");
-const Stock = require("../models/stockModel");
+const Shipping = require("../models/shippingModel");
 const Supplier = require("../models/supplierModel");
 const TypeProduct = require("../models/typeProductModel");
 const User = require("../models/userModel");
@@ -12,42 +12,57 @@ const seedProduct = require("./productSeed");
 const seedSupplier = require("./supplierSeed");
 const seedTypeProduct = require("./typeProductSeed");
 const seedUser = require("./userSeed");
+const seedShipping = require("./shippingSeed");
+const Voucher = require("../models/voucherModel");
+const seedVoucher = require("./voucherSeed");
 
 const seed = async () => {
   try {
-    // Kiểm tra bảng User
+    // Kiểm tra collection User
     if ((await countDocuments(User)) === 0) {
       console.log("Seeding Users...");
       await seedUser();
     }
 
-    // Kiểm tra bảng Supplier
+    // Kiểm tra collection Supplier
     if ((await countDocuments(Supplier)) === 0) {
       console.log("Seeding Suppliers...");
       await seedSupplier();
     }
 
-    // Kiểm tra bảng Category
+    // Kiểm tra collection Category
     if ((await countDocuments(Category)) === 0) {
       console.log("Seeding Categories...");
       await seedCategory();
     }
 
-    // Kiểm tra bảng Subcategory
+    // Kiểm tra collection Subcategory
     if ((await countDocuments(Gender)) === 0) {
       console.log("Seeding Genders...");
       await seedGender();
     }
 
-    // Kiểm tra bảng TypeProduct
+    // Kiểm tra collection TypeProduct
     if ((await countDocuments(TypeProduct)) === 0) {
       console.log("Seeding TypeProducts...");
       await seedTypeProduct();
     }
 
+    // Kiểm tra collection Product
     if ((await countDocuments(Product)) === 0) {
       console.log("Seeding Products...");
       await seedProduct();
+    }
+
+    // Kiểm tra collection Shipping
+    if ((await countDocuments(Shipping)) === 0) {
+      console.log("Seeding Shipping...");
+      await seedShipping();
+    }
+
+    if ((await countDocuments(Voucher)) === 0) {
+      console.log("Seeding Vouchers...");
+      await seedVoucher();
     }
 
     console.log("Seeding process completed.");

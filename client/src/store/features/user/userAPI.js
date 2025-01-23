@@ -6,4 +6,15 @@ const getUserInfoAPI = async () => {
   return response?.data;
 };
 
-export { getUserInfoAPI };
+const saveVoucherAPI = async ({ voucher_id }) => {
+  const response = await axios.post("/user/save-voucher", { voucher_id });
+  return response?.data;
+};
+
+const getVoucherAPI = async ({ voucher_id }) => {
+  console.log(voucher_id);
+  const response = await axios.get(`/user/voucher-info/${voucher_id}`);
+  return response?.data;
+};
+
+export { getUserInfoAPI, saveVoucherAPI, getVoucherAPI };

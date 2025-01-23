@@ -1,21 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getShipping } from "./shippingThunk";
 
 const shippingSlice = createSlice({
   name: "shipping",
   initialState: {
-    shipping_method: null,
-    shipping_price: 0,
+    loading: false,
+    shipping: null,
+    message: null,
   },
-  reducers: {
-    setShippingMethod: (state, action) => {
-      state.shipping_method = action.payload;
-    },
-    setShippingPrice: (state, action) => {
-      state.shipping_price = action.payload;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getShipping.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getShipping.fulfilled, (state, action) => {
+        state.loading = false;
+        state.shipping = action.payload?.shipping;
+      })
+      .addCase(getShipping.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      });
   },
-  extraReducers: (builder) => {},
 });
 
-export const { setShipping } = shippingSlice.actions;
 export default shippingSlice.reducer;

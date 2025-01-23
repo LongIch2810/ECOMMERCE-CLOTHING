@@ -4,18 +4,16 @@ const { Schema } = mongoose;
 
 const voucherSchema = new Schema(
   {
-    name: { type: String, required: true },
+    title: { type: String, required: true },
     number_of_use: { type: Number, required: true },
-    code: { type: String, required: true },
+    code: { type: String, required: true, unique: true },
     description: { type: String, required: true },
-    type: { type: String, required: true },
-    start_date: { type: Date, required: true },
     end_date: { type: Date, required: true },
     value: { type: Number, required: true },
     max_discount: { type: Number, required: true },
     min_order_price: { type: Number, required: true },
     unit: { type: String, enum: ["%", "VND"], default: "%" },
-    status: { type: String, required: true },
+    status: { type: String, enum: ["Hết hạn", "Còn hạn"], required: true },
   },
   { timestamps: true }
 );

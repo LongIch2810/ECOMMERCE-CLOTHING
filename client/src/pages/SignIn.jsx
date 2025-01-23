@@ -15,12 +15,12 @@ const schema = yup
   .object({
     email: yup
       .string()
-      .email("Invalid email format")
-      .required("Email is required"),
+      .email("Vui lòng nhập đúng định dạng email !")
+      .required("Email không được để trống"),
     password: yup
       .string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Password is required"),
+      .min(8, "Mật khẩu phải có ít nhất 8 kí tự !")
+      .required("Mật khẩu không được để trống !"),
   })
   .required();
 
@@ -35,7 +35,7 @@ const SignIn = () => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   useEffect(() => {
     const arrError = Object.values(errors);
     if (arrError.length > 0) {
@@ -48,6 +48,8 @@ const SignIn = () => {
       navigate("/");
     }
   }, [isLoggedIn]);
+
+  console.log(isLoggedIn);
 
   const handleSignIn = (values) => {
     if (!isValid) return;
@@ -94,7 +96,7 @@ const SignIn = () => {
 
               <div className="col-span-6">
                 <Label htmlFor="password">
-                  <span>Password</span>
+                  <span>Mật khẩu</span>
                   <span className="text-secondary">*</span>
                 </Label>
 
@@ -109,19 +111,19 @@ const SignIn = () => {
 
               <div className="col-span-6 mt-4 text-sm">
                 <Link to="/forgot-password" className="underline text-primary">
-                  Forgot password?
+                  Quên mật khẩu?
                 </Link>
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                 <Button className="inline-block px-12 py-3 text-sm text-main bg-primary border-primary shrink-0 ">
-                  Login
+                  Đăng nhập
                 </Button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                  Already have an account?
+                  Bạn đã có tài khoản chưa?
                   <Link to="/sign-up" className="underline text-primary">
-                    Sign up
+                    Đăng ký
                   </Link>
                 </p>
               </div>

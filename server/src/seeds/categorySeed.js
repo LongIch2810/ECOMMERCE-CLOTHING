@@ -1,4 +1,3 @@
-require("dotenv").config();
 const Category = require("../models/categoryModel");
 const generateSlug = require("../utils/generateSlug");
 

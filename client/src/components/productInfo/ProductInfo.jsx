@@ -38,12 +38,17 @@ const ProductInfo = ({ id }) => {
     setTransformOrigin(`${offsetXPercent}% ${offsetYPercent}%`);
   };
 
-  const handleAddProductToCart = ({ product_id, size, quantity }) => {
+  const handleAddProductToCart = ({
+    product_id,
+    size,
+    quantity,
+    stockQuantity,
+  }) => {
     if (size === "default") {
       toast.error("Please choose size");
       return;
     }
-    dispatch(addProductToCart({ product_id, size, quantity }));
+    dispatch(addProductToCart({ product_id, size, quantity, stockQuantity }));
   };
 
   const handleLeaveZoomImage = () => {
@@ -168,6 +173,7 @@ const ProductInfo = ({ id }) => {
                       product_id: productInfo.product._id,
                       size,
                       quantity: Number(quantity),
+                      stockQuantity: maxQuantity,
                     })
                   }
                 >

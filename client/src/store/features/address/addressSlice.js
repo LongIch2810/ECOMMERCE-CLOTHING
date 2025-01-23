@@ -1,25 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { addAddress, getAddresses } from "./addressThunk";
 
 const addressSlice = createSlice({
   name: "address",
   initialState: {
-    fullname: null,
-    addressDetail: null,
-    phone: null,
+    loading: false,
+    addresses: null,
+    addressDefault: null,
+    message: null,
   },
   reducers: {
-    setFullname: (state, action) => {
-      state.fullname = action.payload;
-    },
-    setAddressDetail: (state, action) => {
-      state.addressDetail = action.payload;
-    },
-    setPhone: (state, action) => {
-      state.phone = action.payload;
+    setAddressDefault: (state, action) => {
+      state.addressDefault = action.payload;
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(addAddress.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(addAddress.fulfilled, (state, action) => {
+        state.loading = false;
+        state.addresses = action.payload?.dataAddresses?.addresses;
+        state.message = action.payload?.dataAddAddress?.message;
+      })
+      .addCase(addAddress.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(getAddresses.fulfilled, (state, action) => {
+        state.loading = false;
+        state.addresses = action.payload?.dataAddresses?.addresses;
+        state.addressDefault =
+          action.payload?.dataAddressDefault?.addressDefault;
+      });
+  },
 });
 
-export const { setAddress } = addressSlice.actions;
+export const { setAddressDefault } = addressSlice.actions;
 export default addressSlice.reducer;

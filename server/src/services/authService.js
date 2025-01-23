@@ -6,18 +6,18 @@ const loginService = async (data) => {
     //check user
     const user = await User.findOne({ email });
     if (!user) {
-      return { SC: 404, success: false, message: "User not found !" };
+      return { SC: 404, success: false, message: "Người dùng không tồn tại !" };
     }
 
     //check password
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
-      return { SC: 401, success: false, message: "Incorrect password" };
+      return { SC: 401, success: false, message: "Mật khẩu không chính xác !" };
     }
 
     const token = generateToken({ id: user._id, role: user.role });
 
-    return { SC: 200, success: true, token, message: "Login successfully !" };
+    return { SC: 200, success: true, token, message: "Đăng nhập thành công !" };
   } catch (error) {
     console.log(error);
     return {
@@ -36,7 +36,7 @@ const registerService = async (data) => {
       return {
         SC: 400,
         success: false,
-        message: "Account already exists !",
+        message: "Người dùng đã tồn tại !",
       };
     }
 
@@ -49,7 +49,7 @@ const registerService = async (data) => {
       SC: 201,
       success: true,
       token,
-      message: "Register successfully !",
+      message: "Đăng ký thành công !",
     };
   } catch (error) {
     console.log(error);

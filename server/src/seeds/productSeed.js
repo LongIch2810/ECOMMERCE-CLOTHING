@@ -573,32 +573,32 @@ const sizes = [
   {
     size: "XS",
     quantity: 10,
-    status: "Available",
+    status: "Có hàng",
   },
   {
     size: "S",
     quantity: 10,
-    status: "Available",
+    status: "Có hàng",
   },
   {
     size: "M",
     quantity: 10,
-    status: "Available",
+    status: "Có hàng",
   },
   {
     size: "L",
     quantity: 10,
-    status: "Available",
+    status: "Có hàng",
   },
   {
     size: "XL",
     quantity: 10,
-    status: "Available",
+    status: "Có hàng",
   },
   {
     size: "XXL",
     quantity: 10,
-    status: "Available",
+    status: "Có hàng",
   },
 ];
 

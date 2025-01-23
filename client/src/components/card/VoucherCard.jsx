@@ -1,57 +1,94 @@
 import React from "react";
-import IconVoucher from "../icons/IconVoucher";
 import Button from "../button/Button";
-import Logo from "../logo/Logo";
+import { formatCurrency, formatDate } from "@/utils/format";
+import IconVoucher from "../icons/IconVoucher";
+import { useDispatch, useSelector } from "react-redux";
+import { getVoucher, saveVoucher } from "@/store/features/user/userThunk";
+import { isExpire } from "@/utils/check";
 
-const VoucherCard = ({ value, type, discount_max, min_order_price }) => {
+const VoucherCard = ({
+  item,
+  isSave = false,
+  isMyVoucher = false,
+  isUse = false,
+  onClickUseVoucher = () => {},
+}) => {
+  const dispatch = useDispatch();
+  const handleSaveVoucher = ({ voucher_id }) => {
+    dispatch(saveVoucher({ voucher_id }));
+  };
   return (
-    // <div className="flex justify-between px-6 py-3 border-2 rounded-lg gap-x-5 border-primary">
-    //   <div>
-    //     <IconVoucher width={64} height={64}></IconVoucher>
-    //     <img src="./logo.png" className="w-6 rounded-lg"></img>
-    //   </div>
-    //   <div className="flex flex-col gap-y-2">
-    //     <h1 className="text-sm font-medium">
-    //       Giảm giá
-    //       <strong>
-    //         {value}
-    //         {type}
-    //       </strong>
-    //     </h1>
-    //     <span className="text-sm">
-    //       Giảm tối đa <strong>{discount_max}K</strong>
-    //     </span>
-    //     <span className="text-sm">
-    //       Đơn tối thiểu <strong>{min_order_price}K</strong>
-    //     </span>
-    //     <Button className="p-1 bg-primary text-main">Lưu</Button>
-    //   </div>
-    // </div>
-
-    <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <div>
-        <div>
-          <IconVoucher></IconVoucher>
+    <div
+      className={`flex items-center justify-between p-2  rounded-lg shadow-md ${
+        isExpire(item?.end_date) ? "bg-gray-300 opacity-60" : "bg-white"
+      }`}
+    >
+      <div className="flex items-center gap-x-3">
+        <div className="p-2 rounded-full bg-secondary">
+          <IconVoucher className="size-6 text-main"></IconVoucher>
         </div>
-        <div>
-          <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            {`Giảm giá ${value}${type}`}
-          </h5>
+        <div className="flex flex-col">
+          <h3
+            className={`text-lg font-semibold ${
+              isMyVoucher ? "text-secondary" : "text-primary"
+            }`}
+          >
+            {isMyVoucher ? item.code : item.title}
+          </h3>
+          {!isMyVoucher && (
+            <p className="text-sm text-gray-600">
+              Code: <span className="text-secondary">{item.code}</span>
+            </p>
+          )}
+          <p className="text-sm text-gray-600">
+            Giảm tối đa:{" "}
+            <span className="text-primary">
+              {formatCurrency(item.max_discount)}
+            </span>
+          </p>
+          <p className="text-sm text-gray-600">
+            Đơn hàng tối thiểu:{" "}
+            <span className="text-primary">
+              {formatCurrency(item.min_order_price)}
+            </span>
+          </p>
+          {!isMyVoucher && (
+            <p className="text-sm text-gray-600">
+              Số lượng:{" "}
+              <span className="text-primary">{item.number_of_use}</span>
+            </p>
+          )}
+          <p className="mt-1 text-sm text-gray-500">
+            Hạn sử dụng:{" "}
+            <span className="text-foreign">{formatDate(item.end_date)}</span>
+          </p>
         </div>
-        <div className="flex flex-col mb-3 font-normal text-gray-500 dark:text-gray-400">
-          <span className="text-sm">
-            Giảm tối đa{" "}
-            <strong className="text-secondary">{discount_max}K</strong>
-          </span>
-          <span className="text-sm">
-            Đơn tối thiểu{" "}
-            <strong className="text-secondary">{min_order_price}K</strong>
-          </span>
-        </div>
-        <Button className="font-medium bg-primary text-main px-5 py-1.5">
-          Lưu
-        </Button>
       </div>
+      {!isMyVoucher ? (
+        <Button
+          className={`px-4 py-2 text-sm font-medium rounded-md ${
+            isExpire(item.end_date) || isSave
+              ? "bg-gray-400 cursor-not-allowed text-primary"
+              : "bg-primary text-main"
+          }`}
+          onClick={() => handleSaveVoucher({ voucher_id: item._id })}
+          disabled={isSave || isExpire(item.end_date)}
+        >
+          {isExpire(item.end_date) ? "Hết hạn" : isSave ? "Đã lưu" : "Lưu"}
+        </Button>
+      ) : (
+        <Button
+          onClick={onClickUseVoucher}
+          className={`px-4 py-2 text-sm font-medium rounded-md ${
+            isExpire(item.end_date) || isUse
+              ? "bg-gray-400 cursor-not-allowed text-primary"
+              : "bg-primary text-main"
+          }`}
+          disabled={isUse || isExpire(item.end_date)}
+        >
+          {isExpire(item.end_date) ? "Hết hạn" : "Sử dụng"}
+        </Button>
+      )}
     </div>
   );
 };

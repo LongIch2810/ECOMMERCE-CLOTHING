@@ -13,10 +13,10 @@ const addReview = createAsyncThunk(
     } catch (error) {
       if (error.response && error.response.data.message) {
         toast.error(error.response.data.message);
-        return error.response.data;
+        return thunkAPI.rejectWithValue(error.response.data);
       }
       console.log(error);
-      return error;
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
     }
   }
 );
@@ -27,10 +27,10 @@ const getReviews = createAsyncThunk("review/list", async ({ product_id }) => {
     return data;
   } catch (error) {
     if (error.response && error.response.data.message) {
-      return error.response.data;
+      return thunkAPI.rejectWithValue(error.response.data);
     }
     console.log(error);
-    return error;
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
 

@@ -8,8 +8,6 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Product from "./pages/Product";
 import Voucher from "./pages/Voucher";
-import Address from "./pages/Address";
-import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
 
 function App() {
@@ -20,8 +18,6 @@ function App() {
       <Route path="/sign-up" element={<SignUp />}></Route>
       <Route path="/product-detail/:id" element={<ProductDetail />}></Route>
       <Route path="/cart" element={<Cart />}></Route>
-      <Route path="/address" element={<Address />}></Route>
-      <Route path="/payment" element={<Payment />}></Route>
       <Route path="/contact" element={<Contact />}></Route>
       <Route path="/profile" element={<Profile />}></Route>
       <Route path="/about" element={<About />}></Route>

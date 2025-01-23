@@ -7,16 +7,25 @@ const addProductToCartService = async ({
   product_id,
   size,
   quantity,
+  stockQuantity,
 }) => {
   try {
     // Kiểm tra tính hợp lệ của id
     if (!mongoose.Types.ObjectId.isValid(product_id)) {
-      return { SC: 400, success: false, message: "Invalid product ID!" };
+      return {
+        SC: 400,
+        success: false,
+        message: "Mã sản phẩm không đúng định dạng !",
+      };
     }
 
     // Kiểm tra số lượng
     if (!Number.isInteger(quantity) || quantity < 0) {
-      return { SC: 400, success: false, message: "Invalid quantity value!" };
+      return {
+        SC: 400,
+        success: false,
+        message: "Số lượng không đúng định dạng !",
+      };
     }
 
     const cart = await Cart.findOneAndUpdate(
@@ -32,13 +41,14 @@ const addProductToCartService = async ({
         arrayFilters: [{ "item.product": product_id, "item.size": size }],
       }
     );
+
     if (!cart) {
       await Cart.findOneAndUpdate(
         { user: user_id },
         {
           $push: {
             products: {
-              $each: [{ product: product_id, size, quantity }],
+              $each: [{ product: product_id, size, quantity, stockQuantity }],
               $position: 0,
             },
           },
@@ -46,7 +56,7 @@ const addProductToCartService = async ({
         { new: true }
       );
     }
-    return { SC: 201, success: true, message: "Product added to cart !" };
+    return { SC: 201, success: true, message: "Thêm sản phẩm thành công !" };
   } catch (error) {
     console.log(error);
     return { SC: 500, success: false, message: error.message };
@@ -58,12 +68,20 @@ const updateProductToCartService = async ({ user_id, id, quantity }) => {
   try {
     // Kiểm tra tính hợp lệ của id
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return { SC: 400, success: false, message: "Invalid product ID!" };
+      return {
+        SC: 400,
+        success: false,
+        message: "Mã sản phẩm không đúng định dạng !",
+      };
     }
 
     // Kiểm tra số lượng
     if (!Number.isInteger(quantity) || quantity < 0) {
-      return { SC: 400, success: false, message: "Invalid quantity value!" };
+      return {
+        SC: 400,
+        success: false,
+        message: "Số lượng không đúng định dạng !",
+      };
     }
 
     const cart = await Cart.findOneAndUpdate(
@@ -73,10 +91,14 @@ const updateProductToCartService = async ({ user_id, id, quantity }) => {
     );
 
     if (!cart) {
-      return { SC: 404, success: false, message: "Cart not found !" };
+      return { SC: 404, success: false, message: "Giỏ hàng không tồn tại !" };
     }
 
-    return { SC: 200, success: true, message: "Product updated to cart !" };
+    return {
+      SC: 200,
+      success: true,
+      message: "Cập nhật số lượng sản phẩm thành công !",
+    };
   } catch (error) {
     console.log(error);
     return { SC: 500, success: false, message: error.message };
@@ -88,7 +110,11 @@ const deleteProductToCartService = async ({ user_id, id }) => {
   try {
     // Kiểm tra tính hợp lệ của id
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return { SC: 400, success: false, message: "Invalid product ID!" };
+      return {
+        SC: 400,
+        success: false,
+        message: "Mã sản phẩm không đúng định dạng !",
+      };
     }
 
     const cart = await Cart.findOneAndUpdate(
@@ -100,13 +126,32 @@ const deleteProductToCartService = async ({ user_id, id }) => {
       { new: true }
     );
     if (!cart) {
-      return { SC: 404, success: false, message: "Not found !" };
+      return { SC: 404, success: false, message: "Giỏ hàng không tồn tại !" };
     }
 
     return {
       SC: 200,
       success: true,
-      message: "Product deleted successfully !",
+      message: "Xóa sản phẩm thành công !",
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const deleteAllProductToCartService = async ({ user_id }) => {
+  try {
+    const cart = await Cart.findOne({ user: user_id });
+    if (!cart) {
+      return { SC: 404, success: false, message: "Giỏ hàng không tồn tại !" };
+    }
+    cart.products = [];
+    await cart.save();
+    return {
+      SC: 200,
+      success: true,
+      message: "Xóa tất cả sản phẩm thành công !",
     };
   } catch (error) {
     console.log(error);
@@ -121,7 +166,7 @@ const getProductsToCartService = async ({ user_id }) => {
       "products.product"
     );
     if (!cart) {
-      return { SC: 404, success: false, message: "Cart not found !" };
+      return { SC: 404, success: false, message: "Giỏ hàng không tồn tại !" };
     }
     return { SC: 200, success: true, cart: cart?.products };
   } catch (error) {
@@ -134,5 +179,6 @@ module.exports = {
   addProductToCartService,
   updateProductToCartService,
   deleteProductToCartService,
+  deleteAllProductToCartService,
   getProductsToCartService,
 };

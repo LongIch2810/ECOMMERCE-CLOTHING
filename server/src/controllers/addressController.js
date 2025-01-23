@@ -2,7 +2,9 @@ const validator = require("validator");
 const {
   addAddressService,
   getAddressesService,
+  getAddressDefaultService,
 } = require("../services/addressService");
+
 const addAddress = async (req, res) => {
   const { id: user_id } = req.user;
   const { addressDetail, fullname, phone } = req.body;
@@ -44,4 +46,21 @@ const getAddresses = async (req, res) => {
   return res.status(data.SC).json({ success: false, message: data.message });
 };
 
-module.exports = { addAddress, updateAddress, deleteAddress, getAddresses };
+const getAddressDefault = async (req, res) => {
+  const { id: user_id } = req.user;
+  const data = await getAddressDefaultService({ user_id });
+  if (data.SC === 200 && data?.addressDefault) {
+    return res
+      .status(200)
+      .json({ success: true, addressDefault: data.addressDefault });
+  }
+  return res.status(data.SC).json({ success: false, message: data.message });
+};
+
+module.exports = {
+  addAddress,
+  updateAddress,
+  deleteAddress,
+  getAddresses,
+  getAddressDefault,
+};

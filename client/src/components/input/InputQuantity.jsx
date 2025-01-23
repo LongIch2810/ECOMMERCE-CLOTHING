@@ -1,11 +1,11 @@
 import { updateProductToCart } from "@/store/features/cart/cartThunk";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 
 const InputQuantity = ({
   value,
   setValue,
-  maxValue = 10,
+  maxValue = 5,
   isHandleUpdate = false,
   idItem = "",
 }) => {
@@ -57,7 +57,7 @@ const InputQuantity = ({
         <button
           type="button"
           className={` size-5 text-gray-600 transition  hover:opacity-75 ${
-            value === 1 ? "cursor-not-allowed" : ""
+            value == 1 ? "cursor-not-allowed" : ""
           }`}
           disabled={value === 1}
           onClick={handleDecrement}
@@ -78,7 +78,7 @@ const InputQuantity = ({
         <button
           type="button"
           className={`size-5 text-gray-600 transition  hover:opacity-75 ${
-            value === maxValue ? "cursor-not-allowed" : ""
+            value == maxValue ? "cursor-not-allowed" : ""
           }`}
           disabled={value === maxValue}
           onClick={handleIncrement}

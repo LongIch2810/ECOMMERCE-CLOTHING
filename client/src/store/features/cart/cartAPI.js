@@ -1,15 +1,26 @@
 import axios from "../../../configs/axios";
-const addProductToCartAPI = async ({ product_id, size, quantity }) => {
+const addProductToCartAPI = async ({
+  product_id,
+  size,
+  quantity,
+  stockQuantity,
+}) => {
   const response = await axios.post("/cart/add", {
     product_id,
     size,
     quantity,
+    stockQuantity,
   });
   return response.data;
 };
 
 const deleteProductToCartAPI = async ({ id }) => {
   const response = await axios.delete(`/cart/delete/${id}`);
+  return response.data;
+};
+
+const deleteAllProductToCartAPI = async () => {
+  const response = await axios.delete(`/cart/delete-all`);
   return response.data;
 };
 
@@ -27,5 +38,6 @@ export {
   addProductToCartAPI,
   getProductsAPI,
   deleteProductToCartAPI,
+  deleteAllProductToCartAPI,
   updateProductToCartAPI,
 };

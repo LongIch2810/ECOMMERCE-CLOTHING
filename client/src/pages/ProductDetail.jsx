@@ -356,7 +356,7 @@ const ProductDetail = () => {
                         />
                         <div className="flex flex-col gap-y-1">
                           <span className="font-medium">
-                            {review.user.name}
+                            {review.user?.name}
                           </span>
                           <div className="flex item-center gap-x-3">
                             {stars

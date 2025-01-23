@@ -4,7 +4,7 @@ import ProductInfo from "../productInfo/ProductInfo";
 import { useSelector } from "react-redux";
 import Loading from "../loading/Loading";
 
-const ModalProductDetail = ({ setIsOpen, id }) => {
+const ModalProductDetail = ({ setIsOpen = () => {}, id }) => {
   return (
     <Modal setIsOpen={setIsOpen}>
       <ProductInfo id={id}></ProductInfo>

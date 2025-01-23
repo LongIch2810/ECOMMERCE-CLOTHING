@@ -17,10 +17,10 @@ const getProducts = createAsyncThunk(
     } catch (error) {
       if (error.response && error.response.data.message) {
         console.log(error.response.data.message);
-        return error.response.data;
+        return thunkAPI.rejectWithValue(error.response.data);
       }
       console.log(error);
-      return error;
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
     }
   }
 );
@@ -32,10 +32,10 @@ const getMenProducts = createAsyncThunk("product/men", async () => {
   } catch (error) {
     if (error.response && error.response.data.message) {
       console.log(error.response.data.message);
-      return error.response.data;
+      return thunkAPI.rejectWithValue(error.response.data);
     }
     console.log(error);
-    return error;
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
 
@@ -46,10 +46,10 @@ const getWomenProducts = createAsyncThunk("product/women", async () => {
   } catch (error) {
     if (error.response && error.response.data.message) {
       console.log(error.response.data.message);
-      return error.response.data;
+      return thunkAPI.rejectWithValue(error.response.data);
     }
     console.log(error);
-    return error;
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
 
@@ -62,10 +62,10 @@ const getProductDetail = createAsyncThunk("product/detail", async ({ id }) => {
   } catch (error) {
     if (error.response && error.response.data.message) {
       console.log(error.response.data.message);
-      return error.response.data;
+      return thunkAPI.rejectWithValue(error.response.data);
     }
     console.log(error);
-    return error;
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
 

@@ -18,7 +18,7 @@ const Product = () => {
   );
 
   const [currentPage, setCurrentPage] = useState(current_page);
-  const [limit, setLimit] = useState(9);
+  const [limit, setLimit] = useState(12);
 
   const handleChangePage = (page) => {
     setCurrentPage(page);
@@ -27,56 +27,54 @@ const Product = () => {
   useEffect(() => {
     dispatch(getProducts({ page: currentPage, limit }));
   }, [currentPage, limit]);
+
   return (
     <>
       {!loading && (
         <Layout>
           <section>
-            <div className="flex items-center justify-center my-8">
-              <Title className="text-4xl font-bold" text="Sản phẩm"></Title>
-            </div>
-            <div>
-              <div className="flex items-center justify-between p-3 mb-10 rounded-lg bg-primary text-main">
-                <div className="flex items-center p-2 border rounded-lg cursor-pointer gap-x-1 border-main">
-                  <span className="text-xl font-medium">Bộ lọc sản phẩm</span>
-                  <IconFilter></IconFilter>
-                </div>
-                <div className="flex gap-x-5">
-                  <select className="p-2 border rounded-lg cursor-pointer border-main bg-primary text-main">
-                    <option value="asc">9 sản phẩm</option>
-                    <option value="desc">12 sản phẩm</option>
-                    <option value="desc">15 sản phẩm</option>
-                  </select>
-                  <select className="p-2 border rounded-lg cursor-pointer border-main bg-primary text-main">
-                    <option value="default">Giá</option>
-                    <option value="asc">Thấp đến cao</option>
-                    <option value="desc">Cao đến thấp</option>
-                  </select>
-                </div>
+            <div className="flex flex-col px-4 md:px-8 lg:px-16">
+              <div className="flex items-center justify-center my-8">
+                <Title className="text-4xl font-bold" text="Sản phẩm"></Title>
               </div>
-              <div className="flex justify-between mb-10 gap-x-32">
-                <div className="flex-1">
-                  <div className="grid grid-cols-1 gap-10 mb-10 md:grid-cols-2 lg:grid-cols-3">
-                    {products &&
-                      products.length > 0 &&
-                      products.map((item) => (
-                        <ProductCard
-                          key={item._id}
-                          item={item}
-                          onClick={() =>
-                            navigate(`/product-detail/${item._id}`)
-                          }
-                        ></ProductCard>
-                      ))}
+              <div className="flex flex-col">
+                <div className="flex flex-wrap items-center justify-between gap-3 p-3 mb-10 rounded-lg bg-primary text-main">
+                  <div className="flex items-center p-2 border rounded-lg cursor-pointer gap-x-1 border-main">
+                    <span className="text-xl font-medium">Bộ lọc sản phẩm</span>
+                    <IconFilter></IconFilter>
                   </div>
-                  <div className="flex items-center justify-center">
-                    <Pagination
-                      current={currentPage}
-                      total={total_products}
-                      pageSize={limit}
-                      onChange={handleChangePage}
-                    />
+                  <div className="flex flex-wrap gap-x-3">
+                    <select className="p-2 border rounded-lg cursor-pointer border-main bg-primary text-main">
+                      <option value="asc">9 sản phẩm</option>
+                      <option value="desc">12 sản phẩm</option>
+                      <option value="desc">15 sản phẩm</option>
+                    </select>
+                    <select className="p-2 border rounded-lg cursor-pointer border-main bg-primary text-main">
+                      <option value="default">Giá</option>
+                      <option value="asc">Thấp đến cao</option>
+                      <option value="desc">Cao đến thấp</option>
+                    </select>
                   </div>
+                </div>
+                <div className="grid grid-cols-1 gap-10 mb-10 md:grid-cols-3 lg:grid-cols-4">
+                  {products &&
+                    products.length > 0 &&
+                    products.map((item) => (
+                      <ProductCard
+                        className="w-full"
+                        key={item._id}
+                        item={item}
+                        onClick={() => navigate(`/product-detail/${item._id}`)}
+                      ></ProductCard>
+                    ))}
+                </div>
+                <div className="flex items-center justify-center">
+                  <Pagination
+                    current={currentPage}
+                    total={total_products}
+                    pageSize={limit}
+                    onChange={handleChangePage}
+                  />
                 </div>
               </div>
             </div>

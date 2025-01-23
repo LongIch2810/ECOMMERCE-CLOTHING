@@ -23,7 +23,12 @@ const userSchema = new Schema(
             ref: "Voucher",
             required: true,
           },
-          status: { type: String, enum: ["Used", "Unused"], required: true },
+          status: {
+            type: String,
+            enum: ["Đã sử dụng", "Chưa sử dụng"],
+            default: "Chưa sử dụng",
+            required: true,
+          },
           date_used: { type: Date, default: null },
         },
       ],

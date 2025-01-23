@@ -3,29 +3,30 @@ const {
   updateProductToCartService,
   deleteProductToCartService,
   getProductsToCartService,
+  deleteAllProductToCartService,
 } = require("../services/cartService");
 
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const addProductToCart = async (req, res) => {
   const { id } = req.user;
-  const { product_id, size, quantity } = req.body;
+  const { product_id, size, quantity, stockQuantity } = req.body;
   if (!product_id) {
     return res
       .status(404)
-      .json({ success: false, message: "Product not found !" });
+      .json({ success: false, message: "Sản phẩm không tồn tại !" });
   }
 
   if (!sizes.includes(size)) {
     return res
       .status(404)
-      .json({ success: false, message: "Size not found !" });
+      .json({ success: false, message: "Size không tồn tại !" });
   }
 
   if (quantity < 0) {
     return res
       .status(400)
-      .json({ success: false, message: "Quantity must be greater than 0 !" });
+      .json({ success: false, message: "Số lượng phải lớn hơn 0 !" });
   }
 
   const data = await addProductToCartService({
@@ -33,6 +34,7 @@ const addProductToCart = async (req, res) => {
     product_id,
     size,
     quantity,
+    stockQuantity,
   });
 
   return res.status(data.SC).json({
@@ -48,13 +50,13 @@ const updateProductToCart = async (req, res) => {
   if (!id) {
     return res
       .status(404)
-      .json({ success: false, message: "Item not found !" });
+      .json({ success: false, message: "Item không tồn tại !" });
   }
 
   if (quantity < 0) {
     return res
       .status(400)
-      .json({ success: false, message: "Quantity must be greater than 0 !" });
+      .json({ success: false, message: "Số lượng phải lớn hơn 0 !" });
   }
 
   const data = await updateProductToCartService({
@@ -75,7 +77,7 @@ const deleteProductToCart = async (req, res) => {
   if (!id) {
     return res
       .status(404)
-      .json({ success: false, message: "Item not found !" });
+      .json({ success: false, message: "Item không tồn tại !" });
   }
 
   const data = await deleteProductToCartService({ user_id, id });
@@ -83,6 +85,11 @@ const deleteProductToCart = async (req, res) => {
   return res
     .status(data.SC)
     .json({ success: data.success, message: data.message });
+};
+
+const deleteAllProductToCart = async (req, res) => {
+  const { id: user_id } = req.user;
+  const data = await deleteAllProductToCartService({ user_id });
 };
 
 const getProductsToCart = async (req, res) => {
@@ -100,5 +107,6 @@ module.exports = {
   addProductToCart,
   updateProductToCart,
   deleteProductToCart,
+  deleteAllProductToCart,
   getProductsToCart,
 };

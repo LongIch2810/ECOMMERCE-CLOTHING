@@ -82,7 +82,7 @@ const getProductDetailService = async ({ id }) => {
       })
       .select("-quantity -size -deleted -createdAt -updatedAt -__v");
     if (!product) {
-      return { SC: 404, success: false, message: "Product not found !" };
+      return { SC: 404, success: false, message: "Sản phẩm không tồn tại !" };
     }
     return { SC: 200, success: true, result: product };
   } catch (error) {

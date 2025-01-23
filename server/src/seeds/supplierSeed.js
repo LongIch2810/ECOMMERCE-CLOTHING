@@ -1,4 +1,3 @@
-require("dotenv").config();
 const Supplier = require("../models/supplierModel");
 
 const suppliers = [

@@ -15,24 +15,27 @@ const schema = yup
   .object({
     name: yup
       .string()
-      .min(6, "Username must be at least 6 characters")
+      .min(6, "Tên người dùng phải có ít nhất 6 kí tự !")
       .required(),
     email: yup
       .string()
-      .email("Invalid email format")
-      .required("Email is required"),
+      .email("Vui lòng nhập đúng định dạng email !")
+      .required("Email không được để trống !"),
     phone: yup
       .string()
-      .matches(/^(84|0)([3|5|7|8|9])+([0-9]{8})$/, "Invalid phone number")
+      .matches(
+        /^(84|0)([3|5|7|8|9])+([0-9]{8})$/,
+        "Số điện thoại không hợp lệ !"
+      )
       .required(),
     password: yup
       .string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Password is required"),
+      .min(8, "Mật khẩu phải có ít nhất 8 kí tự !")
+      .required("Mật khẩu không được để trống !"),
     confirm: yup
       .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
+      .oneOf([yup.ref("password"), null], "Mật khẩu không trùng khớp")
+      .required("Hãy xác nhận mật khẩu !"),
   })
   .required();
 
@@ -96,7 +99,7 @@ const SignUp = () => {
             >
               <div className="col-span-6">
                 <Label htmlFor="name">
-                  <span>Username</span>
+                  <span>Tên người dùng</span>
                   <span className="text-secondary">*</span>
                 </Label>
                 <Input
@@ -123,7 +126,7 @@ const SignUp = () => {
 
               <div className="col-span-6">
                 <Label htmlFor="phone">
-                  <span>Phone</span>
+                  <span>Số điện thoại</span>
                   <span className="text-secondary">*</span>
                 </Label>
                 <Input
@@ -136,7 +139,7 @@ const SignUp = () => {
 
               <div className="col-span-6">
                 <Label htmlFor="password">
-                  <span>Password</span>
+                  <span>Mật khẩu</span>
                   <span className="text-secondary">*</span>
                 </Label>
 
@@ -151,7 +154,7 @@ const SignUp = () => {
 
               <div className="col-span-6">
                 <Label htmlFor="confirm">
-                  <span>Password confirmation</span>
+                  <span>Xác nhận mật khẩu</span>
                   <span className="text-secondary">*</span>
                 </Label>
 
@@ -166,13 +169,13 @@ const SignUp = () => {
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                 <Button className="inline-block px-12 py-3 text-sm bg-primary border-primary shrink-0 ">
-                  Create an account
+                  Tạo tài khoản
                 </Button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                  Already have an account?
+                  Bạn đã có tài khoản chưa?
                   <Link to="/sign-in" className="underline text-primary">
-                    Log in
+                    Đăng nhập
                   </Link>
                 </p>
               </div>

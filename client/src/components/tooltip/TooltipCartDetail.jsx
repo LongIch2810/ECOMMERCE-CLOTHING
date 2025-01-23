@@ -13,19 +13,19 @@ const TooltipCartDetail = ({ products }) => {
           <ul>
             {products.slice(0, 3).map((item) => (
               <li
-                key={item.product._id}
+                key={item.product?._id}
                 className="flex items-center justify-between p-2 text-sm font-bold border-b border-main"
-                onClick={() => navigate(`/product-detail/${item.product._id}`)}
+                onClick={() => navigate(`/product-detail/${item.product?._id}`)}
               >
                 <img
-                  src={item.product.images[0]}
+                  src={item.product?.images[0]}
                   className="w-[35px] rounded object-cover"
                 />
                 <span className="overflow-hidden text-xs truncate whitespace-nowrap text-gray-500 hover:text-[#1ac5ae]">
-                  {item.product.name}
+                  {item.product?.name}
                 </span>
                 <span className="text-xs text-secondary">
-                  {formatCurrency(item.product.price)}
+                  {formatCurrency(item.product?.price)}
                 </span>
               </li>
             ))}
@@ -33,7 +33,7 @@ const TooltipCartDetail = ({ products }) => {
           <div className="flex items-center justify-between mt-2">
             <span className="text-xs text-main">
               {`${
-                products.length - 3 <= 0 ? 0 : products.length - 3
+                products.length > 0 ? products.length : 0
               } sản phẩm trong giỏ`}
             </span>
             <Button

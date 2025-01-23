@@ -4,19 +4,28 @@ const addAddressService = async ({
   fullname,
   addressDetail,
   phone,
+  isDefault = false,
   user_id,
 }) => {
   try {
     const addresses = await Address.find({ user: user_id });
-    if (addresses.length === 2) {
-      return { SC: 400, success: false, message: "Bạn đã thêm đủ 2 địa chỉ !" };
+    if (addresses.length === 0) {
+      await Address.create({
+        fullname,
+        addressDetail,
+        phone,
+        isDefault: true,
+        user: user_id,
+      });
+    } else {
+      await Address.create({
+        fullname,
+        addressDetail,
+        phone,
+        isDefault,
+        user: user_id,
+      });
     }
-    await Address.create({
-      fullname,
-      addressDetail,
-      phone,
-      user: user_id,
-    });
     return { SC: 201, success: true, message: "Thêm thành công !" };
   } catch (error) {
     console.log(error);
@@ -41,4 +50,19 @@ const getAddressesService = async ({ user_id }) => {
   }
 };
 
-module.exports = { addAddressService, getAddressesService };
+const getAddressDefaultService = async ({ user_id }) => {
+  try {
+    const addresses = await Address.find({ user: user_id });
+    const addressDefault = addresses.filter((item) => item.isDefault)[0];
+    return { SC: 200, success: true, addressDefault };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+module.exports = {
+  addAddressService,
+  getAddressesService,
+  getAddressDefaultService,
+};

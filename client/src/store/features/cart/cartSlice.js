@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addProductToCart,
+  deleteAllProductToCart,
   deleteProductToCart,
   getProducts,
   updateProductToCart,
@@ -62,6 +63,11 @@ const cartSlice = createSlice({
       .addCase(updateProductToCart.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
+      })
+      .addCase(deleteAllProductToCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = action.payload?.dataCart?.cart;
+        state.message = action.payload?.dataDeleteAllProduct?.message;
       });
   },
 });

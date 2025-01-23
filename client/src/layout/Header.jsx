@@ -12,16 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const menuItem = [
-  // {
-  //   id: 1,
-  //   text: "Nam",
-  //   to: "/men",
-  // },
-  // {
-  //   id: 2,
-  //   text: "Nữ",
-  //   to: "/women",
-  // },
   {
     id: 1,
     text: "Sản phẩm",
@@ -72,14 +62,18 @@ const Header = () => {
             <IconCart></IconCart>
           </div>
           <div className="absolute top-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-black rounded-full left-2/4">
-            {user?._id && products?.length >= 0 && (
+            {user?._id && products?.length >= 0 ? (
               <span>{products.length}</span>
+            ) : (
+              <span>0</span>
             )}
           </div>
-          <TooltipCartDetail products={products}></TooltipCartDetail>
+          {user?._id && (
+            <TooltipCartDetail products={products}></TooltipCartDetail>
+          )}
         </div>
         <div className="p-2 text-lg font-semibold">
-          <div className="relative group">
+          <div className="relative p-2 group">
             <div
               className="flex items-center cursor-pointer gap-x-3"
               onClick={() => navigate("/profile")}

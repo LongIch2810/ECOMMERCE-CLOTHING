@@ -1,8 +1,14 @@
 const Joi = require("joi");
 
 const schema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(8),
+  email: Joi.string().email().required().messages({
+    "string.email": "Vui lòng nhập đúng định dạng email",
+    "string.empty": "Email không được để trống!",
+  }),
+  password: Joi.string().min(8).required().messages({
+    "string.min": "Mật khẩu phải có ít nhất 8 ký tự",
+    "string.empty": "Mật khẩu không được để trống!",
+  }),
 });
 
 const validateLogin = (req, res, next) => {

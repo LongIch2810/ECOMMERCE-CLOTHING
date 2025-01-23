@@ -12,10 +12,10 @@ const login = createAsyncThunk("auth/login", async (credentials) => {
   } catch (error) {
     if (error.response && error.response.data.message) {
       toast.error(error.response.data.message);
-      return error.response.data;
+      return thunkAPI.rejectWithValue(error.response.data);
     }
     console.log(error);
-    return error;
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
 
@@ -29,10 +29,10 @@ const register = createAsyncThunk("auth/register", async (credentials) => {
   } catch (error) {
     if (error.response && error.response.data.message) {
       toast.error(error.response.data.message);
-      return error.response.data;
+      return thunkAPI.rejectWithValue(error.response.data);
     }
     console.log(error);
-    return error;
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
 
@@ -45,10 +45,10 @@ const logout = createAsyncThunk("auth/logout", async () => {
   } catch (error) {
     if (error.response && error.response.data.message) {
       toast.error(error.response.data.message);
-      return error.response.data;
+      return thunkAPI.rejectWithValue(error.response.data);
     }
     console.log(error);
-    return error;
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
 

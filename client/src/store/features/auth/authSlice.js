@@ -21,7 +21,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.message = action.payload?.data?.message;
+        state.message = action.payload?.message;
         state.isLoggedIn = false;
       })
       .addCase(register.pending, (state, action) => {

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserInfo } from "./userThunk";
+import { getUserInfo, getVoucher, saveVoucher } from "./userThunk";
 import { login, logout, register } from "../auth/authThunk";
 const userSlice = createSlice({
   name: "user",
@@ -7,6 +7,7 @@ const userSlice = createSlice({
     loading: false,
     user: null,
     message: null,
+    voucherInfo: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -25,6 +26,15 @@ const userSlice = createSlice({
         state.loading = false;
         state.message = null;
         state.user = action.payload?.dataUserInfo?.user;
+      })
+      .addCase(saveVoucher.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.data?.message;
+        state.user = action.payload?.dataUserInfo?.user;
+      })
+      .addCase(getVoucher.fulfilled, (state, action) => {
+        state.loading = false;
+        state.voucherInfo = action.payload?.voucher;
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.loading = false;
