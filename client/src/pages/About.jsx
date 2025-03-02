@@ -2,9 +2,12 @@ import Dropdown from "@/components/about/Dropdown";
 import Target from "@/components/about/Target";
 import Title from "@/components/title/Title";
 import Layout from "@/layout/Layout";
-import React from "react";
+import React, { useEffect } from "react";
 
 const About = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Layout>
       {/* Tiêu đề */}

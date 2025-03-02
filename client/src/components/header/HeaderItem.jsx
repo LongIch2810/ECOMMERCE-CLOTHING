@@ -7,8 +7,10 @@ const HeaderItem = ({ children, to = "", onClick = () => {} }) => {
       to={to}
       onClick={onClick}
       className={({ isActive }) =>
-        `text-lg font-semibold cursor-pointer p-2 ${
-          isActive ? "border-b-2 border-primary" : ""
+        `text-lg font-semibold cursor-pointer p-2 hover:text-orange-500 ${
+          isActive
+            ? "border-b-2 border-primary"
+            : " border-b-2 border-gray-300 md:border-b-0"
         }`
       }
     >

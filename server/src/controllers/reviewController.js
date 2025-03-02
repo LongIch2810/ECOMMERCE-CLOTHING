@@ -1,6 +1,6 @@
 const {
   addReviewService,
-  getReviewsService,
+  getReviewsByProductIdService,
 } = require("../services/reviewService");
 
 const addReview = async (req, res) => {
@@ -22,14 +22,14 @@ const addReview = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
-const getReviews = async (req, res) => {
+const getReviewsByProductId = async (req, res) => {
   const { id: product_id } = req.params;
   if (!product_id) {
     return res
       .status(400)
       .json({ message: "Mã sản phẩm không được để trống !" });
   }
-  const data = await getReviewsService({ product_id });
+  const data = await getReviewsByProductIdService({ product_id });
   if (data.SC === 200 && data?.reviews) {
     return res.status(200).json({ success: true, reviews: data.reviews });
   }
@@ -38,4 +38,4 @@ const getReviews = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
-module.exports = { addReview, getReviews };
+module.exports = { addReview, getReviewsByProductId };

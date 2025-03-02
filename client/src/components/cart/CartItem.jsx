@@ -13,8 +13,8 @@ const CartItem = ({ item }) => {
     dispatch(deleteProductToCart({ id }));
   };
   return (
-    <div className="grid items-center grid-cols-12 gap-5 p-2 border-b border-gray-300">
-      <div className="flex items-center col-span-8 gap-x-2">
+    <div className="grid items-center grid-cols-12 gap-3 p-2 border-b border-gray-300 md:border-b-0 md:gap-5">
+      <div className="flex items-center col-span-12 md:col-span-8 gap-x-2">
         <img
           src={item.product.images[0]}
           alt=""
@@ -23,6 +23,7 @@ const CartItem = ({ item }) => {
         <div>
           <h3 className="text-sm text-gray-900">{item.product.name}</h3>
           <div className="mt-0.5 space-y-px text-xs text-gray-600">
+            <p>Màu: {item.color.name}</p>
             <div>
               <span className="inline">Size:</span>
               <span className="inline">{item.size}</span>
@@ -33,8 +34,10 @@ const CartItem = ({ item }) => {
           </div>
         </div>
       </div>
-      <p className="place-self-center">{formatCurrency(item.product.price)}</p>
-      <div className="place-self-center">
+      <p className="col-span-12 md:col-span-1 md:place-self-center">
+        {formatCurrency(item.product.price)}
+      </p>
+      <div className="col-span-12 mb-10 md:mb-0 md:col-span-1 md:place-self-center">
         <InputQuantity
           idItem={item._id}
           isHandleUpdate={true}
@@ -43,10 +46,10 @@ const CartItem = ({ item }) => {
           maxValue={item.stockQuantity}
         ></InputQuantity>
       </div>
-      <p className="text-secondary place-self-center">
+      <p className="col-span-6 md:col-span-1 text-secondary md:place-self-center place-self-start">
         {formatCurrency(item.product.price * item.quantity)}
       </p>
-      <div className="place-self-center">
+      <div className="col-span-6 md:col-span-1 md:place-self-center place-self-end">
         <Button onClick={() => handleDeleteItem(item._id)}>
           <IconBin></IconBin>
         </Button>

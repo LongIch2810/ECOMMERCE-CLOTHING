@@ -6,9 +6,14 @@ export default {
     extend: {
       colors: {
         primary: "#111827",
-        secondary: "#e2231a",
-        main: "#fff",
+        secondary: "#E2231A",
+        main: "#FFF",
         foreign: "#3B82F6",
+        pending: "#EAB308",
+        waiting: "#f97316",
+        prepare: "#38bdf8",
+        shipped: "#30AE9E",
+        delivered: "#22C55E",
       },
     },
   },

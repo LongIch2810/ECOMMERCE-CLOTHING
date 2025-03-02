@@ -21,13 +21,6 @@ const schema = yup
       .string()
       .email("Vui lòng nhập đúng định dạng email !")
       .required("Email không được để trống !"),
-    phone: yup
-      .string()
-      .matches(
-        /^(84|0)([3|5|7|8|9])+([0-9]{8})$/,
-        "Số điện thoại không hợp lệ !"
-      )
-      .required(),
     password: yup
       .string()
       .min(8, "Mật khẩu phải có ít nhất 8 kí tự !")
@@ -67,8 +60,8 @@ const SignUp = () => {
 
   const handleSignUp = (values) => {
     if (!isValid) return;
-    const { name, email, phone, password } = values;
-    dispatch(register({ name, email, phone, password }));
+    const { name, email, password } = values;
+    dispatch(register({ name, email, password }));
   };
 
   return (
@@ -121,19 +114,6 @@ const SignUp = () => {
                   name="email"
                   className="w-full p-2"
                   placeholder="Hãy nhập email"
-                ></Input>
-              </div>
-
-              <div className="col-span-6">
-                <Label htmlFor="phone">
-                  <span>Số điện thoại</span>
-                  <span className="text-secondary">*</span>
-                </Label>
-                <Input
-                  control={control}
-                  name="phone"
-                  className="w-full p-2"
-                  placeholder="Hãy nhập số điện thoại"
                 ></Input>
               </div>
 

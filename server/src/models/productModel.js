@@ -15,9 +15,9 @@ const productSchema = new Schema(
       ref: "TypeProduct",
       required: true,
     },
-    supplier: {
+    brand: {
       type: mongoose.Types.ObjectId,
-      ref: "Supplier",
+      ref: "Brand",
       required: true,
     },
   },

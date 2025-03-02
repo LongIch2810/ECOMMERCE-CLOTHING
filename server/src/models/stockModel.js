@@ -14,6 +14,11 @@ const stockSchema = new Schema(
             required: true,
           },
           quantity: { type: Number, required: true },
+          color: {
+            type: mongoose.Types.ObjectId,
+            ref: "Color",
+            required: true,
+          },
           status: {
             type: String,
             enum: ["Có hàng", "Hết hàng", "Số lượng có hạn", "Đang về"],

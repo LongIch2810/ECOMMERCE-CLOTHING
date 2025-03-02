@@ -1,7 +1,7 @@
-import axios from "../../../configs/axios";
+import instanceAxios from "../../../configs/axios";
 
 const addReviewAPI = async ({ star, content, product_id }) => {
-  const response = await axios.post("/review/add", {
+  const response = await instanceAxios.post("/review/add", {
     star,
     content,
     product_id,
@@ -10,7 +10,7 @@ const addReviewAPI = async ({ star, content, product_id }) => {
 };
 
 const getReviewsAPI = async ({ product_id }) => {
-  const response = await axios.get(`/review/${product_id}`);
+  const response = await instanceAxios.get(`/review/${product_id}`);
   return response.data;
 };
 

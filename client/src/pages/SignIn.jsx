@@ -36,6 +36,8 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
+
   useEffect(() => {
     const arrError = Object.values(errors);
     if (arrError.length > 0) {
@@ -44,12 +46,15 @@ const SignIn = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/");
+    console.log(user);
+    if (isLoggedIn && user) {
+      if (user?.role === "Admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     }
-  }, [isLoggedIn]);
-
-  console.log(isLoggedIn);
+  }, [user, isLoggedIn]);
 
   const handleSignIn = (values) => {
     if (!isValid) return;

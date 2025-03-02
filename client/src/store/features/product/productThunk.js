@@ -1,6 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  getFilterProductsAPI,
+  getMaxPriceAPI,
   getMenProductsAPI,
+  getMinPriceAPI,
   getProductDetailAPI,
   getProductsAPI,
   getRelatedProductsAPI,
@@ -24,6 +27,20 @@ const getProducts = createAsyncThunk(
     }
   }
 );
+
+const getFilterProducts = createAsyncThunk("product/filter", async (data) => {
+  try {
+    const result = await getFilterProductsAPI(data);
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      console.log(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
 
 const getMenProducts = createAsyncThunk("product/men", async () => {
   try {
@@ -69,4 +86,40 @@ const getProductDetail = createAsyncThunk("product/detail", async ({ id }) => {
   }
 });
 
-export { getProducts, getMenProducts, getWomenProducts, getProductDetail };
+const getMaxPrice = createAsyncThunk("product/max-price", async () => {
+  try {
+    const data = await getMaxPriceAPI();
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      console.log(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
+const getMinPrice = createAsyncThunk("product/min-price", async () => {
+  try {
+    const data = await getMinPriceAPI();
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      console.log(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
+export {
+  getProducts,
+  getFilterProducts,
+  getMenProducts,
+  getWomenProducts,
+  getProductDetail,
+  getMaxPrice,
+  getMinPrice,
+};

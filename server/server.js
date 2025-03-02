@@ -14,6 +14,11 @@ const voucherRouter = require("./src/routes/voucherRoute");
 const orderRouter = require("./src/routes/orderRoute");
 const stockRouter = require("./src/routes/stockRoute");
 const paypalRouter = require("./src/routes/paypalRoute");
+const typeProductRouter = require("./src/routes/typeProductRoute");
+const sendMail = require("./src/configs/email");
+const brandRouter = require("./src/routes/brandRoute");
+const supplierRouter = require("./src/routes/supplierRoute");
+const categoryRouter = require("./src/routes/categoryRoute");
 
 //create app
 const app = express();
@@ -40,5 +45,9 @@ app.use("/api/voucher", voucherRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/stock", stockRouter);
 app.use("/api/paypal", paypalRouter);
+app.use("/api/type-product", typeProductRouter);
+app.use("/api/brand", brandRouter);
+app.use("/api/supplier", supplierRouter);
+app.use("/api/category", categoryRouter);
 
 app.listen(PORT, () => console.log(`Server is now running on ${PORT}`));

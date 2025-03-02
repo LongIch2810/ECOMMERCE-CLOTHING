@@ -1,18 +1,38 @@
-import axios from "../../../configs/axios";
+import instanceAxios from "../../../configs/axios";
 
 const addOrderAPI = async (data) => {
-  const response = await axios.post("/order/add", data);
+  const response = await instanceAxios.post("/order/add", data);
   return response.data;
 };
 
-const updatePaymentStatusOrderAPI = async ({ order_id }) => {
-  const response = await axios.put(`/order/update-payment-status/${order_id}`);
+const getOrdersByUserIdAPI = async () => {
+  const response = await instanceAxios.get("/order/list");
   return response.data;
 };
 
-const handlePaymentCancelAPI = async ({ order_id }) => {
-  const response = await axios.post("/order/refund", { order_id });
+const getOrdersAPI = async (data) => {
+  const response = await instanceAxios.post("/order/get-all", data);
   return response.data;
 };
 
-export { addOrderAPI, updatePaymentStatusOrderAPI, handlePaymentCancelAPI };
+const changeStatusAPI = async ({ order_id, status }) => {
+  const response = await instanceAxios.put(`/order/change-status/${order_id}`, {
+    status,
+  });
+  return response.data;
+};
+
+const cancelOrderAPI = async ({ order_id }) => {
+  const response = await instanceAxios.put(
+    `/order/change-status-cancel/${order_id}`
+  );
+  return response.data;
+};
+
+export {
+  addOrderAPI,
+  getOrdersByUserIdAPI,
+  getOrdersAPI,
+  changeStatusAPI,
+  cancelOrderAPI,
+};

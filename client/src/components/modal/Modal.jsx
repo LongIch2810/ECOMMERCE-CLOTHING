@@ -10,11 +10,11 @@ const Modal = ({ children, setIsOpen, position = {} }) => {
       onClick={() => setIsOpen(false)}
     >
       <div
-        className="relative p-5 bg-white rounded-lg max-w-[800px] max-h-[680px]"
+        className="relative p-5 bg-white md:rounded-lg w-full md:max-w-[700px] md:max-h-[600px]"
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          className="absolute top-0 right-0 cursor-pointer"
+          className="absolute cursor-pointer top-2 right-2"
           onClick={() => setIsOpen(false)}
         >
           <IconClose className="size-8 hover:text-secondary"></IconClose>

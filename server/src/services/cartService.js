@@ -6,6 +6,7 @@ const addProductToCartService = async ({
   user_id,
   product_id,
   size,
+  color,
   quantity,
   stockQuantity,
 }) => {
@@ -31,14 +32,20 @@ const addProductToCartService = async ({
     const cart = await Cart.findOneAndUpdate(
       {
         user: user_id,
-        products: { $elemMatch: { product: product_id, size } },
+        products: { $elemMatch: { product: product_id, size, color } },
       },
       {
         $inc: { "products.$[item].quantity": quantity },
       },
       {
         new: true,
-        arrayFilters: [{ "item.product": product_id, "item.size": size }],
+        arrayFilters: [
+          {
+            "item.product": product_id,
+            "item.size": size,
+            "item.color": color,
+          },
+        ],
       }
     );
 
@@ -48,7 +55,9 @@ const addProductToCartService = async ({
         {
           $push: {
             products: {
-              $each: [{ product: product_id, size, quantity, stockQuantity }],
+              $each: [
+                { product: product_id, size, color, quantity, stockQuantity },
+              ],
               $position: 0,
             },
           },
@@ -162,9 +171,9 @@ const deleteAllProductToCartService = async ({ user_id }) => {
 //Lay tat ca san pham trong gio hang
 const getProductsToCartService = async ({ user_id }) => {
   try {
-    const cart = await Cart.findOne({ user: user_id }).populate(
-      "products.product"
-    );
+    const cart = await Cart.findOne({ user: user_id })
+      .populate("products.product")
+      .populate("products.color");
     if (!cart) {
       return { SC: 404, success: false, message: "Giỏ hàng không tồn tại !" };
     }

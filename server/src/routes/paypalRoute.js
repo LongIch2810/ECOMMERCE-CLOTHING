@@ -6,6 +6,9 @@ const verifyToken = require("../middlewares/verifyToken");
 const Order = require("../models/orderModel");
 const Cart = require("../models/cartModel");
 const { updateStockAfterOrderService } = require("../services/stockService");
+const User = require("../models/userModel");
+const sendMail = require("../configs/email");
+const Voucher = require("../models/voucherModel");
 
 const paypalRouter = express.Router();
 
@@ -92,10 +95,11 @@ paypalRouter.post("/capture-payment", verifyToken, async (req, res) => {
         products: data.products.map((item) => ({
           product: item.product._id,
           quantity: item.quantity,
+          color: item.color._id,
           size: item.size,
         })),
         total_price: data?.total_price,
-        voucher: data?.voucher,
+        voucher: data?.voucher || null,
         payment_method: data?.payment_method,
         payment_status: jsonResponse.status,
         address: data?.address,
@@ -105,24 +109,56 @@ paypalRouter.post("/capture-payment", verifyToken, async (req, res) => {
 
       await order.save();
 
-      const cart = await Cart.findOne({ user: user_id });
-      cart.products = [];
-      await cart.save();
-
       for (const item of order.products) {
         await updateStockAfterOrderService({
           product_id: item.product,
           size: item.size,
+          color: item.color,
           quantity: item.quantity,
         });
       }
+
+      const cart = await Cart.findOne({ user: user_id });
+      cart.products = [];
+      await cart.save();
+
+      const user = await User.findById(user_id);
+
+      if (data?.voucher) {
+        const index = user.vouchers.findIndex((item) =>
+          item.voucher.equals(data.voucher)
+        );
+
+        if (index !== -1) {
+          user.vouchers[index].status = "Đã sử dụng";
+          await user.save();
+        }
+      }
+
+      await sendMail(
+        user.email,
+        "DIRTY CLOTHES - Đơn hàng của bạn đã được xác nhận!",
+        `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+            <p>Xin chào,</p>
+            <p>Bạn đã đặt hàng thành công với mã đơn hàng của bạn là: <strong>${order._id}</strong></p>
+            <p>Vui lòng theo dõi đơn hàng để nhận hàng nhé! Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+            <hr>
+            <p><strong>DIRTY CLOTHES</strong></p>
+            <p>Địa chỉ: ${process.env.ADMIN_ADDRESS}</p>
+            <p>Hotline: ${process.env.ADMIN_PHONE}</p>
+            <p>Email: ${process.env.ADMIN_EMAIL}</p>
+        </div>`
+      );
+
       return res.status(httpStatusCode).json({
         success: true,
         message: "Đặt hàng và thanh toán đơn hàng thành công !",
         jsonResponse,
       });
     }
-    return res.status(400).json({ message: "Payment not completed." });
+    return res
+      .status(400)
+      .json({ success: false, message: "Payment not completed." });
   } catch (error) {
     console.error("Failed to create order:", error);
     res.status(500).json({ error: "Failed to capture order." });

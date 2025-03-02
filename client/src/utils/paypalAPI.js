@@ -12,7 +12,6 @@ const createOrder = async (products) => {
 
 const capturePayment = async ({ orderID, data }) => {
   try {
-    console.log(data);
     const response = await axios.post(`/paypal/capture-payment`, {
       orderID,
       data,

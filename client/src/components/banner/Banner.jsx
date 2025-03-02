@@ -1,8 +1,8 @@
 import React from "react";
 
-const Banner = ({ className = "" }) => {
+const Banner = ({ className = "", src = "" }) => {
   return (
-    <img src="./banner.webp" alt="" className={`${className} rounded-md`} />
+    <img src={src} alt="" className={`${className} object-cover rounded-md`} />
   );
 };
 

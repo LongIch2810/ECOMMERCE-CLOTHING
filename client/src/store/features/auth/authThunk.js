@@ -1,5 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { loginAPI, logoutAPI, registerAPI } from "./authAPI";
+import {
+  loginAPI,
+  logoutAPI,
+  registerAPI,
+  resetPasswordAPI,
+  sendOtpAPI,
+} from "./authAPI";
 import { toast } from "react-toastify";
 import { getUserInfoAPI } from "../user/userAPI";
 
@@ -52,4 +58,34 @@ const logout = createAsyncThunk("auth/logout", async () => {
   }
 });
 
-export { login, register, logout };
+const sendOTP = createAsyncThunk("auth/sendOTP", async (data) => {
+  try {
+    const result = await sendOtpAPI(data);
+    toast.success(result.message);
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      toast.error(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
+const resetPassword = createAsyncThunk("auth/resetPassword", async (data) => {
+  try {
+    const result = await resetPasswordAPI(data);
+    toast.success(result.message);
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      toast.error(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
+export { login, register, logout, sendOTP, resetPassword };

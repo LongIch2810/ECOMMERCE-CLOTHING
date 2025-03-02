@@ -1,45 +1,106 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { handlePaymentCancel, updatePaymentStatusOrder } from "./orderThunk";
+import {
+  addOrder,
+  getOrders,
+  getOrdersByUserId,
+  cancelOrder,
+  changeStatusSuccessfully,
+  changeStatus,
+} from "./orderThunk";
+import { getVoucher } from "../user/userThunk";
 
 const orderSlice = createSlice({
   name: "order",
   initialState: {
     loading: false,
-    paymentStatus: false,
-    isCancel: false,
+    addOrderSuccess: false,
+    orders: null,
+    total_orders: null,
+    current_page: 1,
     message: null,
+    voucher: null,
+    total_price: null,
+    shippingMethod: null,
   },
-  reducers: {},
+  reducers: {
+    setAddOrderSuccess: (state, action) => {
+      console.log(action.payload);
+      state.addOrderSuccess = action.payload;
+    },
+    setVoucher: (state, action) => {
+      state.voucher = action.payload;
+    },
+    setCurrentPage: (state, action) => {
+      state.current_page = action.payload;
+    },
+    setTotalPrice: (state, action) => {
+      state.total_price = action.payload;
+    },
+    setShippingMethod: (state, action) => {
+      state.shippingMethod = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(updatePaymentStatusOrder.pending, (state, action) => {
+      .addCase(addOrder.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(updatePaymentStatusOrder.fulfilled, (state, action) => {
+      .addCase(addOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.paymentStatus = action.payload?.success;
+        state.addOrderSuccess = action.payload?.dataAddOrder?.success;
+        state.orders = action.payload?.dataOrders?.orders;
+        state.message = action.payload?.dataAddOrder?.message;
+      })
+      .addCase(addOrder.rejected, (state, action) => {
+        state.loading = false;
         state.message = action.payload?.message;
       })
-      .addCase(updatePaymentStatusOrder.rejected, (state, action) => {
+      .addCase(getVoucher.fulfilled, (state, action) => {
         state.loading = false;
-        state.paymentStatus = false;
-        state.message = action.payload?.message;
+        state.voucher = action.payload?.voucher;
       })
-      .addCase(handlePaymentCancel.pending, (state, action) => {
+      .addCase(getOrdersByUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload?.orders;
+      })
+      .addCase(getOrders.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(handlePaymentCancel.fulfilled, (state, action) => {
+      .addCase(getOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.isCancel = action.payload?.success;
+        state.orders = action.payload?.results.orders;
+        state.total_orders = action.payload?.results.total_orders;
+        state.current_page = action.payload?.results.current_page;
+      })
+      .addCase(getOrders.rejected, (state, action) => {
+        state.loading = false;
         state.message = action.payload?.message;
       })
-      .addCase(handlePaymentCancel.rejected, (state, action) => {
+      .addCase(changeStatus.fulfilled, (state, action) => {
         state.loading = false;
-        state.isCancel = false;
-        state.message = action.payload?.message;
+        state.orders = action.payload?.dataOrders.results.orders;
+        state.current_page = action.payload?.dataOrders.results.current_page;
+        state.total_orders = action.payload?.dataOrders.results.total_orders;
+        state.message = action.payload?.dataChangeStatus.message;
+      })
+      .addCase(changeStatusSuccessfully.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload?.dataOrdersByUserId.orders;
+        state.message = action.payload?.dataChangeStatus.message;
+      })
+      .addCase(cancelOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload?.dataOrdersByUserId.orders;
+        state.message = action.payload?.dataCancelOrder.message;
       });
   },
 });
 
-export const { setShipping, setAddress, setVoucher } = orderSlice.actions;
+export const {
+  setVoucher,
+  setAddOrderSuccess,
+  setCurrentPage,
+  setTotalPrice,
+  setShippingMethod,
+} = orderSlice.actions;
 export default orderSlice.reducer;

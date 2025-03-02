@@ -14,6 +14,11 @@ const cartSchema = new Schema(
           },
           quantity: { type: Number, required: true },
           size: { type: String, required: true },
+          color: {
+            type: mongoose.Types.ObjectId,
+            ref: "Color",
+            required: true,
+          },
           stockQuantity: { type: Number, required: true },
         },
       ],

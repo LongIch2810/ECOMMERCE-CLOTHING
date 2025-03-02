@@ -53,7 +53,7 @@ const ModalAddress = ({ setIsOpen = () => {} }) => {
     <Modal setIsOpen={setIsOpen}>
       <form
         onSubmit={handleSubmit(handleAddAddress)}
-        className="m-5 w-[500px] flex flex-col gap-y-5"
+        className="flex flex-col m-5 gap-y-5"
       >
         <div>
           <Label htmlFor="fullname">

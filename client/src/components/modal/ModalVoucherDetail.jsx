@@ -1,22 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
-import VoucherCard from "../card/VoucherCard";
 import { useDispatch, useSelector } from "react-redux";
-import { getVoucher } from "@/store/features/user/userThunk";
+import { getUserInfo, getVoucher } from "@/store/features/user/userThunk";
 import { setVoucher } from "@/store/features/order/orderSlice";
+import MyVoucherCard from "../card/MyVoucherCard";
 
 const ModalVoucherDetail = ({
   setIsOpen = () => {},
   order_price,
-  voucherInfo = null,
+  voucher = null,
 }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const handleClickUseVoucher = (item) => {
+    console.log(item);
     dispatch(getVoucher({ voucher_id: item.voucher._id }));
     dispatch(setVoucher(item));
+    localStorage.setItem("voucher", JSON.stringify({ ...item }));
     setIsOpen(() => setIsOpen(false));
   };
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
   return (
     <Modal setIsOpen={setIsOpen}>
       <div className="m-5 w-[500px] flex flex-col gap-y-5">
@@ -28,17 +33,16 @@ const ModalVoucherDetail = ({
         <div className="flex flex-col gap-y-3">
           {user?.vouchers?.length > 0 &&
             user.vouchers.map((item) => (
-              <VoucherCard
+              <MyVoucherCard
                 isUse={
-                  item.status.toLowerCase() === "sử dụng" ||
+                  item.status.toLowerCase() === "đã sử dụng" ||
                   order_price < item.voucher.min_order_price ||
-                  voucherInfo?.code === item.voucher.code
+                  voucher?.code === item.voucher.code
                 }
                 key={item._id}
                 item={item.voucher}
-                isMyVoucher={true}
                 onClickUseVoucher={() => handleClickUseVoucher(item)}
-              ></VoucherCard>
+              ></MyVoucherCard>
             ))}
         </div>
       </div>

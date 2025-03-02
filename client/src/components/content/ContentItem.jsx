@@ -20,21 +20,13 @@ const ContentItem = ({ title = "", icon = "" }) => {
     }
   }, []);
   return (
-    <div className="mb-20">
+    <div className="w-full mb-20">
       <div className="mb-5">
         <Title
           className="text-xl"
           text={`Thời Trang ${title}`}
           icon={icon}
         ></Title>
-        <div className="flex flex-col justify-end gap-5 md:flex-row">
-          <Button className="flex items-center gap-3 p-3 bg-primary">
-            <span className="text-main">Xem tất cả</span>
-            <span>
-              <IconEye className="size-6 text-main"></IconEye>
-            </span>
-          </Button>
-        </div>
       </div>
       <ProductSlider
         list={title === "Nam" ? menProducts : womenProducts}

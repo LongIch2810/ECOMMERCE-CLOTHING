@@ -10,7 +10,7 @@ const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const addProductToCart = async (req, res) => {
   const { id } = req.user;
-  const { product_id, size, quantity, stockQuantity } = req.body;
+  const { product_id, size, quantity, color, stockQuantity } = req.body;
   if (!product_id) {
     return res
       .status(404)
@@ -21,6 +21,12 @@ const addProductToCart = async (req, res) => {
     return res
       .status(404)
       .json({ success: false, message: "Size không tồn tại !" });
+  }
+
+  if (!color) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Màu sắc không tồn tại !" });
   }
 
   if (quantity < 0) {
@@ -34,6 +40,7 @@ const addProductToCart = async (req, res) => {
     product_id,
     size,
     quantity,
+    color,
     stockQuantity,
   });
 

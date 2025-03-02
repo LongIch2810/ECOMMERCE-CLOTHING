@@ -12,6 +12,7 @@ const orderSchema = new Schema(
           required: true,
         },
         quantity: { type: Number, required: true },
+        color: { type: mongoose.Types.ObjectId, ref: "Color", required: true },
         size: { type: String, required: true },
       },
     ],
@@ -19,19 +20,20 @@ const orderSchema = new Schema(
     status: {
       type: String,
       enum: [
-        "Mới",
-        "Đang xử lý",
-        "Đang giao",
+        "Chờ xác nhận",
+        "Chờ lấy hàng",
+        "Chuẩn bị gửi hàng",
+        "Đang giao hàng",
         "Giao hàng thành công",
         "Hủy bỏ",
       ],
-      default: "Mới",
+      default: "Chờ xác nhận",
     },
     user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
     voucher: { type: mongoose.Types.ObjectId, ref: "Voucher", default: null },
     payment_method: {
       type: String,
-      enum: ["tiền mặt", "paypal", "stripe"],
+      enum: ["tiền mặt", "paypal"],
       required: true,
     },
     payment_status: {

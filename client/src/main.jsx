@@ -9,6 +9,9 @@ import "rc-pagination/assets/index.css";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/autoplay";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 const initialOptions = {
   "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
   "enable-funding": "venmo",
@@ -19,7 +22,7 @@ const initialOptions = {
   components: "buttons",
   "data-sdk-integration-source": "developer-studio",
 };
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Provider store={store}>

@@ -22,7 +22,7 @@ const addReviewService = async ({ user_id, star, content, product_id }) => {
   }
 };
 
-const getReviewsService = async ({ product_id }) => {
+const getReviewsByProductIdService = async ({ product_id }) => {
   try {
     const product = await Product.findById(product_id);
     if (!product)
@@ -37,4 +37,4 @@ const getReviewsService = async ({ product_id }) => {
   }
 };
 
-module.exports = { addReviewService, getReviewsService };
+module.exports = { addReviewService, getReviewsByProductIdService };

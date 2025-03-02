@@ -19,16 +19,6 @@ const schema = Joi.object({
     "string.empty": "Mật khẩu không được để trống",
     "any.required": "Mật khẩu là bắt buộc",
   }),
-  phone: Joi.string()
-    .pattern(new RegExp(/^(84|0)([3|5|7|8|9])+([0-9]{8})$/))
-    .required()
-    .messages({
-      "string.base": "Số điện thoại phải là một chuỗi",
-      "string.pattern.base":
-        "Số điện thoại không đúng định dạng (phải bắt đầu bằng 84 hoặc 0 và có 10 chữ số hợp lệ)",
-      "string.empty": "Số điện thoại không được để trống",
-      "any.required": "Số điện thoại là bắt buộc",
-    }),
 });
 
 const validateRegister = (req, res, next) => {

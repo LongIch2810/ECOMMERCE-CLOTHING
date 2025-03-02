@@ -12,8 +12,9 @@ const Voucher = () => {
   useEffect(() => {
     dispatch(getVouchers());
   }, []);
-  console.log(vouchers);
-  console.log(user);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Layout>
       <div className="flex items-center justify-center my-8">

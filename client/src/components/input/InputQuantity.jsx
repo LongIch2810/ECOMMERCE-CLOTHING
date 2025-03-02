@@ -56,7 +56,7 @@ const InputQuantity = ({
       <div className="inline-flex items-center border border-gray-200 rounded">
         <button
           type="button"
-          className={` size-5 text-gray-600 transition  hover:opacity-75 ${
+          className={`size-5 text-gray-600 transition  hover:opacity-75 ${
             value == 1 ? "cursor-not-allowed" : ""
           }`}
           disabled={value === 1}
@@ -72,7 +72,7 @@ const InputQuantity = ({
           min={1}
           onChange={handleInputChange}
           onBlur={handleBlur}
-          className="w-10 h-10 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+          className="w-8 h-8 md:w-10 md:h-10 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
         />
 
         <button

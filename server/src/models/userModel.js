@@ -5,16 +5,21 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
+    avatar: {
+      type: "string",
+      default:
+        "https://res.cloudinary.com/dbfat0hl6/image/upload/v1737709354/user_egjqgv.jpg",
+    },
     name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
+    fullname: { type: String, default: "" },
     password: { type: String, required: true },
     role: {
       type: String,
       enum: ["Customer", "Admin"],
       default: "Customer",
-      required: true,
     },
-    phone: { type: String, required: true, unique: true },
+    phone: { type: String, default: "", unique: true },
     vouchers: {
       type: [
         {

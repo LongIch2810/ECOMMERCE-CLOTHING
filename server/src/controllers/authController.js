@@ -1,5 +1,10 @@
 const validator = require("validator");
-const { loginService, registerService } = require("../services/authService");
+const {
+  loginService,
+  registerService,
+  sendOTPService,
+  resetPasswordService,
+} = require("../services/authService");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -19,8 +24,8 @@ const login = async (req, res) => {
 };
 
 const register = async (req, res) => {
-  const { name, email, password, phone } = req.body;
-  const data = { name, email, password, phone, role: "Customer" };
+  const { name, email, password } = req.body;
+  const data = { name, email, password, role: "Customer" };
   const result = await registerService(data);
   if (result?.SC === 201 && result?.token) {
     res.cookie("token", result.token, {
@@ -34,7 +39,21 @@ const register = async (req, res) => {
     .json({ success: result.success, message: result.message });
 };
 
-const forgotPassword = (req, res) => {};
+const sendOTP = async (req, res) => {
+  const { email } = req.body;
+  if (!email || !validator.isEmail(email)) {
+    return res.status(400).json({
+      success: false,
+      message: "Email không được để trống và phải đúng định dạng !",
+    });
+  }
+
+  const result = await sendOTPService(email);
+
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
 
 const logout = (req, res) => {
   res.clearCookie("token");
@@ -43,4 +62,20 @@ const logout = (req, res) => {
     .json({ success: true, message: "Logout successfully !" });
 };
 
-module.exports = { login, register, forgotPassword, logout };
+const resetPassword = async (req, res) => {
+  const { id: user_id } = req.user;
+  const { newPassword } = req.body;
+
+  if (!newPassword)
+    return res
+      .status(400)
+      .json({ message: "Mật khẩu mới không được để trống!" });
+
+  const result = await resetPasswordService({ user_id, newPassword });
+
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+module.exports = { login, register, sendOTP, logout, resetPassword };

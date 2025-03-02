@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const Voucher = require("../models/voucherModel");
 
@@ -6,7 +7,7 @@ const getUserInfoService = async (data) => {
   const { id } = data;
   try {
     const user = await User.findById(id)
-      .select("-password -role  -deleted -__v")
+      .select("-password  -deleted -__v")
       .populate({
         path: "vouchers",
         populate: {
@@ -111,4 +112,122 @@ const getVoucherService = async ({ user_id, voucher_id }) => {
   }
 };
 
-module.exports = { getUserInfoService, saveVoucherService, getVoucherService };
+const updateInfoService = async (data) => {
+  const { user_id, username, email, fullname, phone } = data;
+  try {
+    await User.findByIdAndUpdate(user_id, {
+      name: username,
+      email,
+      fullname,
+      phone,
+    });
+    return {
+      SC: 200,
+      success: true,
+      message: "Cập nhật thông tin thành công !",
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const updateAvatarService = async (data) => {
+  const { user_id, avatar } = data;
+
+  try {
+    await User.findByIdAndUpdate(user_id, { avatar });
+    return {
+      SC: 200,
+      success: true,
+      message: "Cập nhật ảnh giao diện thành công !",
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getUsersService = async ({ page = 1, limit = 5, name }) => {
+  try {
+    const filter = {};
+
+    if (name) {
+      filter.name = {};
+      filter.name.$regex = `.*${name}.*`;
+      filter.name.$options = "i";
+    }
+    const results = {};
+    const skip = (page - 1) * limit;
+    const users = await User.find(filter)
+      .limit(limit)
+      .skip(skip)
+      .select("_id name email phone fullname");
+    const total_users = await User.countDocuments(filter);
+    const total_pages = Math.ceil(total_users / limit);
+    results.total_users = total_users;
+    results.total_pages = total_pages;
+    results.current_page = page;
+    results.users = users;
+    return { SC: 200, success: true, results };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const editUserService = async (data) => {
+  try {
+    const { user_id, name, fullname, avatar, phone, email, password } = data;
+    const bcryptPassword = await bcrypt.hash(password, 10);
+    await User.findByIdAndUpdate(user_id, {
+      name,
+      fullname,
+      avatar,
+      phone,
+      email,
+      password: bcryptPassword,
+    });
+    return {
+      SC: 200,
+      success: true,
+      message: "Cập nhật thông tin người dùng thành công !",
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const addUserService = async (data) => {
+  try {
+    const newUser = new User(data);
+    await newUser.save();
+    return { SC: 201, success: true, message: "Thêm người dùng thành công !" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const deleteUserService = async (user_id) => {
+  try {
+    await User.delete(user_id);
+    return { SC: 200, success: true, message: "Xóa người dùng thành công !" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+module.exports = {
+  getUserInfoService,
+  saveVoucherService,
+  getVoucherService,
+  updateInfoService,
+  updateAvatarService,
+  getUsersService,
+  editUserService,
+  deleteUserService,
+  addUserService,
+};

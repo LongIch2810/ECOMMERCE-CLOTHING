@@ -40,7 +40,6 @@ const updateStockAfterOrderService = async ({ product_id, size, quantity }) => {
 
 const refundQuantityService = async ({ product_id, quantity, size }) => {
   try {
-    console.log(product_id);
     // Tìm sản phẩm trong kho với `product_id`
     const stock = await Stock.findOne({ product: product_id });
     if (!stock) {

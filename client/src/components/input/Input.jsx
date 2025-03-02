@@ -4,11 +4,13 @@ import { useController } from "react-hook-form";
 const Input = ({
   control,
   name = "",
+  errors = {},
   type = "text",
   className = "",
   classNameContainer = "",
   ...rest
 }) => {
+  const hasError = errors?.[name];
   const { field } = useController({
     control,
     name,
@@ -17,12 +19,14 @@ const Input = ({
   return (
     <div className={classNameContainer}>
       <input
-        type={type}
         id={name}
+        type={type}
         name={name}
-        className={`${className} text-sm text-gray-700 bg-white border-gray-200 rounded-md shadow-lg outline-primary`}
-        {...rest}
+        className={`w-full p-2 border rounded-md shadow-lg outline-none ${
+          hasError ? "border-red-500" : "border-gray-300"
+        }`}
         {...field}
+        {...rest}
       />
     </div>
   );

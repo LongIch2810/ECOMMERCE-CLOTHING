@@ -2,14 +2,25 @@ import React, { useEffect, useState } from "react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { createOrder, capturePayment } from "../../utils/paypalAPI";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { getProducts } from "@/store/features/cart/cartThunk";
+import { useNavigate } from "react-router-dom";
+import { setVoucher } from "@/store/features/order/orderSlice";
 
 function PaypalButton({ dataOrder }) {
-  console.log(dataOrder);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     if (success && message) {
       toast.success(message);
+      localStorage.removeItem("voucher");
+      localStorage.removeItem("totalPrice");
+      localStorage.removeItem("shippingMethod");
+      dispatch(getProducts());
+      dispatch(setVoucher(null));
+      navigate("/user/order");
     } else if (!success && message) {
       toast.error(message);
     }
@@ -45,32 +56,38 @@ function PaypalButton({ dataOrder }) {
         }
       }}
       onApprove={async (data, actions) => {
-        try {
-          const response = await capturePayment({
-            orderID: data.orderID,
-            data: dataOrder,
-          });
+        if (!dataOrder.shipping) {
+          toast.error("Vui lòng chọn phương thức vận chuyển !");
+        } else if (!dataOrder.address) {
+          toast.error("Vui lòng chọn địa chỉ của bạn !");
+        } else {
+          try {
+            const response = await capturePayment({
+              orderID: data.orderID,
+              data: dataOrder,
+            });
 
-          const orderData = await response;
+            const orderData = await response;
 
-          const errorDetail = orderData?.jsonResponse?.details?.[0];
+            const errorDetail = orderData?.jsonResponse?.details?.[0];
 
-          if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-            return actions.restart();
-          } else if (errorDetail) {
-            throw new Error(
-              `${errorDetail.description} (${orderData.debug_id})`
+            if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+              return actions.restart();
+            } else if (errorDetail) {
+              throw new Error(
+                `${errorDetail.description} (${orderData.debug_id})`
+              );
+            } else {
+              setSuccess(true);
+              setMessage(orderData.message);
+            }
+          } catch (error) {
+            console.error(error);
+            setSuccess(false);
+            setMessage(
+              `Sorry, your transaction could not be processed...${error}`
             );
-          } else {
-            setSuccess(true);
-            setMessage(orderData.message);
           }
-        } catch (error) {
-          console.error(error);
-          setSuccess(false);
-          setMessage(
-            `Sorry, your transaction could not be processed...${error}`
-          );
         }
       }}
     />

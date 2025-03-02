@@ -1,7 +1,7 @@
-import axios from "../../../configs/axios";
+import instanceAxios from "../../../configs/axios";
 
 const getVouchersAPI = async () => {
-  const response = await axios.get("/voucher/list");
+  const response = await instanceAxios.get("/voucher/list");
   return response.data;
 };
 

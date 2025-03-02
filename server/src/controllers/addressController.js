@@ -3,6 +3,8 @@ const {
   addAddressService,
   getAddressesService,
   getAddressDefaultService,
+  getAddressesByUserIdService,
+  setAddressDefaultService,
 } = require("../services/addressService");
 
 const addAddress = async (req, res) => {
@@ -34,12 +36,13 @@ const addAddress = async (req, res) => {
     .status(data.SC)
     .json({ success: data.success, message: data.message });
 };
+
 const updateAddress = (req, res) => {};
 const deleteAddress = (req, res) => {};
 
-const getAddresses = async (req, res) => {
+const getAddressesByUserId = async (req, res) => {
   const { id: user_id } = req.user;
-  const data = await getAddressesService({ user_id });
+  const data = await getAddressesByUserIdService({ user_id });
   if (data.SC === 200 && data?.addresses) {
     return res.status(200).json({ success: true, addresses: data.addresses });
   }
@@ -57,10 +60,41 @@ const getAddressDefault = async (req, res) => {
   return res.status(data.SC).json({ success: false, message: data.message });
 };
 
+const getAddresses = async (req, res) => {
+  const { page, limit, fullname } = req.body;
+  const data = await getAddressesService({
+    page,
+    limit,
+    fullname,
+  });
+  if (data.SC === 200 && data?.results) {
+    return res.status(200).json({ success: true, results: data.results });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
+const setAddressDefault = async (req, res) => {
+  const { id: user_id } = req.user;
+  const { id: address_id } = req.params;
+  if (!address_id) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Địa chỉ không tồn tại !" });
+  }
+  const result = await setAddressDefaultService({ user_id, address_id });
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
 module.exports = {
   addAddress,
   updateAddress,
   deleteAddress,
-  getAddresses,
+  getAddressesByUserId,
   getAddressDefault,
+  getAddresses,
+  setAddressDefault,
 };

@@ -1,8 +1,9 @@
 const Gender = require("../models/genderModel");
 const TypeProduct = require("../models/typeProductModel");
 const Product = require("../models/productModel");
-const Supplier = require("../models/supplierModel");
 const Stock = require("../models/stockModel");
+const Brand = require("../models/brandModel");
+const Color = require("../models/colorModel");
 
 require("dotenv").config();
 
@@ -10,7 +11,8 @@ const menProducts = [
   {
     name: "Nike Club Futura",
     price: 200000,
-    description: "Áo khoác Nike Club Futura giày ấm, nhẹ nhàng, thu hút",
+    description:
+      "Áo khoác Nike Club Futura giữ ấm hiệu quả với chất liệu cao cấp, nhẹ nhàng và thoải mái khi mặc. Thiết kế hiện đại, năng động, phù hợp cho nhiều hoàn cảnh từ dạo phố đến tập luyện. Kiểu dáng thời trang cùng logo Nike đặc trưng giúp bạn nổi bật và tự tin.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734546212/image%20clothing/image%20product/xiba11mjproadhpekcbe.png",
@@ -22,7 +24,8 @@ const menProducts = [
   {
     name: "Nike Windrunner",
     price: 300000,
-    description: "Áo khoác Nike Windrunner thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo khoác Nike Windrunner được thiết kế với chất liệu thoáng khí, giúp bạn luôn mát mẻ và thoải mái khi vận động. Kiểu dáng nhẹ nhàng, linh hoạt, phù hợp cho cả hoạt động thể thao và dạo phố. Thiết kế hiện đại cùng logo Nike đặc trưng tạo nên phong cách năng động và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734547355/image%20clothing/image%20product/bfgvzkxg5wm2pz2iqini.png",
@@ -34,7 +37,8 @@ const menProducts = [
   {
     name: "Nike Fancy Matic",
     price: 300000,
-    description: "Áo khoác Nike Fancy Matic thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo khoác Nike Fancy Matic được làm từ chất liệu cao cấp, thoáng mát và mang lại cảm giác nhẹ nhàng khi mặc. Thiết kế trẻ trung, hiện đại, phù hợp cho nhiều phong cách và hoạt động khác nhau. Điểm nhấn thời trang cùng logo Nike đặc trưng giúp bạn tự tin và thu hút mọi ánh nhìn.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734546569/image%20clothing/image%20product/uxess7hnl4ojor10esbd.png",
@@ -46,7 +50,8 @@ const menProducts = [
   {
     name: "Nike Wind z10",
     price: 250000,
-    description: "Áo sweater Nike Wind z10 thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo sweater Nike Wind Z10 được thiết kế với chất liệu thoáng mát, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Kiểu dáng hiện đại, năng động, phù hợp cho nhiều phong cách thời trang. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn tự tin và thu hút mọi ánh nhìn.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734546770/image%20clothing/image%20product/vfwdej9tc7emms49vsao.png",
@@ -58,7 +63,8 @@ const menProducts = [
   {
     name: "Nike T-Shirt alpha",
     price: 250000,
-    description: "Áo phông Nike T-Shirt alpha thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo phông Nike T-Shirt Alpha được làm từ chất liệu cao cấp, thoáng mát, thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái khi mặc. Thiết kế đơn giản nhưng đầy phong cách, phù hợp cho cả hoạt động thể thao và thời trang hàng ngày. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông năng động và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734548433/image%20clothing/image%20product/pttltxjohlhvfholtgwe.png",
@@ -70,7 +76,8 @@ const menProducts = [
   {
     name: "Nike T-Shirt beta",
     price: 250000,
-    description: "Áo phông Nike T-Shirt beta thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo phông Nike T-Shirt Beta được thiết kế với chất liệu mềm mại, thoáng mát, mang lại cảm giác nhẹ nhàng và dễ chịu suốt cả ngày. Kiểu dáng hiện đại, năng động, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn nổi bật và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734549117/image%20clothing/image%20product/al7t7q0snivcmh9465lc.png",
@@ -82,7 +89,8 @@ const menProducts = [
   {
     name: "Nike T-Shirt omega",
     price: 250000,
-    description: "Áo phông Nike T-Shirt omega  thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo phông Nike T-Shirt Omega được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi hiệu quả, mang lại cảm giác nhẹ nhàng và thoải mái khi mặc. Thiết kế năng động, đơn giản nhưng đầy phong cách, phù hợp cho nhiều hoạt động hàng ngày. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn tự tin và thu hút mọi ánh nhìn.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734549118/image%20clothing/image%20product/aiuxovqiv47hxiycmkq2.png",
@@ -94,7 +102,8 @@ const menProducts = [
   {
     name: "Nike T-Shirt Cuaaaa",
     price: 250000,
-    description: "Áo phông Nike T-Shirt Cuaaaa thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo phông Nike T-Shirt Cuaaaa được thiết kế với chất liệu mềm mại, thoáng mát, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Kiểu dáng hiện đại, trẻ trung, phù hợp cho nhiều phong cách và hoạt động. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn thêm phần năng động và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734549118/image%20clothing/image%20product/jzjd3xgnl9gj7bj4jvgl.png",
@@ -106,7 +115,8 @@ const menProducts = [
   {
     name: "Nike Polo alpha",
     price: 250000,
-    description: "Áo polo Nike Polo alpha  thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo polo Nike Polo Alpha được làm từ chất liệu cao cấp, thoáng mát, thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái khi mặc. Thiết kế thanh lịch, năng động, phù hợp cho cả môi trường công sở lẫn các hoạt động hàng ngày. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734549453/image%20clothing/image%20product/jov5vzjzxp3wd97zuywq.png",
@@ -118,7 +128,8 @@ const menProducts = [
   {
     name: "Nike Polo beta",
     price: 250000,
-    description: "Áo polo Nike Polo beta thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo polo Nike Polo Beta được thiết kế với chất liệu thoáng mát, thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Kiểu dáng thanh lịch, hiện đại, phù hợp cho cả công việc và hoạt động thường ngày. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn tự tin và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734549454/image%20clothing/image%20product/bui2ldijeeuorzebwjgo.png",
@@ -131,7 +142,7 @@ const menProducts = [
     name: "Nike Shirts Yellow Dark",
     price: 280000,
     description:
-      "Áo sơ mi Nike Shirts Yellow Dark thoàng mát, nhẹ nhàng, thu hút",
+      "Áo sơ mi Nike Shirts Yellow Dark được làm từ chất liệu cao cấp, thoáng mát, mang lại cảm giác nhẹ nhàng và dễ chịu khi mặc. Thiết kế hiện đại, lịch lãm nhưng vẫn năng động, phù hợp cho nhiều phong cách và hoàn cảnh. Màu sắc ấn tượng cùng logo Nike tinh tế tạo điểm nhấn, giúp bạn trông cuốn hút và tự tin.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734549599/image%20clothing/image%20product/o3bbehmj4wc4ukppwxle.png",
@@ -143,7 +154,8 @@ const menProducts = [
   {
     name: "Nike Shirts White",
     price: 280000,
-    description: "Áo sơ mi Nike Shirts White thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Áo sơ mi Nike Shirts White được làm từ chất liệu cao cấp, thoáng mát, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế thanh lịch, đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ công sở đến dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông sang trọng và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734549754/image%20clothing/image%20product/mwdp1rhue2vfdconaru0.png",
@@ -154,9 +166,9 @@ const menProducts = [
   },
   {
     name: "Nike Sweater Red Dark",
-    price: 280000,
+    price: 580000,
     description:
-      "Áo sweater Nike Sweater Red Dark thoàng mát, nhẹ nhàng, thu hút",
+      "Áo sweater Nike Sweater Red Dark được làm từ chất liệu mềm mại, thoáng mát, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế hiện đại, năng động, phù hợp cho nhiều phong cách và hoàn cảnh khác nhau. Màu đỏ trầm ấn tượng cùng logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông cuốn hút và tự tin.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734550198/image%20clothing/image%20product/cocvocj2hjt9tm0kof0x.png",
@@ -167,8 +179,9 @@ const menProducts = [
   },
   {
     name: "Nike Sweater Gray",
-    price: 280000,
-    description: "Áo sweater Nike Sweater Gray thoàng mát, nhẹ nhàng, thu hút",
+    price: 480000,
+    description:
+      "Áo sweater Nike Sweater Gray được làm từ chất liệu cao cấp, mềm mại và thoáng mát, mang lại cảm giác nhẹ nhàng và thoải mái khi mặc. Thiết kế đơn giản nhưng hiện đại, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Màu xám trung tính kết hợp với logo Nike tinh tế tạo điểm nhấn, giúp bạn trông năng động và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734549917/image%20clothing/image%20product/t8pl8xuamgrdjmwbyrdp.png",
@@ -179,9 +192,9 @@ const menProducts = [
   },
   {
     name: "Nike Sweater Mixed Classic",
-    price: 280000,
+    price: 880000,
     description:
-      "Áo sweater Nike Sweater Mixed Classic thoàng mát, nhẹ nhàng, thu hút",
+      "Áo sweater Nike Sweater Mixed Classic được làm từ chất liệu cao cấp, thoáng mát và mềm mại, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế pha trộn màu sắc tinh tế, tạo phong cách cổ điển nhưng vẫn hiện đại và năng động. Logo Nike đặc trưng là điểm nhấn, giúp bạn tự tin và thu hút mọi ánh nhìn.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734550199/image%20clothing/image%20product/vs2n2ipv2dphqk9xtdid.png",
@@ -193,7 +206,8 @@ const menProducts = [
   {
     name: "Nike Jeans Basic",
     price: 280000,
-    description: "Quần jeans Nike Jeans Basic thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Quần jeans Nike Jeans Basic được làm từ chất liệu denim cao cấp, thoáng mát và co giãn nhẹ, mang lại cảm giác thoải mái suốt cả ngày. Thiết kế đơn giản nhưng tinh tế, dễ dàng phối với nhiều trang phục khác nhau. Kiểu dáng hiện đại cùng logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734550601/image%20clothing/image%20product/nbeyqi1bnhdyfj5sbwsz.png",
@@ -205,7 +219,8 @@ const menProducts = [
   {
     name: "Nike Wind Pant Beige",
     price: 280000,
-    description: "Quần gió Nike Wind Pant Beige thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Quần gió Nike Wind Pant Beige được làm từ chất liệu cao cấp, thoáng mát và nhẹ nhàng, mang lại sự thoải mái tối đa khi vận động. Thiết kế hiện đại, năng động, phù hợp cho nhiều hoạt động từ thể thao đến dạo phố. Màu be trang nhã kết hợp với logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734550758/image%20clothing/image%20product/ypbvfyxpha0hrk5scwy8.png",
@@ -217,7 +232,8 @@ const menProducts = [
   {
     name: "Nike Wind Pant Black",
     price: 280000,
-    description: "Quần gió Nike Wind Pant Black thoàng mát, nhẹ nhàng, thu hút",
+    description:
+      "Quần gió Nike Wind Pant Black được làm từ chất liệu cao cấp, thoáng mát và nhẹ nhàng, mang lại cảm giác thoải mái suốt cả ngày. Thiết kế năng động, hiện đại, phù hợp cho nhiều hoạt động từ thể thao đến dạo phố. Màu đen mạnh mẽ kết hợp với logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734550892/image%20clothing/image%20product/wjp0v36vzltsvokodmos.png",
@@ -228,9 +244,9 @@ const menProducts = [
   },
   {
     name: "Nike Kaki Pant Black",
-    price: 280000,
+    price: 380000,
     description:
-      "Quần kaki Nike Kaki Pant Black thoàng mát, nhẹ nhàng, thu hút",
+      "Quần kaki Nike Kaki Pant Black được làm từ chất liệu cao cấp, thoáng mát và co giãn nhẹ, mang lại cảm giác thoải mái suốt cả ngày. Thiết kế hiện đại, đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ công sở đến dạo phố. Màu đen mạnh mẽ kết hợp với logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734551159/image%20clothing/image%20product/z3guadgerizvluzmmiva.png",
@@ -241,9 +257,9 @@ const menProducts = [
   },
   {
     name: "Nike Kaki Pant Beige",
-    price: 280000,
+    price: 480000,
     description:
-      "Quần kaki Nike Kaki Pant Beige thoàng mát, nhẹ nhàng, thu hút",
+      "Quần kaki Nike Kaki Pant Beige được làm từ chất liệu cao cấp, thoáng mát và co giãn nhẹ, mang lại cảm giác thoải mái suốt cả ngày. Thiết kế thanh lịch, đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ công sở đến dạo phố. Màu be trang nhã kết hợp với logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734551294/image%20clothing/image%20product/ptco3wi1ef5viuiverck.png",
@@ -256,7 +272,7 @@ const menProducts = [
     name: "Nike Short Black Cool",
     price: 280000,
     description:
-      "Quần đùi Nike Short Black Cool thoàng mát, nhẹ nhàng, thu hút",
+      "Quần đùi Nike Short Black Cool được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế năng động, linh hoạt, phù hợp cho các hoạt động thể thao và dạo phố. Màu đen mạnh mẽ kết hợp với logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734551423/image%20clothing/image%20product/prshnhpgj1q4zc3fqcrx.png",
@@ -269,7 +285,7 @@ const menProducts = [
     name: "Nike Short Basic Lonely",
     price: 280000,
     description:
-      "Quần đùi Nike Short Basic Lonely thoàng mát, nhẹ nhàng, thu hút",
+      "Quần đùi Nike Short Basic Lonely được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế đơn giản nhưng tinh tế, phù hợp cho nhiều hoạt động từ thể thao đến dạo phố. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734551651/image%20clothing/image%20product/gp1lext8a3sihbqog9dl.png",
@@ -282,7 +298,7 @@ const menProducts = [
     name: "Nike Short Red Light Basketball",
     price: 280000,
     description:
-      "Quần đùi Nike Short Red Light Basketball thoàng mát, nhẹ nhàng, thu hút",
+      "Quần đùi Nike Short Red Light Basketball được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái khi vận động. Thiết kế rộng rãi, linh hoạt, phù hợp cho các hoạt động thể thao, đặc biệt là bóng rổ. Màu đỏ nổi bật kết hợp với logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734551680/image%20clothing/image%20product/sdx4stn6ezntb6ubeeft.png",
@@ -298,7 +314,7 @@ const womenProducts = [
     name: "Nike T-Shirt Freestyle",
     price: 280000,
     description:
-      "Áo phông Nike T-Shirt Freestyle thoàng mát, nhẹ nhàng, thu hút",
+      "Áo phông Nike T-Shirt Freestyle được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế năng động, trẻ trung, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734789301/image%20clothing/image%20product/mc6lmno1ut5vboe5idoc.png",
@@ -311,7 +327,7 @@ const womenProducts = [
     name: "Nike T-Shirt Sportswear Short-Sleeve",
     price: 280000,
     description:
-      "Áo phông Nike T-Shirt Sportswear Short-Sleeve thoàng mát, nhẹ nhàng, thu hút",
+      "Áo phông Nike T-Shirt Sportswear Short-Sleeve được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế tay ngắn năng động, phù hợp cho các hoạt động thể thao và dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734789664/image%20clothing/image%20product/nunwlbkc9n9xy0lhbdrw.png",
@@ -324,7 +340,7 @@ const womenProducts = [
     name: "Jordan Artist Series by Darien Birks",
     price: 280000,
     description:
-      "Áo phông Jordan Artist Series by Darien Birks thoàng mát, nhẹ nhàng, thu hút",
+      "Áo phông Jordan Artist Series by Darien Birks được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế mang đậm dấu ấn nghệ thuật với họa tiết độc đáo, kết hợp cùng phong cách thể thao đặc trưng của Jordan. Logo Jordan tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734789811/image%20clothing/image%20product/b3cg5mos6k5o4xjpxqea.png",
@@ -337,7 +353,7 @@ const womenProducts = [
     name: "Nike T-Shirt Sportswear Essential",
     price: 280000,
     description:
-      "Áo phông Nike T-Shirt Sportswear Essential thoàng mát, nhẹ nhàng, thu hút",
+      "Áo phông Nike T-Shirt Sportswear Essential được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734790098/image%20clothing/image%20product/ja6i4dotnflr6axh2ifq.png",
@@ -350,7 +366,7 @@ const womenProducts = [
     name: "Nike T-Shirt Sportswear Classic",
     price: 280000,
     description:
-      "Áo phông Nike T-Shirt Sportswear Classic thoàng mát, nhẹ nhàng, thu hút",
+      "Áo phông Nike T-Shirt Sportswear Classic được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734790442/image%20clothing/image%20product/pphkz1z8nniifqdalevr.png",
@@ -363,7 +379,7 @@ const womenProducts = [
     name: "Nike Sweater Sportswear Phoenix Fleece",
     price: 280000,
     description:
-      "Áo sweater Nike Sweater Sportswear Phoenix Fleece thoàng mát, nhẹ nhàng, thu hút",
+      "Áo sweater Nike Sweater Sportswear Phoenix Fleece được làm từ chất liệu nỉ cao cấp, mềm mại và thoáng mát, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế hiện đại, trẻ trung, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734790795/image%20clothing/image%20product/bnlqtgqx24b40lfbrixn.png",
@@ -376,7 +392,7 @@ const womenProducts = [
     name: "Nike Sweater Crew-Neck French",
     price: 280000,
     description:
-      "Áo sweater Nike Sweater Crew-Neck French thoàng mát, nhẹ nhàng, thu hút",
+      "Áo sweater Nike Sweater Crew-Neck French được làm từ chất liệu nỉ cao cấp, mềm mại và thoáng mát, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế cổ tròn đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734791038/image%20clothing/image%20product/m5uo1tfpkb3xnp5hzjas.png",
@@ -387,9 +403,9 @@ const womenProducts = [
   },
   {
     name: "Nike Short-sleeve Polo Top",
-    price: 250000,
+    price: 950000,
     description:
-      "Áo polo Nike Short-sleeve Polo Top thoàng mát, nhẹ nhàng, thu hút",
+      "Áo polo Nike Short-Sleeve Polo Top được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế tay ngắn năng động, hiện đại, phù hợp cho nhiều phong cách từ thể thao đến công sở. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734791253/image%20clothing/image%20product/cluyq27hvpqfulvruavf.png",
@@ -400,9 +416,9 @@ const womenProducts = [
   },
   {
     name: "Nike Polo Women by YOON",
-    price: 250000,
+    price: 550000,
     description:
-      "Áo polo Nike Polo Women by YOON thoàng mát, nhẹ nhàng, thu hút",
+      "Áo polo Nike Polo Women by YOON được làm từ chất liệu cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế hiện đại, thanh lịch, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734791555/image%20clothing/image%20product/fnmphn3wzed7qpvgf0ey.png",
@@ -413,9 +429,9 @@ const womenProducts = [
   },
   {
     name: "Nike Shirts Woven Crop Top",
-    price: 250000,
+    price: 650000,
     description:
-      "Áo sơ mi Nike Shirts Woven Crop Top thoàng mát, nhẹ nhàng, thu hút",
+      "Áo sơ mi Nike Shirts Woven Crop Top được làm từ chất liệu cao cấp, thoáng mát và mềm mại, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế crop top hiện đại, trẻ trung, phù hợp cho nhiều phong cách từ năng động đến cá tính. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734791746/image%20clothing/image%20product/rikyonqhso3zimibioqp.png",
@@ -426,9 +442,9 @@ const womenProducts = [
   },
   {
     name: "Nike Sportswear Oversized Full-Zip French Terry Hoodie",
-    price: 200000,
+    price: 1000000,
     description:
-      "Áo khoác Nike Sportswear Oversized Full-Zip French Terry Hoodie giày ấm, nhẹ nhàng, thu hút",
+      "Áo khoác Nike Sportswear Oversized Full-Zip French Terry Hoodie được làm từ chất liệu nỉ French Terry cao cấp, mềm mại và giữ ấm hiệu quả, mang lại cảm giác nhẹ nhàng và thoải mái khi mặc. Thiết kế oversized hiện đại, năng động, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734792628/image%20clothing/image%20product/zl5fkf7fecta0qawvqe1.png",
@@ -441,7 +457,7 @@ const womenProducts = [
     name: "Nike Air Jordan Knit Shorts",
     price: 280000,
     description:
-      "Quần đùi Nike Air Jordan Knit Shorts thoàng mát, nhẹ nhàng, thu hút",
+      "Quần đùi Nike Air Jordan Knit Shorts được làm từ chất liệu vải dệt cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế năng động, linh hoạt, phù hợp cho các hoạt động thể thao và dạo phố. Logo Jordan đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734793278/image%20clothing/image%20product/cw6ihx8mb4mevf9oaweh.png",
@@ -452,9 +468,9 @@ const womenProducts = [
   },
   {
     name: "Nike Short Sportswear Chill Terry",
-    price: 280000,
+    price: 480000,
     description:
-      "Quần đùi Nike Short Sportswear Chill Terry thoàng mát, nhẹ nhàng, thu hút",
+      "Quần đùi Nike Short Sportswear Chill Terry được làm từ chất liệu Terry cao cấp, thoáng mát và thấm hút mồ hôi tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734792975/image%20clothing/image%20product/hdxi8gvlzhhsdnzls2xq.png",
@@ -465,9 +481,9 @@ const womenProducts = [
   },
   {
     name: "Dress NikeCourt Slam",
-    price: 280000,
+    price: 580000,
     description:
-      "Váy liền thân Dress NikeCourt Slam thoàng mát, nhẹ nhàng, thu hút",
+      "Váy liền thân Dress NikeCourt Slam được làm từ chất liệu cao cấp, thoáng mát và co giãn tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế thể thao hiện đại, ôm dáng tinh tế, phù hợp cho cả thi đấu và dạo phố. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734793689/image%20clothing/image%20product/d0gv4zyuotsilfwhe3fn.png",
@@ -480,7 +496,7 @@ const womenProducts = [
     name: "Dress Nike Air Jordan Knit",
     price: 280000,
     description:
-      "Váy liền thân Dress Nike Air Jordan Knit thoàng mát, nhẹ nhàng, thu hút",
+      "Váy liền thân Dress Nike Air Jordan Knit được làm từ chất liệu dệt kim cao cấp, thoáng mát và co giãn tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế hiện đại, ôm dáng tinh tế, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Jordan đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734793749/image%20clothing/image%20product/uxkogatfftcfxeqhijzy.png",
@@ -493,7 +509,7 @@ const womenProducts = [
     name: "NikeCourt Slam Tennis Skirt",
     price: 280000,
     description:
-      "Chân váy NikeCourt Slam Tennis Skirt thoàng mát, nhẹ nhàng, thu hút",
+      "Chân váy NikeCourt Slam Tennis Skirt được làm từ chất liệu cao cấp, thoáng mát và co giãn tốt, mang lại cảm giác nhẹ nhàng và thoải mái khi vận động. Thiết kế thể thao năng động, phù hợp cho cả thi đấu và dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734794068/image%20clothing/image%20product/mjotkcigxipk7iqazhqv.png",
@@ -506,7 +522,7 @@ const womenProducts = [
     name: "Nike Skirt ACG 'Snowgrass'",
     price: 280000,
     description:
-      "Chân váy Nike Skirt ACG 'Snowgrass' thoàng mát, nhẹ nhàng, thu hút",
+      "Chân váy Nike Skirt ACG 'Snowgrass' được làm từ chất liệu cao cấp, thoáng mát và co giãn tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế hiện đại, năng động, phù hợp cho nhiều hoạt động ngoài trời và dạo phố. Logo Nike ACG tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734794178/image%20clothing/image%20product/nxgiahvdc5ewrjaooewg.png",
@@ -519,7 +535,7 @@ const womenProducts = [
     name: "Nike Skirt Sportswear Chill Rib",
     price: 280000,
     description:
-      "Chân váy Nike Skirt Sportswear Chill Rib thoàng mát, nhẹ nhàng, thu hút",
+      "Chân váy Nike Skirt Sportswear Chill Rib được làm từ chất liệu gân cao cấp, thoáng mát và co giãn tốt, mang lại cảm giác nhẹ nhàng và thoải mái suốt cả ngày. Thiết kế đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734794338/image%20clothing/image%20product/mseevruuzrjrkgp3ec9s.png",
@@ -532,7 +548,7 @@ const womenProducts = [
     name: "Nike Wind Pant High-Waisted Woven Open-Hem",
     price: 250000,
     description:
-      "Quần gió Nike Wind Pant High-Waisted Woven Open-Hem thoàng mát, nhẹ nhàng, thu hút",
+      "Quần gió Nike Wind Pant High-Waisted Woven Open-Hem được làm từ chất liệu dệt cao cấp, thoáng mát và nhẹ nhàng, mang lại cảm giác thoải mái suốt cả ngày. Thiết kế lưng cao tôn dáng cùng ống rộng thoải mái, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734794673/image%20clothing/image%20product/obgncj65mleqtww248po.png",
@@ -543,9 +559,9 @@ const womenProducts = [
   },
   {
     name: "Nike Wind Pant Everything Wovens",
-    price: 230000,
+    price: 330000,
     description:
-      "Quần gió Nike Wind Pant Everything Wovens thoàng mát, nhẹ nhàng, thu hút",
+      "Quần gió Nike Wind Pant Everything Wovens được làm từ chất liệu dệt cao cấp, thoáng mát và nhẹ nhàng, mang lại cảm giác thoải mái suốt cả ngày. Thiết kế hiện đại, linh hoạt, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike tinh tế tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734794816/image%20clothing/image%20product/dzxkbywxb2iztectjekr.png",
@@ -556,9 +572,9 @@ const womenProducts = [
   },
   {
     name: "Nike Kaki Pant Sustainable Materials",
-    price: 280000,
+    price: 680000,
     description:
-      "Quần gió Nike Kaki Pant Sustainable Materials thoàng mát, nhẹ nhàng, thu hút",
+      "Quần gió Nike Kaki Pant Sustainable Materials được làm từ chất liệu bền vững, thoáng mát và nhẹ nhàng, mang lại cảm giác thoải mái suốt cả ngày. Thiết kế hiện đại, đơn giản nhưng tinh tế, phù hợp cho nhiều phong cách từ thể thao đến dạo phố. Logo Nike đặc trưng tạo điểm nhấn, giúp bạn trông phong cách và thu hút.",
     averageReview: 4.9,
     images: [
       "https://res.cloudinary.com/dbfat0hl6/image/upload/v1734795255/image%20clothing/image%20product/ds7mrebip36u8qdysbsi.png",
@@ -603,20 +619,21 @@ const sizes = [
 ];
 
 /*-----------------------------------------Them san pham-------------------------------------------*/
-const addProductsByGender = async (slugType, arr, slugGender, supplierName) => {
+const addProductsByGender = async (slugType, arr, slugGender, brandName) => {
   try {
     const gender = await Gender.findOne({ slug: slugGender });
     const type_product = await TypeProduct.findOne({ slug: slugType });
-    const supplier = await Supplier.findOne({ name: supplierName });
+    const brand = await Brand.findOne({ name: brandName });
+    const colors = await Color.find({}).select("_id");
     const addProducts = arr.map(async (product) => {
       const newProduct = await Product.create({
         ...product,
         gender: gender._id,
         type_product: type_product._id,
-        supplier: supplier._id,
+        brand: brand._id,
       });
       await newProduct.save();
-      await addProductStock(newProduct._id);
+      await addProductStock(newProduct._id, colors);
 
       return newProduct;
     });
@@ -627,15 +644,29 @@ const addProductsByGender = async (slugType, arr, slugGender, supplierName) => {
 };
 
 /*-------------------------------------------Them san pham vao kho----------------------------------------------*/
-const addProductStock = async (product_id) => {
+const addProductStock = async (product_id, colors) => {
   try {
+    // Gán màu sắc cho từng kích thước
+    const sizesWithColors = [];
+    for (const size of sizes) {
+      for (const color of colors) {
+        sizesWithColors.push({
+          ...size,
+          color, // Mỗi size có nhiều màu sắc khác nhau
+        });
+      }
+    }
+
+    // Thêm vào kho hàng
     const newProductStock = await Stock.create({
       product: product_id,
-      sizes,
+      sizes: sizesWithColors,
     });
+
     await newProductStock.save();
+    console.log("Thêm sản phẩm vào kho thành công!");
   } catch (error) {
-    console.log(error);
+    console.log("Lỗi khi thêm sản phẩm vào kho:", error);
   }
 };
 

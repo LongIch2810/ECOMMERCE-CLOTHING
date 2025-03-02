@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  getFilterProducts,
+  getMaxPrice,
   getMenProducts,
+  getMinPrice,
   getProductDetail,
-  getProducts,
   getWomenProducts,
 } from "./productThunk";
 
@@ -19,22 +21,28 @@ const productSlice = createSlice({
     current_page: 1,
     total_products: 0,
     total_pages: 1,
+    min_price: null,
+    max_price: null,
     message: null,
   },
-  reducers: {},
+  reducers: {
+    setCurrentPage: (state, action) => {
+      state.current_page = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(getProducts.pending, (state, action) => {
+      .addCase(getFilterProducts.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(getProducts.fulfilled, (state, action) => {
+      .addCase(getFilterProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload?.results?.products;
         state.total_products = action.payload?.results?.total_products;
         state.total_pages = action.payload?.results?.total_pages;
         state.current_page = action.payload?.results?.current_page;
       })
-      .addCase(getProducts.rejected, (state, action) => {
+      .addCase(getFilterProducts.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
       })
@@ -43,6 +51,12 @@ const productSlice = createSlice({
       })
       .addCase(getWomenProducts.fulfilled, (state, action) => {
         state.womenProducts = action.payload?.results?.products;
+      })
+      .addCase(getMaxPrice.fulfilled, (state, action) => {
+        state.max_price = action.payload?.max_price;
+      })
+      .addCase(getMinPrice.fulfilled, (state, action) => {
+        state.min_price = action.payload?.min_price;
       })
       .addCase(getProductDetail.pending, (state, action) => {
         state.loadingDetail = true;
@@ -60,5 +74,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { setMenProducts, setWomenProducts } = productSlice.actions;
+export const { setMenProducts, setWomenProducts, setCurrentPage } =
+  productSlice.actions;
 export default productSlice.reducer;

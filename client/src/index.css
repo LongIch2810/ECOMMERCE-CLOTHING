@@ -27,3 +27,12 @@
   height: 100%;
   transition: transform 0.5s ease-in-out; /* Smooth zoom */
 }
+
+@media screen and (max-width: 767px) {
+  .swiper-wrapper {
+    width: 100%;
+  }
+  .product-list .swiper-slide {
+    width: 100%;
+  }
+}

@@ -10,12 +10,13 @@ import { toast } from "react-toastify";
 
 const addProductToCart = createAsyncThunk(
   "cart/add",
-  async ({ product_id, size, quantity, stockQuantity }) => {
+  async ({ product_id, size, quantity, color, stockQuantity }) => {
     try {
       const dataAddProduct = await addProductToCartAPI({
         product_id,
         size,
         quantity,
+        color,
         stockQuantity,
       });
       const dataCart = await getProductsAPI();

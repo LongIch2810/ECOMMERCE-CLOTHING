@@ -15,6 +15,10 @@ const seedUser = require("./userSeed");
 const seedShipping = require("./shippingSeed");
 const Voucher = require("../models/voucherModel");
 const seedVoucher = require("./voucherSeed");
+const seedBrand = require("./brandSeed");
+const Brand = require("../models/brandModel");
+const Color = require("../models/colorModel");
+const seedColor = require("./colorSeed");
 
 const seed = async () => {
   try {
@@ -36,6 +40,11 @@ const seed = async () => {
       await seedCategory();
     }
 
+    if ((await countDocuments(Brand)) === 0) {
+      console.log("Seeding Brands...");
+      await seedBrand();
+    }
+
     // Kiểm tra collection Subcategory
     if ((await countDocuments(Gender)) === 0) {
       console.log("Seeding Genders...");
@@ -46,6 +55,12 @@ const seed = async () => {
     if ((await countDocuments(TypeProduct)) === 0) {
       console.log("Seeding TypeProducts...");
       await seedTypeProduct();
+    }
+
+    // Kiểm tra collection TypeProduct
+    if ((await countDocuments(Color)) === 0) {
+      console.log("Seeding Colors...");
+      await seedColor();
     }
 
     // Kiểm tra collection Product
