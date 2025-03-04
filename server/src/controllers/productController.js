@@ -7,7 +7,9 @@ const {
   getFilterProductsService,
   getMaxPriceProductService,
   getMinPriceProductService,
+  addProductService,
 } = require("../services/productService");
+const uploadImages = require("../utils/uploadImages");
 
 const getProducts = async (req, res) => {
   const { page, limit } = req.query;
@@ -113,6 +115,47 @@ const getMinPriceProduct = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
+const addProduct = async (req, res) => {
+  const { name, price, description, gender, type_product, brand } = req.body;
+  const images = req.files;
+
+  console.log(images);
+
+  if (!name || !price || !description || !gender || !type_product || !brand) {
+    return res
+      .status(400)
+      .json({ message: "Vui lòng điền đầy đủ thông tin sản phẩm" });
+  }
+
+  // Kiểm tra ít nhất một ảnh được tải lên
+  if (!images.image1 && !images.image2 && !images.image3 && !images.image4) {
+    return res
+      .status(400)
+      .json({ message: "Ít nhất một ảnh phải được tải lên" });
+  }
+
+  const imagesUpload = Object.values(images)
+    .flat()
+    .filter((item) => !!item);
+
+  const imageUrls = await uploadImages(imagesUpload);
+
+  const result = await addProductService({
+    name,
+    price,
+    description,
+    averageReview: 0,
+    images: imageUrls,
+    gender,
+    brand,
+    type_product,
+  });
+
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
 module.exports = {
   getProducts,
   getMenProducts,
@@ -122,4 +165,5 @@ module.exports = {
   getFilterProducts,
   getMaxPriceProduct,
   getMinPriceProduct,
+  addProduct,
 };

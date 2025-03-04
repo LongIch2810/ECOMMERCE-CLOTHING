@@ -1,6 +1,16 @@
 const Supplier = require("../models/supplierModel");
 
-const getSuppliersService = async ({ page = 1, limit = 5, name }) => {
+const getSuppliersService = async () => {
+  try {
+    const suppliers = await Supplier.find({});
+    return { SC: 200, success: true, suppliers };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getFilterSuppliersService = async ({ page = 1, limit = 5, name }) => {
   try {
     const filter = {};
 
@@ -43,4 +53,8 @@ const addSupplierService = async (data) => {
   }
 };
 
-module.exports = { getSuppliersService, addSupplierService };
+module.exports = {
+  getFilterSuppliersService,
+  addSupplierService,
+  getSuppliersService,
+};

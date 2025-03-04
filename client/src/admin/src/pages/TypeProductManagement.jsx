@@ -173,12 +173,14 @@ const AddTypeProduct = () => {
           </GroupForm>
         </div>
         <Button
-          className={`w-1/5 p-2 bg-foreign text-main ${
-            loading ? "bg-opacity-60 cursor-not-allowed" : ""
-          }`}
           disabled={loading}
+          className={`w-1/5 p-2  ${
+            loading
+              ? "bg-gray-400 opacity-60 cursor-not-allowed text-black"
+              : "bg-foreign text-main"
+          }`}
         >
-          {loading ? "Đang xử lý..." : "Thêm"}
+          {loading ? "Đang xử lý ..." : "Thêm"}
         </Button>
       </form>
     </div>

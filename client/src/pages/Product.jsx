@@ -95,6 +95,8 @@ const Product = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  console.log(products);
+
   return (
     <Layout>
       <section>

@@ -5,12 +5,27 @@ const addReviewService = async ({ user_id, star, content, product_id }) => {
     const product = await Product.findById(product_id);
     if (!product)
       return { SC: 404, success: false, message: "Sản phẩm không tồn tại !" };
-    await Review.create({
+    const review = new Review({
       star,
       content,
       user: user_id,
       product: product_id,
     });
+    await review.save();
+
+    const reviews = await Review.find({ product: product_id });
+
+    const totalReview = reviews.length;
+
+    const totalStar = reviews.reduce((total, review) => {
+      return total + review.star;
+    }, 0);
+
+    const averageReview = totalStar / totalReview;
+
+    product.averageReview = averageReview;
+    await product.save();
+
     return {
       SC: 201,
       success: true,

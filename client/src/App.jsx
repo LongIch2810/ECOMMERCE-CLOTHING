@@ -27,13 +27,11 @@ import {
   SupplierList,
 } from "./admin/src/pages/SupplierManagement";
 import { AddVoucher, VoucherList } from "./admin/src/pages/VoucherManagement";
-import { AddressList } from "./admin/src/pages/AddressManagement";
 import { AddReceipt, ReceiptList } from "./admin/src/pages/StockManagement";
 import Dashboard from "./admin/src/components/Dashboard";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUserInfo } from "./store/features/user/userThunk";
-import LoadingView from "./components/loading/LoadingView";
 import Payment from "./pages/Payment";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -85,7 +83,6 @@ function App() {
         <Route path="suppliers/add-supplier" element={<AddSupplier />} />
         <Route path="vouchers/list" element={<VoucherList />} />
         <Route path="vouchers/add-voucher" element={<AddVoucher />} />
-        <Route path="addresses/list" element={<AddressList />} />
         <Route path="stock-in/list" element={<ReceiptList />} />
         <Route path="stock-in/add-receipt" element={<AddReceipt />} />
       </Route>

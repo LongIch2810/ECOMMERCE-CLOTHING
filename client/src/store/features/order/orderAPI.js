@@ -29,10 +29,18 @@ const cancelOrderAPI = async ({ order_id }) => {
   return response.data;
 };
 
+const exportExcelAPI = async () => {
+  const response = await instanceAxios.get("/order/export-excel", {
+    responseType: "blob",
+  });
+  return response.data;
+};
+
 export {
   addOrderAPI,
   getOrdersByUserIdAPI,
   getOrdersAPI,
   changeStatusAPI,
   cancelOrderAPI,
+  exportExcelAPI,
 };

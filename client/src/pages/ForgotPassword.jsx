@@ -42,6 +42,13 @@ const ForgotPassword = () => {
     dispatch(sendOTP({ email: savedEmail }));
   };
 
+  const handleBack = () => {
+    reset();
+    setStep(1);
+    dispatch(setSavedEmail(""));
+    dispatch(setIsSendOTP(false));
+    dispatch(setIsResetPassword(false));
+  };
   useEffect(() => {
     if (isResetPassword) {
       reset();
@@ -112,7 +119,7 @@ const ForgotPassword = () => {
                 Xác Nhận
               </button>
             </form>
-            <div>
+            <div className="flex flex-col gap-y-3">
               <button
                 disabled={loading}
                 onClick={handleResendOTP}
@@ -123,6 +130,17 @@ const ForgotPassword = () => {
                 }`}
               >
                 Gửi lại OTP
+              </button>
+              <button
+                disabled={loading}
+                onClick={handleBack}
+                className={`w-full py-2  rounded-lg  ${
+                  loading
+                    ? "bg-opacity-60 bg-gray-400 text-black cursor-not-allowed"
+                    : "bg-gray-600 hover:bg-gray-700 text-main"
+                }`}
+              >
+                Trở về
               </button>
             </div>
           </>

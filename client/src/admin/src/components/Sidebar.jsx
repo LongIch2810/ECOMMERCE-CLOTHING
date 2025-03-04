@@ -4,7 +4,7 @@ import {
   Home,
   MapPin,
   PackageSearch,
-  Settings,
+  Palette,
   ShoppingCart,
   Ticket,
   Truck,
@@ -100,11 +100,11 @@ const items = [
   },
   {
     id: 9,
-    text: "Địa chỉ",
-    icon: <MapPin size={20} />,
+    text: "Màu sắc",
+    icon: <Palette size={20} />,
     children: [
-      { id: 44, text: "Danh sách địa chỉ", to: "/admin/addresses/list" },
-      { id: 45, text: "Thêm địa chỉ", to: "/admin/addresses/add-address" },
+      { id: 44, text: "Danh sách màu sắc", to: "/admin/addresses/list" },
+      { id: 45, text: "Thêm màu sắc", to: "/admin/addresses/add-address" },
     ],
   },
   {

@@ -4,6 +4,7 @@ import {
   addOrderAPI,
   cancelOrderAPI,
   changeStatusAPI,
+  exportExcelAPI,
   getOrdersAPI,
   getOrdersByUserIdAPI,
 } from "./orderAPI";
@@ -110,6 +111,31 @@ const cancelOrder = createAsyncThunk("order/cancel", async ({ order_id }) => {
   }
 });
 
+const exportExcel = createAsyncThunk("order/export-excel", async () => {
+  try {
+    const result = await exportExcelAPI();
+
+    const url = window.URL.createObjectURL(result); //Tạo url tạm thời chứa dữ liệu excel
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "orders.xlsx"; // Tên file tải về
+    document.body.appendChild(a); //Thêm thẻ a vào trình duyệt
+    a.click(); // tự động click để tải về
+    document.body.removeChild(a); //Xáo thẻ a khỏi trình duyệt
+    window.URL.revokeObjectURL(url); //Xóa url tạm thời khỏi bộ nhớ
+
+    return true;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
 export {
   addOrder,
   getOrdersByUserId,
@@ -117,4 +143,5 @@ export {
   changeStatus,
   changeStatusSuccessfully,
   cancelOrder,
+  exportExcel,
 };

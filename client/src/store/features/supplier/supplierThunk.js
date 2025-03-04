@@ -1,10 +1,28 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addSupplierAPI, getSuppliersAPI } from "./supplierAPI";
+import {
+  addSupplierAPI,
+  getFilterSuppliersAPI,
+  getSuppliersAPI,
+} from "./supplierAPI";
 import { toast } from "react-toastify";
 
-const getSuppliers = createAsyncThunk("supplier/list", async (data) => {
+const getSuppliers = createAsyncThunk("supplier/list", async () => {
   try {
-    const result = await getSuppliersAPI(data);
+    const result = await getSuppliersAPI();
+    return result;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      console.log(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
+const getFilterSuppliers = createAsyncThunk("supplier/filter", async (data) => {
+  try {
+    const result = await getFilterSuppliersAPI(data);
     return result;
   } catch (error) {
     if (error.response && error.response.data.message) {
@@ -19,7 +37,7 @@ const getSuppliers = createAsyncThunk("supplier/list", async (data) => {
 const addSupplier = createAsyncThunk("supplier/add-supplier", async (data) => {
   try {
     const dataAddSupplier = await addSupplierAPI(data);
-    const dataSuppliers = await getSuppliersAPI();
+    const dataSuppliers = await getFilterSuppliersAPI();
     toast.success(dataAddSupplier.message);
     return { dataSuppliers, dataAddSupplier };
   } catch (error) {
@@ -33,4 +51,4 @@ const addSupplier = createAsyncThunk("supplier/add-supplier", async (data) => {
   }
 });
 
-export { getSuppliers, addSupplier };
+export { getSuppliers, addSupplier, getFilterSuppliers };

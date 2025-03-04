@@ -42,6 +42,15 @@ const getMinPriceAPI = async () => {
   return response.data;
 };
 
+const addProductAPI = async (data) => {
+  const response = await instanceAxios.post(`/product/add-product`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
 export {
   getProductsAPI,
   getFilterProductsAPI,
@@ -51,4 +60,5 @@ export {
   getProductDetailAPI,
   getMaxPriceAPI,
   getMinPriceAPI,
+  addProductAPI,
 };

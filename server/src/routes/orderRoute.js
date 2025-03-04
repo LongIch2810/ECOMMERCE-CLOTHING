@@ -11,6 +11,7 @@ const {
   statisticalStatusOrderYear,
   statisticalStatusOrderMonth,
   statisticalStatusOrderDate,
+  exportExcel,
 } = require("../controllers/orderController");
 const checkAdmin = require("../middlewares/checkAdmin");
 
@@ -60,5 +61,7 @@ orderRouter.post(
   checkAdmin,
   statisticalRevenueMonth
 );
+
+orderRouter.get("/export-excel", verifyToken, checkAdmin, exportExcel);
 
 module.exports = orderRouter;

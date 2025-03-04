@@ -204,10 +204,25 @@ const getMinPriceProductService = async () => {
 
     // Kiểm tra nếu có sản phẩm
     if (!products.length) {
-      return { SC: 404, success: false, message: "No products found" };
+      return {
+        SC: 404,
+        success: false,
+        message: "Danh sách sản phẩm không tồn tại !",
+      };
     }
 
     return { SC: 200, success: true, min_price: products[0].price };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const addProductService = async (data) => {
+  try {
+    const newProduct = new Product(data);
+    await newProduct.save();
+    return { SC: 201, success: true, message: "Thêm sản phẩm thành công !" };
   } catch (error) {
     console.log(error);
     return { SC: 500, success: false, message: error.message };
@@ -223,4 +238,5 @@ module.exports = {
   getFilterProductsService,
   getMaxPriceProductService,
   getMinPriceProductService,
+  addProductService,
 };

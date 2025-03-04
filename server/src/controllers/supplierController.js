@@ -1,12 +1,23 @@
 const validator = require("validator");
 const {
-  getSuppliersService,
   addSupplierService,
+  getFilterSuppliersService,
+  getSuppliersService,
 } = require("../services/supplierService");
 
 const getSuppliers = async (req, res) => {
+  const data = await getSuppliersService();
+  if (data.SC === 200 && data?.suppliers) {
+    return res.status(200).json({ success: true, suppliers: data.suppliers });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
+const getFilterSuppliers = async (req, res) => {
   const { page, limit, name } = req.body;
-  const data = await getSuppliersService({
+  const data = await getFilterSuppliersService({
     page,
     limit,
     name,
@@ -48,4 +59,4 @@ const addSupplier = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
-module.exports = { getSuppliers, addSupplier };
+module.exports = { getFilterSuppliers, addSupplier, getSuppliers };

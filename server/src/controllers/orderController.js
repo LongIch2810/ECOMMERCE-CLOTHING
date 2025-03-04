@@ -11,6 +11,11 @@ const {
   statisticalStatusOrderDateService,
 } = require("../services/orderService");
 
+const ExcelJS = require("exceljs");
+const fs = require("fs");
+const path = require("path");
+const Order = require("../models/orderModel");
+
 const addOrder = async (req, res) => {
   const { id: user_id } = req.user;
   const { products, total_price, voucher, payment_method, address, shipping } =
@@ -149,6 +154,49 @@ const statisticalRevenueMonth = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
+const exportExcel = async (req, res) => {
+  const orders = await Order.find({});
+
+  if (!orders || orders.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Không có dữ liệu đơn hàng để xuất Excel",
+    });
+  }
+
+  try {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Danh sách đơn hàng");
+
+    worksheet.columns = Object.keys(orders[0]._doc).map((item) => ({
+      header: item.toUpperCase(),
+      key: item,
+      width: 30,
+    }));
+
+    orders.forEach((item) => worksheet.addRow(item.toObject()));
+
+    const filePath = path.join(__dirname, "orders.xlsx");
+    await workbook.xlsx.writeFile(filePath);
+
+    res.download(filePath, "orders.xlsx", (err) => {
+      if (err) {
+        console.error("Lỗi tải file:", err);
+        res
+          .status(500)
+          .json({ success: false, message: "Lỗi khi tải file Excel" });
+      }
+      // Xóa file sau khi gửi thành công
+      fs.unlink(filePath, (unlinkErr) => {
+        if (unlinkErr) console.error("Lỗi xóa file:", unlinkErr);
+      });
+    });
+  } catch (error) {
+    console.error("Lỗi xuất Excel:", error);
+    res.status(500).json({ success: false, message: "Lỗi server" });
+  }
+};
+
 module.exports = {
   addOrder,
   getOrdersByUserId,
@@ -160,4 +208,5 @@ module.exports = {
   statisticalStatusOrderDate,
   statisticalRevenueYear,
   statisticalRevenueMonth,
+  exportExcel,
 };

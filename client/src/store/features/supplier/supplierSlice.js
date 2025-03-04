@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addSupplier, getSuppliers } from "./supplierThunk";
+import { addSupplier, getFilterSuppliers, getSuppliers } from "./supplierThunk";
 
 const supplierSlice = createSlice({
   name: "supplier",
   initialState: {
     loading: false,
     suppliers: [],
+    filterSuppliers: [],
     message: null,
     total_suppliers: null,
     current_page: 1,
@@ -18,16 +19,20 @@ const supplierSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getSuppliers.pending, (state, action) => {
-        state.loading = true;
-      })
       .addCase(getSuppliers.fulfilled, (state, action) => {
         state.loading = false;
-        state.suppliers = action.payload?.results.suppliers;
+        state.suppliers = action.payload?.suppliers;
+      })
+      .addCase(getFilterSuppliers.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getFilterSuppliers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.filterSuppliers = action.payload?.results.suppliers;
         state.current_page = action.payload?.results.current_page;
         state.total_suppliers = action.payload?.results.total_suppliers;
       })
-      .addCase(getSuppliers.rejected, (state, action) => {
+      .addCase(getFilterSuppliers.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
       })
@@ -38,7 +43,7 @@ const supplierSlice = createSlice({
       .addCase(addSupplier.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = action.payload?.dataAddSupplier.success;
-        state.suppliers = action.payload?.dataSuppliers.results.suppliers;
+        state.filterSuppliers = action.payload?.dataSuppliers.results.suppliers;
         state.current_page = action.payload?.dataSuppliers.results.current_page;
         state.total_suppliers =
           action.payload?.dataSuppliers.results.total_suppliers;

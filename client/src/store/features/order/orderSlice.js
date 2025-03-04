@@ -6,6 +6,7 @@ import {
   cancelOrder,
   changeStatusSuccessfully,
   changeStatus,
+  exportExcel,
 } from "./orderThunk";
 import { getVoucher } from "../user/userThunk";
 
@@ -21,6 +22,7 @@ const orderSlice = createSlice({
     voucher: null,
     total_price: null,
     shippingMethod: null,
+    isExportExcel: false,
   },
   reducers: {
     setAddOrderSuccess: (state, action) => {
@@ -38,6 +40,9 @@ const orderSlice = createSlice({
     },
     setShippingMethod: (state, action) => {
       state.shippingMethod = action.payload;
+    },
+    setIsExportExcel: (state, action) => {
+      state.isExportExcel = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -92,6 +97,17 @@ const orderSlice = createSlice({
         state.loading = false;
         state.orders = action.payload?.dataOrdersByUserId.orders;
         state.message = action.payload?.dataCancelOrder.message;
+      })
+      .addCase(exportExcel.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(exportExcel.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isExportExcel = true;
+      })
+      .addCase(exportExcel.rejected, (state, action) => {
+        state.loading = false;
+        state.isExportExcel = false;
       });
   },
 });
@@ -102,5 +118,6 @@ export const {
   setCurrentPage,
   setTotalPrice,
   setShippingMethod,
+  setIsExportExcel,
 } = orderSlice.actions;
 export default orderSlice.reducer;

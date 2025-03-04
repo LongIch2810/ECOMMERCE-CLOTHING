@@ -12,4 +12,15 @@ const getVouchersService = async () => {
   }
 };
 
-module.exports = { getVouchersService };
+const addVoucherService = async (data) => {
+  try {
+    const voucher = new Voucher(data);
+    await voucher.save();
+    return { SC: 201, success: true, message: "Thêm mã giảm giá thành công !" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+module.exports = { getVouchersService, addVoucherService };

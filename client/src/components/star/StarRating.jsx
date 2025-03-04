@@ -24,7 +24,7 @@ const StarRating = ({ rating }) => {
         ))}
 
       {/* Hiển thị nửa sao (nếu có) */}
-      {remainingStar && (
+      {!!remainingStar && (
         <svg
           className="w-6 h-6 text-yellow-300"
           xmlns="http://www.w3.org/2000/svg"

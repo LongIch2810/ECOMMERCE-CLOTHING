@@ -15,6 +15,8 @@ import brandReducer from "./features/brand/brandSlice";
 import supplierReducer from "./features/supplier/supplierSlice";
 import statisticalReducer from "./features/statistical/statisticalSlice";
 import categoryReducer from "./features/category/categorySlice";
+import colorReducer from "./features/color/colorSlice";
+import importReceiptReducer from "./features/importReceipt/importReceiptSlice";
 
 const store = configureStore({
   reducer: {
@@ -33,6 +35,8 @@ const store = configureStore({
     supplier: supplierReducer,
     statistical: statisticalReducer,
     category: categoryReducer,
+    color: colorReducer,
+    importReceipt: importReceiptReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

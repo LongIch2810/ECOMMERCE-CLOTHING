@@ -3,7 +3,7 @@ import LayoutAdmin from "../components/LayoutAdmin";
 import Table from "../components/Table";
 import Title from "@/components/title/Title";
 import { useDispatch, useSelector } from "react-redux";
-import { getVouchers } from "@/store/features/voucher/voucherThunk";
+import { addVoucher, getVouchers } from "@/store/features/voucher/voucherThunk";
 import Tr from "../components/Tr";
 import Td from "../components/Td";
 import { formatCurrency } from "@/utils/format";
@@ -14,6 +14,55 @@ import Label from "@/components/label/Label";
 import Select from "@/components/input/Select";
 import Input from "@/components/input/Input";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import Textarea from "@/components/input/Textarea";
+import { toast } from "react-toastify";
+
+const schema = yup
+  .object({
+    title: yup.string().required("Vui lòng nhập tiêu đề mã giảm giá"),
+    number_of_use: yup
+      .number()
+      .typeError("Số lượng phải là số")
+      .min(1, "Số lượng phải lớn hơn 0")
+      .required("Vui lòng nhập số lượng"),
+    code: yup.string().required("Vui lòng nhập mã code"),
+    description: yup.string().required("Vui lòng nhập mô tả"),
+    end_date: yup
+      .date()
+      .required("Vui lòng chọn ngày kết thúc")
+      .min(new Date(), "Ngày kết thúc phải lớn hơn ngày hiện tại"),
+    unit: yup
+      .string()
+      .oneOf(["%", "VND"], "Chỉ có đơn vị % và VND !")
+      .required("Vui lòng chọn đơn vị"), // Chỉ chấp nhận % hoặc VND
+    value: yup
+      .number()
+      .typeError("Giá trị phải là số")
+      .required("Vui lòng nhập giá trị")
+      .test("validate-value", "Giá trị không hợp lệ", function (value) {
+        const { unit } = this.parent; // Lấy unit từ form
+        if (unit === "%") {
+          return value >= 1 && value <= 100;
+        }
+        if (unit === "VND") {
+          return value >= 1000;
+        }
+        return true;
+      }),
+    max_discount: yup
+      .number()
+      .typeError("Giảm giá tối đa phải là số")
+      .min(1, "Giảm giá tối đa phải lớn hơn 0")
+      .required("Vui lòng nhập giá tối đa được giảm"),
+    min_order_price: yup
+      .number()
+      .typeError("Giá đơn tối thiểu phải là số")
+      .min(1, "Giá đơn tối thiểu phải lớn hơn 0")
+      .required("Vui lòng nhập giá đơn tối thiểu"),
+  })
+  .required();
 
 const VoucherList = () => {
   const dispatch = useDispatch();
@@ -59,22 +108,45 @@ const AddVoucher = () => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm({
     mode: "onSubmit",
+    resolver: yupResolver(schema),
   });
 
-  const handleAddUser = (values) => {
-    console.log(values);
+  const { loading, isAddVoucher } = useSelector((state) => state.voucher);
+
+  const dispatch = useDispatch();
+
+  const handleAddVoucher = (values) => {
+    if (!isValid) return;
+    dispatch(addVoucher(values));
   };
+
+  useEffect(() => {
+    const arrError = Object.values(errors);
+    if (arrError.length > 0) {
+      arrError.forEach((_, index) => {
+        toast.error(arrError[index].message);
+      });
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if (isAddVoucher) {
+      reset();
+    }
+  }, [isAddVoucher]);
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit(handleAddVoucher)}>
         <div className="grid grid-cols-1 gap-10 mb-5 md:grid-cols-2 lg:grid-cols-3">
           <GroupForm>
             <Label>Tiêu đề mã giảm giá</Label>
             <Input
               control={control}
+              errors={errors}
               name="title"
               placeholder="Nhập tiêu đề mã giảm giá ..."
               className="w-full p-2"
@@ -84,6 +156,8 @@ const AddVoucher = () => {
             <Label>Số lượng</Label>
             <Input
               control={control}
+              errors={errors}
+              type="number"
               name="number_of_use"
               placeholder="Nhập số lượng ..."
               className="w-full p-2"
@@ -93,6 +167,7 @@ const AddVoucher = () => {
             <Label>Code</Label>
             <Input
               control={control}
+              errors={errors}
               name="code"
               placeholder="Nhập code ..."
               className="w-full p-2"
@@ -100,18 +175,21 @@ const AddVoucher = () => {
           </GroupForm>
           <GroupForm>
             <Label>description</Label>
-            <Input
+            <Textarea
               control={control}
+              errors={errors}
               name="description"
               placeholder="Nhập mô tả ..."
               className="w-full p-2"
-            ></Input>
+            ></Textarea>
           </GroupForm>
           <GroupForm>
             <Label>Ngày kết thúc mã giảm giá</Label>
             <Input
               control={control}
+              errors={errors}
               name="end_date"
+              type="date"
               placeholder="Nhập ngày kết thúc ..."
               className="w-full p-2"
             ></Input>
@@ -120,7 +198,9 @@ const AddVoucher = () => {
             <Label>Giá trị</Label>
             <Input
               control={control}
+              errors={errors}
               name="value"
+              type="number"
               placeholder="Nhập giá trị ..."
               className="w-full p-2"
             ></Input>
@@ -129,7 +209,9 @@ const AddVoucher = () => {
             <Label>Giảm giá tối đa</Label>
             <Input
               control={control}
+              errors={errors}
               name="max_discount"
+              type="number"
               placeholder="Nhập giá tối đa được giảm ..."
               className="w-full p-2"
             ></Input>
@@ -138,6 +220,8 @@ const AddVoucher = () => {
             <Label>Giá đơn tối thiểu</Label>
             <Input
               control={control}
+              errors={errors}
+              type="number"
               name="min_order_price"
               placeholder="Nhập giá đơn tối thiểu ..."
               className="w-full p-2"
@@ -145,7 +229,13 @@ const AddVoucher = () => {
           </GroupForm>
           <GroupForm>
             <Label>Đơn vị</Label>
-            <Select name="role" control={control} className="w-full p-2">
+            <Select
+              errors={errors}
+              name="unit"
+              control={control}
+              className="w-full p-2"
+            >
+              <option value="">Đơn vị</option>
               {UNIT.map((item) => (
                 <option key={item._id} value={item.unit}>
                   {item.unit}
@@ -154,7 +244,16 @@ const AddVoucher = () => {
             </Select>
           </GroupForm>
         </div>
-        <Button className="w-1/5 p-2 bg-foreign text-main">Thêm</Button>
+        <Button
+          disabled={loading}
+          className={`w-1/5 p-2  ${
+            loading
+              ? "bg-gray-400 opacity-60 cursor-not-allowed text-black"
+              : "bg-foreign text-main"
+          }`}
+        >
+          {loading ? "Đang xử lý ..." : "Thêm"}
+        </Button>
       </form>
     </div>
   );

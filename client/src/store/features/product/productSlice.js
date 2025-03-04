@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  addProduct,
   getFilterProducts,
   getMaxPrice,
   getMenProducts,
@@ -24,6 +25,7 @@ const productSlice = createSlice({
     min_price: null,
     max_price: null,
     message: null,
+    isSuccess: false,
   },
   reducers: {
     setCurrentPage: (state, action) => {
@@ -69,6 +71,24 @@ const productSlice = createSlice({
       })
       .addCase(getProductDetail.rejected, (state, action) => {
         state.loadingDetail = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(addProduct.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+      })
+      .addCase(addProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.products = action.payload?.dataProducts.results?.products;
+        state.total_products =
+          action.payload?.dataProducts.results?.total_products;
+        state.total_pages = action.payload?.dataProducts.results?.total_pages;
+        state.current_page = action.payload?.dataProducts.results?.current_page;
+        state.message = action.payload?.dataAddProduct.message;
+      })
+      .addCase(addProduct.rejected, (state, action) => {
+        state.loading = false;
         state.message = action.payload?.message;
       });
   },

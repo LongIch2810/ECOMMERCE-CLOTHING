@@ -7,7 +7,7 @@ import Tr from "../components/Tr";
 import Td from "../components/Td";
 import {
   addSupplier,
-  getSuppliers,
+  getFilterSuppliers,
 } from "@/store/features/supplier/supplierThunk";
 import IconSearch from "@/components/icons/IconSearch";
 import Button from "@/components/button/Button";
@@ -36,14 +36,14 @@ const schema = yup
 
 const SupplierList = () => {
   const dispatch = useDispatch();
-  const { suppliers, total_suppliers, current_page } = useSelector(
+  const { filterSuppliers, total_suppliers, current_page } = useSelector(
     (state) => state.supplier
   );
 
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    dispatch(getSuppliers({ page: current_page, name: search }));
+    dispatch(getFilterSuppliers({ page: current_page, name: search }));
   }, [current_page, search]);
 
   const handleSearch = (e) => {
@@ -66,14 +66,14 @@ const SupplierList = () => {
         </div>
       </div>
       <Title text="Danh sách nhà cung cấp" className="text-2xl"></Title>
-      {suppliers?.length > 0 ? (
+      {filterSuppliers?.length > 0 ? (
         <Table
-          ths={Object.keys(suppliers[0])}
+          ths={Object.keys(filterSuppliers[0])}
           total_items={total_suppliers}
           currentPage={current_page}
           setCurrentPage={setCurrentPage}
         >
-          {suppliers.map((item) => (
+          {filterSuppliers.map((item) => (
             <Tr key={item._id}>
               <Td>{item._id}</Td>
               <Td>{item.name}</Td>
@@ -167,12 +167,14 @@ const AddSupplier = () => {
         </div>
 
         <Button
-          className={`w-1/5 p-2 bg-foreign text-main ${
-            loading ? "bg-opacity-60 cursor-not-allowed" : ""
-          }`}
           disabled={loading}
+          className={`w-1/5 p-2  ${
+            loading
+              ? "bg-gray-400 opacity-60 cursor-not-allowed text-black"
+              : "bg-foreign text-main"
+          }`}
         >
-          {loading ? "Đang xử lý..." : "Thêm"}
+          {loading ? "Đang xử lý ..." : "Thêm"}
         </Button>
       </form>
     </div>

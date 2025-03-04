@@ -2,8 +2,15 @@ import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import Title from "@/components/title/Title";
 import { useDispatch, useSelector } from "react-redux";
-import { changeStatus, getOrders } from "@/store/features/order/orderThunk";
-import { setCurrentPage } from "@/store/features/order/orderSlice";
+import {
+  changeStatus,
+  exportExcel,
+  getOrders,
+} from "@/store/features/order/orderThunk";
+import {
+  setCurrentPage,
+  setIsExportExcel,
+} from "@/store/features/order/orderSlice";
 import IconSearch from "@/components/icons/IconSearch";
 import Tr from "../components/Tr";
 import Td from "../components/Td";
@@ -11,12 +18,11 @@ import Button from "@/components/button/Button";
 import { formatCurrency, formatDate } from "@/utils/format";
 import { orderStatus } from "@/utils/constant";
 import { bgColorStatusOrder } from "@/utils/constant";
-
+import { toast } from "react-toastify";
 const OrderList = () => {
   const dispatch = useDispatch();
-  const { orders, total_orders, current_page } = useSelector(
-    (state) => state.order
-  );
+  const { orders, total_orders, current_page, isExportExcel, loading } =
+    useSelector((state) => state.order);
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
@@ -40,6 +46,17 @@ const OrderList = () => {
     setStatus(e.target.value);
   };
 
+  const handleExportExcel = () => {
+    dispatch(exportExcel());
+  };
+
+  useEffect(() => {
+    if (isExportExcel) {
+      toast.success("Xuất file thành công !");
+      dispatch(setIsExportExcel(false));
+    }
+  }, [isExportExcel]);
+
   return (
     <div>
       <div className="flex items-center justify-center my-8">
@@ -56,7 +73,7 @@ const OrderList = () => {
         </div>
       </div>
       <Title text="Danh sách đơn hàng" className="text-2xl"></Title>
-      <div className="mb-10">
+      <div className="flex justify-between mb-10">
         <select
           onClick={handleFilterStatus}
           className="p-3 border-2 border-gray-300 rounded-lg"
@@ -68,6 +85,29 @@ const OrderList = () => {
             </option>
           ))}
         </select>
+        <Button
+          disabled={loading}
+          onClick={handleExportExcel}
+          className={`flex items-center gap-2 px-4 py-2 font-semibold rounded-lg shadow-md ${
+            loading
+              ? "bg-opacity-60 bg-gray-400 text-black cursor-not-allowed"
+              : "text-white bg-green-600"
+          } `}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M4.5 3.75A.75.75 0 015.25 3h6.629a.75.75 0 01.53.22l6.121 6.121a.75.75 0 01.22.53v10.379a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V3.75zm8.625 1.5V9H18L13.125 5.25zM7.5 13.5h1.379l1.621 2.44 1.621-2.44H13.5l-2.121 3.189 2.121 3.311H12.12l-1.62-2.5-1.621 2.5H7.5l2.121-3.311L7.5 13.5z"
+              clipRule="evenodd"
+            />
+          </svg>
+          {loading ? "Đang xử lý ..." : "Xuất Excel"}
+        </Button>
       </div>
       {orders?.length > 0 ? (
         <Table

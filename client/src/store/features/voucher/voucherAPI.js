@@ -5,4 +5,9 @@ const getVouchersAPI = async () => {
   return response.data;
 };
 
-export { getVouchersAPI };
+const addVoucherAPI = async (data) => {
+  const response = await instanceAxios.post("/voucher/add-voucher", data);
+  return response.data;
+};
+
+export { getVouchersAPI, addVoucherAPI };

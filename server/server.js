@@ -19,6 +19,8 @@ const sendMail = require("./src/configs/email");
 const brandRouter = require("./src/routes/brandRoute");
 const supplierRouter = require("./src/routes/supplierRoute");
 const categoryRouter = require("./src/routes/categoryRoute");
+const colorRouter = require("./src/routes/colorRoute");
+const importReceiptRouter = require("./src/routes/importReceiptRoute");
 
 //create app
 const app = express();
@@ -49,5 +51,7 @@ app.use("/api/type-product", typeProductRouter);
 app.use("/api/brand", brandRouter);
 app.use("/api/supplier", supplierRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/color", colorRouter);
+app.use("/api/import-receipt", importReceiptRouter);
 
 app.listen(PORT, () => console.log(`Server is now running on ${PORT}`));

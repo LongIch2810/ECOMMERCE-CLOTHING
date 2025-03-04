@@ -45,7 +45,9 @@ const UNIT = [
 ];
 
 const FILE_SIZE = 2 * 1024 * 1024; // 2MB
-const TYPE_IMAGE = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
+const TYPE_IMAGE = ["image/jpg", "image/jpeg", "image/png", "image/avif"];
+
+const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 export {
   orderStatus,
@@ -58,4 +60,5 @@ export {
   UNIT,
   FILE_SIZE,
   TYPE_IMAGE,
+  SIZES,
 };

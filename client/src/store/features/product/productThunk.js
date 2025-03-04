@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  addProductAPI,
   getFilterProductsAPI,
   getMaxPriceAPI,
   getMenProductsAPI,
@@ -10,6 +11,7 @@ import {
   getWomenProductsAPI,
 } from "./productAPI";
 import { getReviewsAPI } from "../review/reviewAPI";
+import { toast } from "react-toastify";
 
 const getProducts = createAsyncThunk(
   "product/list",
@@ -114,6 +116,23 @@ const getMinPrice = createAsyncThunk("product/min-price", async () => {
   }
 });
 
+const addProduct = createAsyncThunk("product/add-product", async (data) => {
+  try {
+    const dataAddProduct = await addProductAPI(data);
+    const dataProducts = await getFilterProductsAPI({ page: 1, limit: 5 });
+    toast.success(dataAddProduct.message);
+    return { dataAddProduct, dataProducts };
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
 export {
   getProducts,
   getFilterProducts,
@@ -122,4 +141,5 @@ export {
   getProductDetail,
   getMaxPrice,
   getMinPrice,
+  addProduct,
 };
