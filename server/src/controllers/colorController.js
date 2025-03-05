@@ -1,6 +1,7 @@
 const {
   getColorsService,
   getFilterColorsService,
+  addColorService,
 } = require("../services/colorService");
 
 const getColors = async (req, res) => {
@@ -28,4 +29,27 @@ const getFilterColors = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
-module.exports = { getColors, getFilterColors };
+const addColor = async (req, res) => {
+  const { name, hexCode } = req.body;
+
+  if (!name || !hexCode) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Thông tin phải điền đầy đủ !" });
+  }
+
+  if (!hexCode.match(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/g)) {
+    return res.status(400).json({
+      success: false,
+      message: "hexCode không hợp lệ !",
+    });
+  }
+
+  const result = await addColorService({ name, hexCode });
+
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+module.exports = { getColors, getFilterColors, addColor };

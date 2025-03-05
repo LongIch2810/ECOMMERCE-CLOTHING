@@ -103,8 +103,8 @@ const items = [
     text: "Màu sắc",
     icon: <Palette size={20} />,
     children: [
-      { id: 44, text: "Danh sách màu sắc", to: "/admin/addresses/list" },
-      { id: 45, text: "Thêm màu sắc", to: "/admin/addresses/add-address" },
+      { id: 44, text: "Danh sách màu sắc", to: "/admin/colors/list" },
+      { id: 45, text: "Thêm màu sắc", to: "/admin/colors/add-color" },
     ],
   },
   {

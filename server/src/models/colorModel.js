@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const colorSchema = new Schema(
   {
     name: { type: String, required: true, unique: true },
-    hexCode: { type: String, required: true },
+    hexCode: { type: String, required: true, unique: true },
   },
   { timestamps: true }
 );

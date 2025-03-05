@@ -38,7 +38,24 @@ const getFilterColorsService = async ({ page = 1, limit = 5, name }) => {
   }
 };
 
+const addColorService = async (data) => {
+  try {
+    const { name } = data;
+    const color = await Color.findOne({ name });
+    if (color) {
+      return { SC: 400, success: false, message: "Màu sắc đã tồn tại !" };
+    }
+    const newColor = new Color(data);
+    await newColor.save();
+    return { SC: 201, success: true, message: "Thêm màu mới thành công !" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 module.exports = {
   getColorsService,
   getFilterColorsService,
+  addColorService,
 };

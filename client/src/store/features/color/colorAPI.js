@@ -10,4 +10,9 @@ const getFilterColorsAPI = async (data) => {
   return response.data;
 };
 
-export { getColorsAPI, getFilterColorsAPI };
+const addColorAPI = async (data) => {
+  const response = await instanceAxios.post("/color/add-color", data);
+  return response.data;
+};
+
+export { getColorsAPI, getFilterColorsAPI, addColorAPI };

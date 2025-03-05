@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getColors, getFilterColors } from "./colorThunk";
+import { addColor, getColors, getFilterColors } from "./colorThunk";
 
 const colorSlice = createSlice({
   name: "color",
@@ -41,6 +41,20 @@ const colorSlice = createSlice({
       })
       .addCase(getFilterColors.rejected, (state, action) => {
         state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(addColor.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+      })
+      .addCase(addColor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.message = action.payload?.message;
+      })
+      .addCase(addColor.rejected, (state, action) => {
+        state.loading = false;
+        state.isSuccess = false;
         state.message = action.payload?.message;
       });
   },
