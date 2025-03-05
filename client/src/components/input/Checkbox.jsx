@@ -1,6 +1,12 @@
 import React from "react";
 
-const Checkbox = ({ arr, value, text, setArr = () => {}, checked = false }) => {
+const Checkbox = ({
+  arr,
+  value,
+  content,
+  setArr = () => {},
+  checked = false,
+}) => {
   const handleChangeCheckbox = (e) => {
     if (e.target.checked && !arr.includes(e.target.value)) {
       setArr((prev) => [...prev, e.target.value]);
@@ -21,9 +27,7 @@ const Checkbox = ({ arr, value, text, setArr = () => {}, checked = false }) => {
           onChange={handleChangeCheckbox}
         />
       </div>
-      <div>
-        <strong className="font-medium text-gray-900">{text}</strong>
-      </div>
+      <div>{content}</div>
     </label>
   );
 };

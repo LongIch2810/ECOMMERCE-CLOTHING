@@ -2,7 +2,7 @@ const Color = require("../models/colorModel");
 
 const getColorsService = async () => {
   try {
-    const colors = await Color.find({}).select("_id name slug");
+    const colors = await Color.find({}).select("_id name hexCode");
     return { SC: 200, success: true, colors };
   } catch (error) {
     console.log(error);

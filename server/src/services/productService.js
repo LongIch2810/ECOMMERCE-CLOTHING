@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Gender = require("../models/genderModel");
 const Product = require("../models/productModel");
 const Stock = require("../models/stockModel");
@@ -33,17 +34,90 @@ const getFilterProductsService = async ({
   brands,
   min_price,
   max_price,
-  sort = 1,
+  sort = "price_asc",
+  colors,
   search,
 }) => {
+  console.log(">>> min_price : ", min_price);
+  console.log(max_price, " ", typeof max_price);
+  const skip = (page - 1) * limit;
+  console.log(colors);
   try {
+    const pipeline = [
+      {
+        $lookup: {
+          from: "stocks",
+          localField: "_id",
+          foreignField: "product",
+          as: "stock",
+        },
+      },
+      {
+        $match: {
+          "stock.0": { $exists: true },
+        },
+      },
+      { $unwind: "$stock" },
+      { $unwind: "$stock.sizes" },
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$name" }, // Giữ nguyên name của sản phẩm
+          price: { $first: "$price" },
+          brand: { $first: "$brand" },
+          type_product: { $first: "$type_product" },
+          gender: { $first: "$gender" },
+          images: { $first: "$images" },
+          averageReview: { $first: "$averageReview" },
+          description: { $first: "$description" },
+          color_ids: { $addToSet: "$stock.sizes.color" }, // Gom nhóm các màu sắc
+        },
+      },
+      {
+        $lookup: {
+          from: "colors",
+          localField: "color_ids",
+          foreignField: "_id",
+          as: "colors",
+        },
+      },
+
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          price: 1,
+          brand: 1,
+          type_product: 1,
+          gender: 1,
+          images: 1,
+          averageReview: 1,
+          description: 1,
+          colors: {
+            $map: {
+              input: "$colors",
+              as: "color",
+              in: {
+                _id: "$$color._id",
+                hexCode: "$$color.hexCode",
+              },
+            },
+          },
+        },
+      },
+    ];
+
     const filter = {};
 
     //Lọc theo giá
     if (min_price || max_price) {
       filter.price = {};
+
       if (min_price) filter.price.$gte = min_price;
-      if (max_price) filter.price.$lte = max_price;
+
+      if (max_price) {
+        filter.price.$lte = max_price; // Chỉ thêm điều kiện này nếu max_price không phải Infinity
+      }
     }
 
     //Lọc theo loại sản phẩm
@@ -66,23 +140,87 @@ const getFilterProductsService = async ({
       filter.name.$options = "i";
     }
 
-    const skip = (page - 1) * limit;
-    const total_products = await Product.countDocuments(filter);
-    const results = {};
-    const products = await Product.find(filter)
-      .limit(limit)
-      .skip(skip)
-      .populate("type_product")
-      .populate("brand")
-      .populate("gender")
-      .sort(sort === 0 ? { createdAt: -1 } : { price: sort })
-      .select("-__v -createdAt -updatedAt -deleted")
-      .exec();
-    results.total_products = total_products;
-    results.total_pages = Math.ceil(total_products / limit);
-    results.current_page = page;
-    results.products = products;
-    return { SC: 200, success: true, results };
+    pipeline.push({ $match: filter });
+
+    const sortOptions = {
+      newest: { createdAt: -1 },
+      price_asc: { price: 1 },
+      price_desc: { price: -1 },
+    };
+
+    if (sortOptions[sort]) {
+      pipeline.push({ $sort: sortOptions[sort] });
+    }
+
+    if (colors && colors.length > 0) {
+      const objectIds = colors.map((id) => new mongoose.Types.ObjectId(id));
+
+      pipeline.push({
+        $match: {
+          "colors._id": { $in: objectIds },
+        },
+      });
+    }
+
+    pipeline.push({
+      $facet: {
+        total_count: [{ $count: "count" }],
+        paginated_products: [
+          { $skip: skip },
+          { $limit: limit },
+          {
+            $lookup: {
+              from: "typeproducts",
+              localField: "type_product",
+              foreignField: "_id",
+              as: "type_product",
+            },
+          },
+
+          {
+            $lookup: {
+              from: "brands",
+              localField: "brand",
+              foreignField: "_id",
+              as: "brand",
+            },
+          },
+
+          {
+            $lookup: {
+              from: "genders",
+              localField: "gender",
+              foreignField: "_id",
+              as: "gender",
+            },
+          },
+
+          {
+            $unwind: {
+              path: "$type_product",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          { $unwind: { path: "$brand", preserveNullAndEmptyArrays: true } },
+          { $unwind: { path: "$gender", preserveNullAndEmptyArrays: true } },
+        ],
+      },
+    });
+    const result = await Product.aggregate(pipeline);
+    const total_products = result[0]?.total_count?.length
+      ? result[0].total_count[0].count
+      : 0;
+    console.log(result);
+    return {
+      SC: 200,
+      success: true,
+      results: {
+        total_products,
+        total_pages: Math.ceil(total_products / limit),
+        current_page: page,
+        products: result[0].paginated_products,
+      },
+    };
   } catch (error) {
     console.log(error);
     return { SC: 500, success: false, message: error.message };

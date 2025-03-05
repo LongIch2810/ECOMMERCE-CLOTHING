@@ -1,4 +1,7 @@
-const { addImportReceiptService } = require("../services/importReceipt");
+const {
+  addImportReceiptService,
+  getFilterImportReceiptsService,
+} = require("../services/importReceipt");
 
 const addImportReceipt = async (req, res) => {
   const { products, note, supplier } = req.body;
@@ -25,4 +28,18 @@ const addImportReceipt = async (req, res) => {
     .json({ success: result.success, message: result.message });
 };
 
-module.exports = { addImportReceipt };
+const getFilterImportReceipts = async (req, res) => {
+  const { page, limit, id } = req.body;
+  const data = await getFilterImportReceiptsService({
+    page,
+    limit,
+    id,
+  });
+  if (data.SC === 200 && data?.results) {
+    return res.status(200).json({ success: true, results: data.results });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+module.exports = { addImportReceipt, getFilterImportReceipts };

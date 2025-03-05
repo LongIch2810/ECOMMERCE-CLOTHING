@@ -14,9 +14,16 @@ import { SIZES } from "@/utils/constant";
 import Button from "@/components/button/Button";
 import { toast } from "react-toastify";
 import { getColors } from "@/store/features/color/colorThunk";
-import { formatCurrency } from "@/utils/format";
+import { formatCurrency, formatDate } from "@/utils/format";
 import { getSuppliers } from "@/store/features/supplier/supplierThunk";
-import { addImportReceipt } from "@/store/features/importReceipt/importReceiptThunk";
+import {
+  addImportReceipt,
+  getFilterImportReceipts,
+} from "@/store/features/importReceipt/importReceiptThunk";
+import { setCurrentPage } from "@/store/features/importReceipt/importReceiptSlice";
+import IconSearch from "@/components/icons/IconSearch";
+import Tr from "../components/Tr";
+import Td from "../components/Td";
 
 const schema = yup.object().shape({
   product: yup.object().required("Vui lòng chọn sản phẩm"),
@@ -37,11 +44,68 @@ const schema = yup.object().shape({
 });
 
 const ReceiptList = () => {
+  const dispatch = useDispatch();
+  const { importReceipts, total_importReceipts, current_page, loading } =
+    useSelector((state) => state.importReceipt);
+
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    dispatch(getFilterImportReceipts({ page: current_page, id: search }));
+  }, [current_page, search]);
+
+  const handleSearch = (e) => {
+    dispatch(setCurrentPage(1));
+    setSearch(e.target.value);
+  };
+
+  console.log(importReceipts);
+
   return (
-    <>
+    <div>
+      <div className="flex items-center justify-center my-8">
+        <div className="relative w-full md:w-3/4">
+          <input
+            type="text"
+            placeholder="Nhập mã phiếu nhập ..."
+            onChange={handleSearch}
+            className="w-full p-2 pr-10 border-2 border-gray-300 rounded-md shadow-xs outline-none text-primary"
+          />
+          <span className="absolute inset-y-0 grid w-10 end-0 place-content-center">
+            <IconSearch></IconSearch>
+          </span>
+        </div>
+      </div>
       <Title text="Danh sách phiếu nhập" className="text-2xl"></Title>
-      <Table></Table>
-    </>
+
+      {importReceipts?.length > 0 ? (
+        <Table
+          ths={Object.keys(importReceipts[0])}
+          total_items={total_importReceipts}
+          currentPage={current_page}
+          setCurrentPage={setCurrentPage}
+        >
+          {importReceipts.map((item) => (
+            <Tr key={item._id}>
+              <Td>{item._id}</Td>
+              <Td>{item.supplier.name}</Td>
+              <Td>{formatCurrency(item.total_price)}</Td>
+              <Td>{item.note}</Td>
+              <Td>{formatDate(item.createdAt)}</Td>
+              <Td>
+                <div className="flex items-center justify-center gap-x-3">
+                  <Button className="p-2 bg-foreign text-main">Detail</Button>
+                </div>
+              </Td>
+            </Tr>
+          ))}
+        </Table>
+      ) : (
+        <div className="flex flex-col items-center justify-center h-64 p-6 bg-gray-100 rounded-lg shadow-md">
+          <p className="mb-4 text-lg text-gray-700">Không có phiếu nhập nào.</p>
+        </div>
+      )}
+    </div>
   );
 };
 

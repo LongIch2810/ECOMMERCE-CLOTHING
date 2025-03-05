@@ -56,4 +56,31 @@ const addImportReceiptService = async (data) => {
   }
 };
 
-module.exports = { addImportReceiptService };
+const getFilterImportReceiptsService = async ({ page = 1, limit = 5, id }) => {
+  try {
+    const filter = {};
+
+    if (id) {
+      filter._id = id;
+    }
+    const results = {};
+    const skip = (page - 1) * limit;
+    const importReceipts = await ImportReceipt.find(filter)
+      .limit(limit)
+      .select("-deleted -updatedAt -__v -products")
+      .populate("supplier")
+      .skip(skip);
+    const total_importReceipts = await ImportReceipt.countDocuments(filter);
+    const total_pages = Math.ceil(total_importReceipts / limit);
+    results.total_importReceipts = total_importReceipts;
+    results.total_pages = total_pages;
+    results.current_page = page;
+    results.importReceipts = importReceipts;
+    return { SC: 200, success: true, results };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+module.exports = { addImportReceiptService, getFilterImportReceiptsService };

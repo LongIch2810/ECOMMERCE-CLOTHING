@@ -32,6 +32,7 @@ const getFilterProducts = async (req, res) => {
     max_price,
     min_price,
     sort,
+    colors,
     search,
   } = req.body;
   const data = await getFilterProductsService({
@@ -43,6 +44,7 @@ const getFilterProducts = async (req, res) => {
     max_price,
     min_price,
     sort,
+    colors,
     search,
   });
   if (data.SC === 200 && data?.results) {

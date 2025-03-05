@@ -1,7 +1,10 @@
 const express = require("express");
 const verifyToken = require("../middlewares/verifyToken");
 const checkAdmin = require("../middlewares/checkAdmin");
-const { addImportReceipt } = require("../controllers/importReceiptController");
+const {
+  addImportReceipt,
+  getFilterImportReceipts,
+} = require("../controllers/importReceiptController");
 
 const importReceiptRouter = express.Router();
 
@@ -10,6 +13,13 @@ importReceiptRouter.post(
   verifyToken,
   checkAdmin,
   addImportReceipt
+);
+
+importReceiptRouter.post(
+  "/filter",
+  verifyToken,
+  checkAdmin,
+  getFilterImportReceipts
 );
 
 module.exports = importReceiptRouter;

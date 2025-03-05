@@ -8,4 +8,9 @@ const addImportReceiptAPI = async (data) => {
   return response.data;
 };
 
-export { addImportReceiptAPI };
+const getFilterImportReceiptsAPI = async (data) => {
+  const response = await instanceAxios.post("/import-receipt/filter", data);
+  return response.data;
+};
+
+export { addImportReceiptAPI, getFilterImportReceiptsAPI };

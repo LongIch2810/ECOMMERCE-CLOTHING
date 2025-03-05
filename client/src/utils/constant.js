@@ -1,3 +1,5 @@
+import { formatCurrency } from "./format";
+
 const bgColorStatusOrder = {
   "Chờ xác nhận": "bg-pending",
   "Chờ lấy hàng": "bg-waiting",
