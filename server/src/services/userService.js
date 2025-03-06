@@ -178,12 +178,15 @@ const getUsersService = async ({ page = 1, limit = 5, name }) => {
 
 const editUserService = async (data) => {
   try {
-    const { user_id, name, fullname, avatar, phone, email, password } = data;
+    const { user_id, name, fullname, phone, email, password } = data;
+    const user = await User.findById(user_id);
+    if (!user) {
+      return { SC: 400, success: false, message: "Người dùng không tồn tại !" };
+    }
     const bcryptPassword = await bcrypt.hash(password, 10);
     await User.findByIdAndUpdate(user_id, {
       name,
       fullname,
-      avatar,
       phone,
       email,
       password: bcryptPassword,
@@ -212,8 +215,25 @@ const addUserService = async (data) => {
 
 const deleteUserService = async (user_id) => {
   try {
-    await User.delete(user_id);
+    const user = await User.findById(user_id);
+    if (!user) {
+      return { SC: 400, success: false, message: "Người dùng không tồn tại !" };
+    }
+    await User.delete({ _id: user_id });
     return { SC: 200, success: true, message: "Xóa người dùng thành công !" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getUserByIdService = async (user_id) => {
+  try {
+    const user = await User.findById(user_id);
+    if (!user) {
+      return { SC: 400, success: false, message: "Người dùng không tồn tại !" };
+    }
+    return { SC: 200, success: true, user };
   } catch (error) {
     console.log(error);
     return { SC: 500, success: false, message: error.message };
@@ -230,4 +250,5 @@ module.exports = {
   editUserService,
   deleteUserService,
   addUserService,
+  getUserByIdService,
 };

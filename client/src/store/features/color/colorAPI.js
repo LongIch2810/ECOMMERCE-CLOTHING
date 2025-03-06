@@ -15,4 +15,29 @@ const addColorAPI = async (data) => {
   return response.data;
 };
 
-export { getColorsAPI, getFilterColorsAPI, addColorAPI };
+const editColorAPI = async ({ colorId, name, hexCode }) => {
+  const response = await instanceAxios.put(`/color/edit/${colorId}`, {
+    name,
+    hexCode,
+  });
+  return response.data;
+};
+
+const deleteColorAPI = async (colorId) => {
+  const response = await instanceAxios.delete(`/color/delete/${colorId}`);
+  return response.data;
+};
+
+const getColorByIdAPI = async (colorId) => {
+  const response = await instanceAxios.get(`/color/get-color/${colorId}`);
+  return response.data;
+};
+
+export {
+  getColorsAPI,
+  getFilterColorsAPI,
+  addColorAPI,
+  editColorAPI,
+  deleteColorAPI,
+  getColorByIdAPI,
+};

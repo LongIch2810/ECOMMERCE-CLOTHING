@@ -17,4 +17,27 @@ const addBrandAPI = async (data) => {
   return response.data;
 };
 
-export { getBrandsAPI, getFilterBrandsAPI, addBrandAPI };
+const editBrandAPI = async ({ brandId, formData }) => {
+  const response = await instanceAxios.put(`/brand/edit/${brandId}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response.data;
+};
+
+const deleteBrandAPI = async (brandId) => {
+  const response = await instanceAxios.delete(`/brand/delete/${brandId}`);
+  return response.data;
+};
+
+const getBrandByIdAPI = async (brandId) => {
+  const response = await instanceAxios.get(`/brand/get-brand/${brandId}`);
+  return response.data;
+};
+export {
+  getBrandsAPI,
+  getFilterBrandsAPI,
+  addBrandAPI,
+  editBrandAPI,
+  deleteBrandAPI,
+  getBrandByIdAPI,
+};

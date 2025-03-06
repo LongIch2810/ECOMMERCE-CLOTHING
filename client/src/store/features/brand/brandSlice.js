@@ -1,5 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addBrand, getBrands, getFilterBrands } from "./brandThunk";
+import {
+  addBrand,
+  deleteBrand,
+  editBrand,
+  getBrandById,
+  getBrands,
+  getFilterBrands,
+} from "./brandThunk";
 
 const brandSlice = createSlice({
   name: "brand",
@@ -10,11 +17,18 @@ const brandSlice = createSlice({
     total_brands: null,
     current_page: 1,
     message: null,
+    brandById: null,
     isSuccess: false,
   },
   reducers: {
     setCurrentPage: (state, action) => {
       state.current_page = action.payload;
+    },
+    setIsSuccess: (state, action) => {
+      state.isSuccess = action.payload;
+    },
+    setBrandById: (state, action) => {
+      state.brandById = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -58,9 +72,55 @@ const brandSlice = createSlice({
       .addCase(addBrand.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
+      })
+      .addCase(editBrand.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+      })
+      .addCase(editBrand.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.filterBrands = action.payload?.dataBrands.results.brands;
+        state.current_page = action.payload?.dataBrands.results.current_page;
+        state.total_brands = action.payload?.dataBrands.results.total_brands;
+        state.message = action.payload?.dataEditBrand.message;
+      })
+      .addCase(editBrand.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+        state.isSuccess = false;
+      })
+      .addCase(deleteBrand.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+      })
+      .addCase(deleteBrand.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.filterBrands = action.payload?.dataBrands.results.brands;
+        state.current_page = action.payload?.dataBrands.results.current_page;
+        state.total_brands = action.payload?.dataBrands.results.total_brands;
+        state.message = action.payload?.dataDeleteBrand.message;
+      })
+      .addCase(deleteBrand.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+        state.isSuccess = false;
+      })
+      .addCase(getBrandById.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getBrandById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.brandById = action.payload?.brand;
+      })
+      .addCase(getBrandById.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       });
   },
 });
 
-export const { setCurrentPage } = brandSlice.actions;
+export const { setCurrentPage, setBrandById, setIsSuccess } =
+  brandSlice.actions;
 export default brandSlice.reducer;

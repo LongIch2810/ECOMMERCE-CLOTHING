@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPage } from "@/store/features/brand/brandSlice";
 import IconSearch from "@/components/icons/IconSearch";
 import Button from "@/components/button/Button";
-import { addBrand, getFilterBrands } from "@/store/features/brand/brandThunk";
+import {
+  addBrand,
+  deleteBrand,
+  getFilterBrands,
+} from "@/store/features/brand/brandThunk";
 import Tr from "../components/Tr";
 import Td from "../components/Td";
 import GroupForm from "@/components/group/GroupForm";
@@ -17,6 +21,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import InputFile from "@/components/input/InputFile";
 import { toast } from "react-toastify";
+import ModalEditBrand from "@/components/modal/ModalEditBrand";
 
 const schema = yup
   .object({
@@ -44,6 +49,8 @@ const BrandList = () => {
   );
 
   const [search, setSearch] = useState("");
+  const [brandId, setBrandId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getFilterBrands({ page: current_page, limit: 5, name: search }));
@@ -52,6 +59,15 @@ const BrandList = () => {
   const handleSearch = (e) => {
     dispatch(setCurrentPage(1));
     setSearch(e.target.value);
+  };
+
+  const handleDeleteBrand = (brandId) => {
+    dispatch(deleteBrand(brandId));
+  };
+
+  const handleEditBrand = (brandId) => {
+    setBrandId(brandId);
+    setIsOpen(true);
   };
 
   return (
@@ -89,8 +105,18 @@ const BrandList = () => {
               </Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">
-                  <Button className="p-2 bg-foreign text-main">Edit</Button>
-                  <Button className="p-2 bg-secondary text-main">Delete</Button>
+                  <Button
+                    onClick={() => handleEditBrand(item._id)}
+                    className="p-2 bg-foreign text-main"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteBrand(item._id)}
+                    className="p-2 bg-secondary text-main"
+                  >
+                    Delete
+                  </Button>
                 </div>
               </Td>
             </Tr>
@@ -103,6 +129,7 @@ const BrandList = () => {
           </p>
         </div>
       )}
+      {isOpen && <ModalEditBrand id={brandId} setIsOpen={setIsOpen} />}
     </div>
   );
 };

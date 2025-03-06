@@ -6,6 +6,9 @@ const {
   updateInfoService,
   getUsersService,
   addUserService,
+  editUserService,
+  deleteUserService,
+  getUserByIdService,
 } = require("../services/userService");
 
 const cloudinary = require("../configs/cloudinary");
@@ -184,6 +187,100 @@ const addUser = async (req, res) => {
   });
 };
 
+const editUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, fullname, phone, password } = req.body;
+  if (!id) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Id người dùng không hợp lệ !" });
+  }
+
+  if (!name || name.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "Tên người dùng không được để trống và phải có ít nhất 6 kí tự !",
+    });
+  }
+
+  if (!email || !validator.isEmail(email)) {
+    return res.status(400).json({
+      success: false,
+      message: "Email không để trống và phải đúng đinh dạng !",
+    });
+  }
+
+  if (!password || password.length < 8) {
+    return res.status(400).json({
+      success: false,
+      message: "Mật khẩu không được để trống và phải có ít nhất 8 kí tự !",
+    });
+  }
+
+  if (!fullname || fullname.length < 3 || fullname.length > 100) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "Họ và tên không được để trống, phải có ít nhất 3 kí tự và tối đa 100 kí tự !",
+    });
+  }
+
+  if (!phone || !phone.match(/^(0\d{9,10})$/g)) {
+    return res.status(400).json({
+      success: false,
+      message: "Số điện thoại không được để trống và phải đúng đinh dạng !",
+    });
+  }
+
+  const result = await editUserService({
+    user_id: id,
+    name,
+    email,
+    password,
+    fullname,
+    password,
+    phone,
+  });
+
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Id người dùng không hợp lệ !" });
+  }
+
+  const result = await deleteUserService(id);
+
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Id người dùng không hợp lệ !" });
+  }
+
+  const result = await getUserByIdService(id);
+  if (result.SC === 200 && result?.user) {
+    return res.status(200).json({ success: true, user: result.user });
+  }
+
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
 module.exports = {
   getUserInfo,
   saveVoucher,
@@ -192,4 +289,7 @@ module.exports = {
   updateAvatar,
   getUsers,
   addUser,
+  editUser,
+  deleteUser,
+  getUserById,
 };

@@ -53,8 +53,121 @@ const addSupplierService = async (data) => {
   }
 };
 
+const editSupplierService = async ({
+  supplierId,
+  name,
+  email,
+  description,
+}) => {
+  try {
+    const existingSupplier = await Supplier.findById(supplierId);
+    if (!existingSupplier) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Nhà cung cấp không tồn tại",
+      };
+    }
+
+    if (name) {
+      const isNameTaken = await Supplier.findOne({
+        name,
+        _id: { $ne: supplierId },
+      });
+      if (isNameTaken) {
+        return {
+          SC: 400,
+          success: false,
+          message: "Tên nhà cung cấp đã tồn tại",
+        };
+      }
+
+      existingSupplier.name = name;
+    } else {
+      return res.status(400).json({
+        success: true,
+        message: "Tên nhà cung cấp không được để trống !",
+      });
+    }
+
+    if (email) {
+      const isEmailTaken = await Supplier.findOne({
+        email,
+        _id: { $ne: supplierId },
+      });
+      if (isEmailTaken) {
+        return {
+          SC: 400,
+          success: false,
+          message: "Email nhà cung cấp đã tồn tại",
+        };
+      }
+
+      existingSupplier.email = email;
+    } else {
+      return res.status(400).json({
+        success: true,
+        message: "Mã màu không được để trống !",
+      });
+    }
+
+    existingSupplier.description = description;
+    await existingSupplier.save();
+
+    return {
+      SC: 200,
+      success: true,
+      message: "Cập nhật thông tin nhà cung cấp thành công",
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const deleteSupplierService = async (supplierId) => {
+  try {
+    const existingSupplier = await Supplier.findById(supplierId);
+    if (!existingSupplier) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Nhà cung cấp không tồn tại",
+      };
+    }
+
+    await Supplier.delete({ _id: supplierId });
+
+    return { SC: 200, success: true, message: "Xóa nhà cung cấp thành công" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getSupplierByIdService = async (supplierId) => {
+  try {
+    const supplier = await Supplier.findById(supplierId);
+    if (!supplier) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Nhà cung cấp không tồn tại",
+      };
+    }
+
+    return { SC: 200, success: true, supplier };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 module.exports = {
   getFilterSuppliersService,
   addSupplierService,
   getSuppliersService,
+  editSupplierService,
+  deleteSupplierService,
+  getSupplierByIdService,
 };

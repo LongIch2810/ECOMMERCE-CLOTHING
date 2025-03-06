@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addTypeProduct,
+  deleteTypeProduct,
+  editTypeProduct,
   getFilterTypeProducts,
+  getTypeProductById,
   getTypeProducts,
 } from "./typeProductThunk";
 
@@ -14,11 +17,18 @@ const typeProductSlice = createSlice({
     total_typeProducts: null,
     current_page: 1,
     isSuccess: false,
+    typeProductById: null,
     message: null,
   },
   reducers: {
     setCurrentPage: (state, action) => {
       state.current_page = action.payload;
+    },
+    setTypeProductById: (state, action) => {
+      state.typeProductById = action.payload;
+    },
+    setIsSuccess: (state, action) => {
+      state.isSuccess = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -66,9 +76,61 @@ const typeProductSlice = createSlice({
         state.loading = false;
         state.message = action.payload?.message;
         state.isSuccess = false;
+      })
+      .addCase(editTypeProduct.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+      })
+      .addCase(editTypeProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.typeProducts =
+          action.payload?.dataTypeProducts.results.typeProducts;
+        state.total_typeProducts =
+          action.payload?.dataTypeProducts.results.total_typeProducts;
+        state.current_page =
+          action.payload?.dataTypeProducts.results.current_page;
+        state.message = action.payload?.dataEditTypeProduct.message;
+        state.isSuccess = true;
+      })
+      .addCase(editTypeProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+        state.isSuccess = false;
+      })
+      .addCase(deleteTypeProduct.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+      })
+      .addCase(deleteTypeProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.typeProducts =
+          action.payload?.dataTypeProducts.results.typeProducts;
+        state.total_typeProducts =
+          action.payload?.dataTypeProducts.results.total_typeProducts;
+        state.current_page =
+          action.payload?.dataTypeProducts.results.current_page;
+        state.message = action.payload?.dataDeleteTypeProduct.message;
+        state.isSuccess = true;
+      })
+      .addCase(deleteTypeProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+        state.isSuccess = false;
+      })
+      .addCase(getTypeProductById.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getTypeProductById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.typeProductById = action.payload?.typeProduct;
+      })
+      .addCase(getTypeProductById.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       });
   },
 });
 
-export const { setCurrentPage } = typeProductSlice.actions;
+export const { setCurrentPage, setIsSuccess, setTypeProductById } =
+  typeProductSlice.actions;
 export default typeProductSlice.reducer;

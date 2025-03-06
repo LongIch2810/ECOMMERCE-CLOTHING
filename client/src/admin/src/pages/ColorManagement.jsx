@@ -17,7 +17,12 @@ import * as yup from "yup";
 import InputFile from "@/components/input/InputFile";
 import { toast } from "react-toastify";
 import { setCurrentPage } from "@/store/features/color/colorSlice";
-import { addColor, getFilterColors } from "@/store/features/color/colorThunk";
+import {
+  addColor,
+  deleteColor,
+  getFilterColors,
+} from "@/store/features/color/colorThunk";
+import ModalEditColor from "@/components/modal/ModalEditColor";
 
 const schema = yup
   .object({
@@ -37,6 +42,8 @@ const ColorList = () => {
   );
 
   const [search, setSearch] = useState("");
+  const [colorId, setColorId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getFilterColors({ page: current_page, limit: 5, name: search }));
@@ -45,6 +52,15 @@ const ColorList = () => {
   const handleSearch = (e) => {
     dispatch(setCurrentPage(1));
     setSearch(e.target.value);
+  };
+
+  const handleDeleteColor = (colorId) => {
+    dispatch(deleteColor(colorId));
+  };
+
+  const handleEditColor = (colorId) => {
+    setColorId(colorId);
+    setIsOpen(true);
   };
 
   return (
@@ -77,8 +93,18 @@ const ColorList = () => {
               <Td>{item.hexCode}</Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">
-                  <Button className="p-2 bg-foreign text-main">Edit</Button>
-                  <Button className="p-2 bg-secondary text-main">Delete</Button>
+                  <Button
+                    onClick={() => handleEditColor(item._id)}
+                    className="p-2 bg-foreign text-main"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteColor(item._id)}
+                    className="p-2 bg-secondary text-main"
+                  >
+                    Delete
+                  </Button>
                 </div>
               </Td>
             </Tr>
@@ -89,6 +115,7 @@ const ColorList = () => {
           <p className="mb-4 text-lg text-gray-700">Không có màu sắc nào.</p>
         </div>
       )}
+      {isOpen && <ModalEditColor id={colorId} setIsOpen={setIsOpen} />}
     </div>
   );
 };

@@ -2,21 +2,30 @@ const { default: mongoose } = require("mongoose");
 const Gender = require("../models/genderModel");
 const Product = require("../models/productModel");
 const Stock = require("../models/stockModel");
+const { getPublicIds, deleteImages } = require("../utils/uploadImages");
 
-const getProductsService = async ({ page = 1, limit = 10 }) => {
+const getProductsService = async ({ page = 1, limit = 5, name }) => {
   try {
+    const filter = {};
+
+    if (name) {
+      filter.name = {};
+      filter.name.$regex = `.*${name}.*`;
+      filter.name.$options = "i";
+    }
     const results = {};
     const skip = (page - 1) * limit;
-    const total_products = await Product.countDocuments();
-    const products = await Product.find({})
+    const products = await Product.find(filter)
       .limit(limit)
-      .skip(skip)
-      .populate("type_product")
+      .select("-deleted -updatedAt -createdAt -__v")
       .populate("brand")
+      .populate("type_product")
       .populate("gender")
-      .exec();
+      .skip(skip);
+    const total_products = await Product.countDocuments(filter);
+    const total_pages = Math.ceil(total_products / limit);
     results.total_products = total_products;
-    results.total_pages = Math.ceil(total_products / limit);
+    results.total_pages = total_pages;
     results.current_page = page;
     results.products = products;
     return { SC: 200, success: true, results };
@@ -367,6 +376,94 @@ const addProductService = async (data) => {
   }
 };
 
+const editProductService = async ({
+  productId,
+  name,
+  price,
+  description,
+  images,
+  type_product,
+  gender,
+  brand,
+}) => {
+  try {
+    console.log(productId);
+    const existingProduct = await Product.findById(productId);
+    console.log(existingProduct);
+    if (!existingProduct) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Sản phẩm không tồn tại",
+      };
+    }
+
+    const publicIds = getPublicIds(existingProduct.images);
+
+    await deleteImages(publicIds);
+
+    existingProduct.name = name;
+    existingProduct.price = price;
+    existingProduct.description = description;
+    existingProduct.images = images;
+    existingProduct.type_product = type_product;
+    existingProduct.gender = gender;
+    existingProduct.brand = brand;
+
+    await existingProduct.save();
+
+    return {
+      SC: 200,
+      success: true,
+      message: "Cập nhật thông tin sản phẩm thành công",
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const deleteProductService = async (productId) => {
+  try {
+    const existingProduct = await Product.findById(productId);
+    if (!existingProduct) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Sản phẩm không tồn tại",
+      };
+    }
+
+    await Product.delete({ _id: productId });
+
+    return { SC: 200, success: true, message: "Xóa sản phẩm thành công" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getProductByIdService = async (productId) => {
+  try {
+    const product = await Product.findById(productId)
+      .populate("gender")
+      .populate("type_product")
+      .populate("brand");
+    if (!product) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Sản phẩm không tồn tại",
+      };
+    }
+
+    return { SC: 200, success: true, product };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 module.exports = {
   getProductsService,
   getMenProductsService,
@@ -377,4 +474,7 @@ module.exports = {
   getMaxPriceProductService,
   getMinPriceProductService,
   addProductService,
+  editProductService,
+  deleteProductService,
+  getProductByIdService,
 };

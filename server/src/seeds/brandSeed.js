@@ -39,7 +39,7 @@ const brands = [
   },
   {
     name: "UNIQLO",
-    slug: generateSlug("dirty coins"),
+    slug: generateSlug("uniqlo"),
     logo: "https://tse3.mm.bing.net/th?id=OIP.5eTnAnPg5w7fcOGZ-8D0ZgHaHY&pid=Api&P=0&h=180",
   },
   {

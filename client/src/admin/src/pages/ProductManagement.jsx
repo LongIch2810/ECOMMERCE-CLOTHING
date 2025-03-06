@@ -4,7 +4,8 @@ import Title from "@/components/title/Title";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
-  getFilterProducts,
+  deleteProduct,
+  getProducts,
 } from "@/store/features/product/productThunk";
 import Tr from "../components/Tr";
 import IconSearch from "@/components/icons/IconSearch";
@@ -26,6 +27,7 @@ import { getGenders } from "@/store/features/gender/genderThunk";
 import Select from "@/components/input/Select";
 import { FILE_SIZE, TYPE_IMAGE } from "@/utils/constant";
 import { toast } from "react-toastify";
+import ModalEditProduct from "@/components/modal/ModalEditProduct";
 
 const schema = yup
   .object()
@@ -72,15 +74,33 @@ const ProductList = () => {
   );
 
   const [search, setSearch] = useState("");
+  const [productId, setProductId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSearch = (e) => {
-    dispatch(setCurrentPage(1));
-    setSearch(e.target.value);
+    const newSearch = e.target.value;
+    if (search !== newSearch) {
+      dispatch(setCurrentPage(1));
+    }
+    setSearch(newSearch);
+  };
+
+  const handleDeleteProduct = (productId) => {
+    dispatch(deleteProduct(productId));
+  };
+
+  const handleEditProduct = (productId) => {
+    setProductId(productId);
+    setIsOpen(true);
   };
 
   useEffect(() => {
-    dispatch(getFilterProducts({ page: current_page, limit: 5, search }));
+    dispatch(getProducts({ page: current_page, limit: 5, name: search }));
   }, [current_page, search]);
+
+  console.log(">>> current_page : ", current_page);
+
+  console.log(products);
 
   console.log(search);
   return (
@@ -121,8 +141,18 @@ const ProductList = () => {
               <Td>{item.brand.name}</Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">
-                  <Button className="p-2 bg-foreign text-main">Edit</Button>
-                  <Button className="p-2 bg-secondary text-main">Delete</Button>
+                  <Button
+                    onClick={() => handleEditProduct(item._id)}
+                    className="p-2 bg-foreign text-main"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteProduct(item._id)}
+                    className="p-2 bg-secondary text-main"
+                  >
+                    Delete
+                  </Button>
                 </div>
               </Td>
             </Tr>
@@ -135,6 +165,7 @@ const ProductList = () => {
           </p>
         </div>
       )}
+      {isOpen && <ModalEditProduct setIsOpen={setIsOpen} id={productId} />}
     </div>
   );
 };

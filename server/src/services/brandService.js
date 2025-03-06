@@ -1,4 +1,6 @@
 const Brand = require("../models/brandModel");
+const generateSlug = require("../utils/generateSlug");
+const { getPublicId, deleteImage } = require("../utils/uploadImages");
 
 const getBrandsService = async () => {
   try {
@@ -49,8 +51,96 @@ const addBrandService = async (data) => {
   }
 };
 
+const editBrandService = async ({ brandId, name, logo }) => {
+  try {
+    // Kiểm tra xem thương hiệu có tồn tại không
+    const existingBrand = await Brand.findById(brandId);
+    if (!existingBrand) {
+      return { SC: 404, success: false, message: "Thương hiệu không tồn tại" };
+    }
+
+    // Kiểm tra name không được để trống
+    if (!name) {
+      return {
+        SC: 400,
+        success: false,
+        message: "Tên thương hiệu không được để trống!",
+      };
+    }
+
+    // Kiểm tra xem tên thương hiệu có bị trùng không
+    const isNameTaken = await Brand.findOne({ name, _id: { $ne: brandId } });
+    if (isNameTaken) {
+      return { SC: 400, success: false, message: "Tên thương hiệu đã tồn tại" };
+    }
+
+    const publicId = getPublicId(existingBrand.logo);
+
+    await deleteImage(publicId);
+
+    const slug = generateSlug(name);
+    existingBrand.name = name;
+    existingBrand.slug = slug;
+    existingBrand.logo = logo;
+
+    await existingBrand.save();
+
+    return {
+      SC: 200,
+      success: true,
+      message: "Cập nhật thương hiệu thành công",
+      data: existingBrand,
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const deleteBrandService = async (brandId) => {
+  try {
+    const existingBrand = await Brand.findById(brandId);
+    if (!existingBrand) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Thương hiệu không tồn tại",
+      };
+    }
+
+    await Brand.delete({ _id: brandId });
+
+    return { SC: 200, success: true, message: "Xóa thương hiệu thành công" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getBrandByIdService = async (brandId) => {
+  try {
+    const brand = await Brand.findById(brandId);
+
+    if (!brand) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Thương hiệu không tồn tại",
+      };
+    }
+
+    return { SC: 200, success: true, brand };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 module.exports = {
   getBrandsService,
   getFilterBrandsService,
   addBrandService,
+  editBrandService,
+  deleteBrandService,
+  getBrandByIdService,
 };

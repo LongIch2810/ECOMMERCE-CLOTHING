@@ -1,3 +1,4 @@
+const Product = require("../models/productModel");
 const {
   getProductsService,
   getMenProductsService,
@@ -8,12 +9,15 @@ const {
   getMaxPriceProductService,
   getMinPriceProductService,
   addProductService,
+  editProductService,
+  deleteProductService,
+  getProductByIdService,
 } = require("../services/productService");
-const uploadImages = require("../utils/uploadImages");
+const { uploadImages } = require("../utils/uploadImages");
 
 const getProducts = async (req, res) => {
-  const { page, limit } = req.query;
-  const data = await getProductsService({ page, limit });
+  const { page, limit, name } = req.body;
+  const data = await getProductsService({ page, limit, name });
   if (data.SC === 200 && data?.results) {
     return res.status(200).json({ success: true, results: data.results });
   }
@@ -158,6 +162,81 @@ const addProduct = async (req, res) => {
     .json({ success: result.success, message: result.message });
 };
 
+const editProduct = async (req, res) => {
+  const { id: productId } = req.params;
+  const { name, price, description, gender, type_product, brand } = req.body;
+  const images = req.files;
+
+  if (!name || !price || !description || !gender || !type_product || !brand) {
+    return res
+      .status(400)
+      .json({ message: "Vui lòng điền đầy đủ thông tin sản phẩm" });
+  }
+
+  if (!images.image1 && !images.image2 && !images.image3 && !images.image4) {
+    return res
+      .status(400)
+      .json({ message: "Ít nhất một ảnh phải được tải lên" });
+  }
+
+  const imagesUpload = Object.values(images)
+    .flat()
+    .filter((item) => !!item);
+
+  const imageUrls = await uploadImages(imagesUpload);
+  console.log("🖼 Ảnh mới tải lên:", imageUrls);
+
+  if (!imageUrls || imageUrls.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Không thể tải ảnh lên Cloudinary" });
+  }
+
+  const result = await editProductService({
+    productId,
+    name,
+    description,
+    gender,
+    type_product,
+    brand,
+    price,
+    images: imageUrls,
+  });
+
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+const deleteProduct = async (req, res) => {
+  const { id: productId } = req.params;
+  if (!productId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Sản phẩm không hợp lệ !" });
+  }
+  const result = await deleteProductService(productId);
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+const getProductById = async (req, res) => {
+  const { id: productId } = req.params;
+  if (!productId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Sản phẩm không hợp lệ !" });
+  }
+  const result = await getProductByIdService(productId);
+  if (result.SC === 200 && result?.product) {
+    return res.status(200).json({ success: true, product: result.product });
+  }
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
 module.exports = {
   getProducts,
   getMenProducts,
@@ -168,4 +247,7 @@ module.exports = {
   getMaxPriceProduct,
   getMinPriceProduct,
   addProduct,
+  editProduct,
+  deleteProduct,
+  getProductById,
 };

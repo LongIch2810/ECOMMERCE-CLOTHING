@@ -46,7 +46,7 @@ const UNIT = [
   { _id: 2, unit: "VND" },
 ];
 
-const FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const FILE_SIZE = 100 * 1024 * 1024; // 2MB
 const TYPE_IMAGE = ["image/jpg", "image/jpeg", "image/png", "image/avif"];
 
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];

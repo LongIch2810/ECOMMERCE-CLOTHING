@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 
-const InputFile = ({ control, name, errors = {}, fileInputRef }) => {
+const InputFile = ({
+  control,
+  name,
+  errors = {},
+  fileInputRef,
+  defaultImage,
+}) => {
   const { field } = useController({
     control,
     name,
     defaultValue: "",
   });
 
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(defaultImage || ""); // Gán ảnh từ API ban đầu
+
+  useEffect(() => {
+    if (defaultImage && !field.value) {
+      setImage(defaultImage);
+    }
+  }, [defaultImage, field.value]);
 
   const handleChangeImage = (e) => {
     const file = e.target.files[0];
@@ -16,14 +28,9 @@ const InputFile = ({ control, name, errors = {}, fileInputRef }) => {
       const tempUrl = URL.createObjectURL(file);
       setImage(tempUrl);
       field.onChange(file);
+      console.log("Field value after change:", field.value); // Kiểm tra giá trị sau khi cập nhật
     }
   };
-
-  useEffect(() => {
-    if (!fileInputRef?.current?.value) {
-      setImage("");
-    }
-  }, [fileInputRef?.current?.value]);
 
   const hasError = errors?.[name];
 
@@ -37,7 +44,7 @@ const InputFile = ({ control, name, errors = {}, fileInputRef }) => {
         {image ? (
           <img
             src={image}
-            alt="avatar"
+            alt="Ảnh sản phẩm"
             className="object-cover w-full h-full rounded-lg"
           />
         ) : (

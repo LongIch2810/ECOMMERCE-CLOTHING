@@ -54,8 +54,116 @@ const addColorService = async (data) => {
   }
 };
 
+const editColorService = async ({ colorId, name, hexCode }) => {
+  try {
+    const existingColor = await Color.findById(colorId);
+    if (!existingColor) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Màu sắc không tồn tại",
+      };
+    }
+
+    if (name) {
+      const isNameTaken = await Color.findOne({
+        name,
+        _id: { $ne: colorId },
+      });
+      if (isNameTaken) {
+        return {
+          SC: 400,
+          success: false,
+          message: "Tên màu sắc đã tồn tại",
+        };
+      }
+
+      existingColor.name = name;
+    } else {
+      return res.status(400).json({
+        success: true,
+        message: "Tên màu sắc không được để trống !",
+      });
+    }
+
+    if (hexCode) {
+      const isHexCodeTaken = await Color.findOne({
+        hexCode,
+        _id: { $ne: colorId },
+      });
+      if (isHexCodeTaken) {
+        return {
+          SC: 400,
+          success: false,
+          message: "Mã màu đã tồn tại",
+        };
+      }
+
+      existingColor.hexCode = hexCode;
+    } else {
+      return res.status(400).json({
+        success: true,
+        message: "Mã màu không được để trống !",
+      });
+    }
+
+    await existingColor.save();
+
+    return {
+      SC: 200,
+      success: true,
+      message: "Cập nhật thông tin màu sắc thành công",
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const deleteColorService = async (colorId) => {
+  try {
+    const existingColor = await Color.findById(colorId);
+    if (!existingColor) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Màu sắc không tồn tại",
+      };
+    }
+
+    await Color.delete({ _id: colorId });
+
+    return { SC: 200, success: true, message: "Xóa màu sắc thành công" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getColorByIdService = async (colorId) => {
+  try {
+    const color = await Color.findById(colorId);
+
+    if (!color) {
+      return {
+        SC: 404,
+        success: false,
+        message: "Màu sắc không tồn tại",
+      };
+    }
+
+    return { SC: 200, success: true, color };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 module.exports = {
   getColorsService,
   getFilterColorsService,
   addColorService,
+  editColorService,
+  deleteColorService,
+  getColorByIdService,
 };

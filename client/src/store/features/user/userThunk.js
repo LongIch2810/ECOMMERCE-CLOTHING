@@ -2,6 +2,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import {
   addUserAPI,
+  deleteUserAPI,
+  editUserAPI,
+  getUserByIdAPI,
   getUserInfoAPI,
   getUsersAPI,
   getVoucherAPI,
@@ -128,6 +131,53 @@ const addUser = createAsyncThunk("user/add-user", async (data) => {
   }
 });
 
+const editUser = createAsyncThunk("user/edit", async (data) => {
+  try {
+    console.log(data);
+    const dataEditUser = await editUserAPI(data);
+    const dataUsers = await getUsersAPI({ page: 1, limit: 5 });
+    toast.success(dataEditUser.message);
+    return { dataEditUser, dataUsers };
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      toast.error(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
+const deleteUser = createAsyncThunk("user/delete", async (user_id) => {
+  try {
+    const dataDeleteUser = await deleteUserAPI(user_id);
+    const dataUsers = await getUsersAPI({ page: 1, limit: 5 });
+    toast.success(dataDeleteUser.message);
+    return { dataDeleteUser, dataUsers };
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      toast.error(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
+const getUserById = createAsyncThunk("user/getUserById", async (user_id) => {
+  try {
+    const data = await getUserByIdAPI(user_id);
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      toast.error(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+  }
+});
+
 export {
   getUserInfo,
   saveVoucher,
@@ -136,4 +186,7 @@ export {
   updateAvatar,
   getUsers,
   addUser,
+  editUser,
+  deleteUser,
+  getUserById,
 };

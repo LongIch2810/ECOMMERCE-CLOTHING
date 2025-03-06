@@ -15,12 +15,13 @@ const orderRouter = require("./src/routes/orderRoute");
 const stockRouter = require("./src/routes/stockRoute");
 const paypalRouter = require("./src/routes/paypalRoute");
 const typeProductRouter = require("./src/routes/typeProductRoute");
-const sendMail = require("./src/configs/email");
 const brandRouter = require("./src/routes/brandRoute");
 const supplierRouter = require("./src/routes/supplierRoute");
 const categoryRouter = require("./src/routes/categoryRoute");
 const colorRouter = require("./src/routes/colorRoute");
 const importReceiptRouter = require("./src/routes/importReceiptRoute");
+const startCronJob = require("./src/utils/schedule");
+const cloudinary = require("./src/configs/cloudinary");
 
 //create app
 const app = express();
@@ -33,6 +34,9 @@ connectDB();
 
 //config
 configs(app);
+
+//schedule
+startCronJob();
 
 //declare route
 app.use("/api/auth", authRouter);

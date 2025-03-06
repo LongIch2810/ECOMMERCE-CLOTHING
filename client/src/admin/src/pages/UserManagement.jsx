@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Table from "../components/Table";
 import Title from "@/components/title/Title";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, getUsers } from "@/store/features/user/userThunk";
+import { addUser, deleteUser, getUsers } from "@/store/features/user/userThunk";
 import Tr from "../components/Tr";
 import Td from "../components/Td";
 import Button from "@/components/button/Button";
@@ -18,6 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import InputFile from "@/components/input/InputFile";
+import ModalEditUser from "@/components/modal/ModalEditUser";
 
 const schema = yup
   .object({
@@ -75,6 +76,8 @@ const UserList = () => {
   );
 
   const [search, setSearch] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     dispatch(getUsers({ page: current_page, name: search }));
@@ -84,6 +87,16 @@ const UserList = () => {
     dispatch(setCurrentPage(1));
     setSearch(e.target.value);
   };
+
+  const handleDeleteUser = (user_id) => {
+    dispatch(deleteUser(user_id));
+  };
+
+  const handleEditUser = (user_id) => {
+    setUserId(user_id);
+    setIsOpen(true);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-center my-8">
@@ -116,8 +129,18 @@ const UserList = () => {
               <Td>{item.phone}</Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">
-                  <Button className="p-2 bg-foreign text-main">Edit</Button>
-                  <Button className="p-2 bg-secondary text-main">Delete</Button>
+                  <Button
+                    onClick={() => handleEditUser(item._id)}
+                    className="p-2 bg-foreign text-main"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteUser(item._id)}
+                    className="p-2 bg-secondary text-main"
+                  >
+                    Delete
+                  </Button>
                 </div>
               </Td>
             </Tr>
@@ -128,6 +151,7 @@ const UserList = () => {
           <p className="mb-4 text-lg text-gray-700">Không có người dùng nào.</p>
         </div>
       )}
+      {isOpen && <ModalEditUser setIsOpen={setIsOpen} id={userId} />}
     </div>
   );
 };

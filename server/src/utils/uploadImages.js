@@ -10,7 +10,7 @@ const uploadImages = async (files) => {
     // Upload tất cả ảnh lên Cloudinary
     const uploadPromises = files.map((file) =>
       cloudinary.uploader.upload(file.path, {
-        folder: "image clothing/image product", // Thay đổi thư mục lưu trữ
+        folder: "image_clothing/image_product", // Thay đổi thư mục lưu trữ
       })
     );
 
@@ -27,4 +27,69 @@ const uploadImages = async (files) => {
   }
 };
 
-module.exports = uploadImages;
+const deleteImage = async (imageUrl) => {
+  try {
+    const publicId = imageUrl.split("/image/upload/")[1].split(".")[0];
+
+    await cloudinary.uploader.destroy(publicId);
+
+    console.log("Ảnh đã bị xóa thành công!");
+  } catch (error) {
+    console.error("Lỗi khi xóa ảnh:", error);
+  }
+};
+
+const deleteImages = async (publicIds) => {
+  try {
+    if (publicIds.length === 0) {
+      console.log("❌ Không có ảnh nào để xóa.");
+      return;
+    }
+
+    const result = await cloudinary.api.delete_resources(publicIds);
+
+    console.log("✅ Đã xóa các ảnh thành công:", result.deleted);
+  } catch (error) {
+    console.error("❌ Lỗi khi xóa ảnh:", error);
+  }
+};
+
+const getPublicId = (imageUrl) => {
+  try {
+    const urlParts = imageUrl.split("/image/upload/");
+    if (urlParts.length < 2) {
+      throw new Error(`URL không hợp lệ: ${imageUrl}`);
+    }
+    const pathWithoutVersion = urlParts[1].replace(/v\d+\//, ""); // Loại bỏ `vXXXXXXXXXX/`
+    return pathWithoutVersion.split(".")[0]; // Loại bỏ phần mở rộng
+  } catch (error) {
+    console.error("❌ Lỗi khi lấy publicId:", error.message);
+    return null;
+  }
+};
+
+const getPublicIds = (imageUrls) => {
+  return imageUrls
+    .map((imageUrl) => {
+      try {
+        const urlParts = imageUrl.split("/image/upload/");
+        if (urlParts.length < 2) {
+          throw new Error(`URL không hợp lệ: ${imageUrl}`);
+        }
+        const pathWithoutVersion = urlParts[1].replace(/v\d+\//, ""); // Loại bỏ `vXXXXXXXXXX/`
+        return pathWithoutVersion.split(".")[0]; // Loại bỏ phần mở rộng
+      } catch (error) {
+        console.error("❌ Lỗi khi lấy publicId:", error.message);
+        return null;
+      }
+    })
+    .filter(Boolean); // Loại bỏ các giá trị null
+};
+
+module.exports = {
+  uploadImages,
+  deleteImage,
+  getPublicIds,
+  getPublicId,
+  deleteImages,
+};

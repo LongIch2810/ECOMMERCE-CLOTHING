@@ -2,6 +2,9 @@ const {
   getTypeProductsService,
   getFilterTypeProductsService,
   addTypeProductService,
+  editTypeProductService,
+  deleteTypeProductService,
+  getTypeProductByIdService,
 } = require("../services/typeProductService");
 const generateSlug = require("../utils/generateSlug");
 const Category = require("../models/categoryModel");
@@ -60,4 +63,56 @@ const addTypeProduct = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
-module.exports = { getTypeProducts, getFilterTypeProducts, addTypeProduct };
+const editTypeProduct = async (req, res) => {
+  const { id: typeProductId } = req.params;
+  const { name, category_id } = req.body;
+
+  const result = await editTypeProductService({
+    typeProductId,
+    name,
+    category_id,
+  });
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+const deleteTypeProduct = async (req, res) => {
+  const { id: typeProductId } = req.params;
+  if (!typeProductId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Mã loại sản phẩm không hợp lệ !" });
+  }
+  const result = await deleteTypeProductService(typeProductId);
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+const getTypeProductById = async (req, res) => {
+  const { id: typeProductId } = req.params;
+  if (!typeProductId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Mã loại sản phẩm không hợp lệ !" });
+  }
+  const result = await getTypeProductByIdService(typeProductId);
+  if (result.SC === 200 && result?.typeProduct) {
+    return res
+      .status(200)
+      .json({ success: true, typeProduct: result.typeProduct });
+  }
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+module.exports = {
+  getTypeProducts,
+  getFilterTypeProducts,
+  addTypeProduct,
+  editTypeProduct,
+  deleteTypeProduct,
+  getTypeProductById,
+};

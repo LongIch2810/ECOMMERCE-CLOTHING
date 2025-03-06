@@ -3,6 +3,9 @@ const {
   addSupplierService,
   getFilterSuppliersService,
   getSuppliersService,
+  editSupplierService,
+  deleteSupplierService,
+  getSupplierByIdService,
 } = require("../services/supplierService");
 
 const getSuppliers = async (req, res) => {
@@ -59,4 +62,55 @@ const addSupplier = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
-module.exports = { getFilterSuppliers, addSupplier, getSuppliers };
+const editSupplier = async (req, res) => {
+  const { id: supplierId } = req.params;
+  const { name, email, description } = req.body;
+
+  const result = await editSupplierService({
+    supplierId,
+    name,
+    email,
+    description,
+  });
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+const deleteSupplier = async (req, res) => {
+  const { id: supplierId } = req.params;
+  if (!supplierId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Mã loại sản phẩm không hợp lệ !" });
+  }
+  const result = await deleteSupplierService(supplierId);
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+const getSupplierById = async (req, res) => {
+  const { id: supplierId } = req.params;
+  if (!supplierId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Mã loại sản phẩm không hợp lệ !" });
+  }
+  const result = await getSupplierByIdService(supplierId);
+  if (result.SC === 200 && result?.supplier) {
+    return res.status(200).json({ success: true, supplier: result.supplier });
+  }
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
+module.exports = {
+  getFilterSuppliers,
+  addSupplier,
+  getSuppliers,
+  editSupplier,
+  deleteSupplier,
+  getSupplierById,
+};

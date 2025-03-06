@@ -4,6 +4,7 @@ import Title from "@/components/title/Title";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTypeProduct,
+  deleteTypeProduct,
   getFilterTypeProducts,
 } from "@/store/features/typeProduct/typeProductThunk";
 import Tr from "../components/Tr";
@@ -20,6 +21,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
+import ModalEditTypeProduct from "@/components/modal/ModalEditTypeProduct";
 
 const schema = yup
   .object({
@@ -40,6 +42,8 @@ const TypeProductList = () => {
   );
 
   const [search, setSearch] = useState("");
+  const [typeProductId, setTypeProductId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -52,7 +56,16 @@ const TypeProductList = () => {
     setSearch(e.target.value);
   };
 
-  console.log(filterTypeProducts);
+  const handleDeleteTypeProduct = (typeProductId) => {
+    dispatch(deleteTypeProduct(typeProductId));
+  };
+
+  const handleEditTypeProduct = (typeProductId) => {
+    setTypeProductId(typeProductId);
+    setIsOpen(true);
+  };
+
+  console.log(typeProductId);
 
   return (
     <div>
@@ -84,8 +97,18 @@ const TypeProductList = () => {
               <Td>{item.slug}</Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">
-                  <Button className="p-2 bg-foreign text-main">Edit</Button>
-                  <Button className="p-2 bg-secondary text-main">Delete</Button>
+                  <Button
+                    onClick={() => handleEditTypeProduct(item._id)}
+                    className="p-2 bg-foreign text-main"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteTypeProduct(item._id)}
+                    className="p-2 bg-secondary text-main"
+                  >
+                    Delete
+                  </Button>
                 </div>
               </Td>
             </Tr>
@@ -97,6 +120,9 @@ const TypeProductList = () => {
             Không có loại sản phẩm nào.
           </p>
         </div>
+      )}
+      {isOpen && (
+        <ModalEditTypeProduct id={typeProductId} setIsOpen={setIsOpen} />
       )}
     </div>
   );
@@ -143,7 +169,7 @@ const AddTypeProduct = () => {
   return (
     <div>
       <form onSubmit={handleSubmit(handleAddTypeProduct)}>
-        <div className="grid grid-cols-1 gap-10 mb-5 md:grid-cols-1 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-10 mb-5 md:grid-cols-2 lg:grid-cols-4">
           <GroupForm>
             <Label>Tên loại sản phẩm</Label>
             <Input

@@ -1,9 +1,8 @@
 import instanceAxios from "../../../configs/axios";
 
-const getProductsAPI = async ({ page, limit }) => {
-  const response = await instanceAxios.get(
-    `/product/list?page=${page}&limit=${limit}`
-  );
+const getProductsAPI = async (data) => {
+  console.log(data);
+  const response = await instanceAxios.post(`/product/list`, data);
   return response.data;
 };
 
@@ -51,6 +50,32 @@ const addProductAPI = async (data) => {
   return response.data;
 };
 
+const editProductAPI = async ({ productId, formData }) => {
+  console.log(productId);
+  const response = await instanceAxios.put(
+    `/product/edit/${productId}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data;
+};
+
+const deleteProductAPI = async (productId) => {
+  const response = await instanceAxios.delete(`/product/delete/${productId}`);
+  return response.data;
+};
+
+const getProductByIdAPI = async (productId) => {
+  console.log(productId);
+  const response = await instanceAxios.get(`/product/get-product/${productId}`);
+  console.log(response.data);
+  return response.data;
+};
+
 export {
   getProductsAPI,
   getFilterProductsAPI,
@@ -61,4 +86,7 @@ export {
   getMaxPriceAPI,
   getMinPriceAPI,
   addProductAPI,
+  editProductAPI,
+  deleteProductAPI,
+  getProductByIdAPI,
 };

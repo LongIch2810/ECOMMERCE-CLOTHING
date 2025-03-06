@@ -7,6 +7,7 @@ import Tr from "../components/Tr";
 import Td from "../components/Td";
 import {
   addSupplier,
+  deleteSupplier,
   getFilterSuppliers,
 } from "@/store/features/supplier/supplierThunk";
 import IconSearch from "@/components/icons/IconSearch";
@@ -19,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Textarea from "@/components/input/Textarea";
 import { toast } from "react-toastify";
+import ModalEditSupplier from "@/components/modal/ModalEditSupplier";
 
 const schema = yup
   .object({
@@ -41,6 +43,8 @@ const SupplierList = () => {
   );
 
   const [search, setSearch] = useState("");
+  const [supplierId, setSupplierId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getFilterSuppliers({ page: current_page, name: search }));
@@ -49,6 +53,15 @@ const SupplierList = () => {
   const handleSearch = (e) => {
     dispatch(setCurrentPage(1));
     setSearch(e.target.value);
+  };
+
+  const handleDeleteSupplier = (supplierId) => {
+    dispatch(deleteSupplier(supplierId));
+  };
+
+  const handleEditSupplier = (supplierId) => {
+    setSupplierId(supplierId);
+    setIsOpen(true);
   };
   return (
     <div>
@@ -79,8 +92,18 @@ const SupplierList = () => {
               <Td>{item.name}</Td>
               <Td>{item.email}</Td>
               <Td className="flex items-center gap-x-3">
-                <Button className="p-2 bg-foreign text-main">Edit</Button>
-                <Button className="p-2 bg-secondary text-main">Delete</Button>
+                <Button
+                  onClick={() => handleEditSupplier(item._id)}
+                  className="p-2 bg-foreign text-main"
+                >
+                  Edit
+                </Button>
+                <Button
+                  onClick={() => handleDeleteSupplier(item._id)}
+                  className="p-2 bg-secondary text-main"
+                >
+                  Delete
+                </Button>
               </Td>
             </Tr>
           ))}
@@ -92,6 +115,7 @@ const SupplierList = () => {
           </p>
         </div>
       )}
+      {isOpen && <ModalEditSupplier id={supplierId} setIsOpen={setIsOpen} />}
     </div>
   );
 };

@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const typeProductSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
     category: {
       type: mongoose.Types.ObjectId,

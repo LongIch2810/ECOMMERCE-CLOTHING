@@ -10,7 +10,7 @@ const Modal = ({ children, setIsOpen, position = {} }) => {
       onClick={() => setIsOpen(false)}
     >
       <div
-        className="relative p-5 bg-white md:rounded-lg w-full md:max-w-[700px] md:max-h-[600px]"
+        className="relative p-5 bg-white md:rounded-lg w-full md:max-w-[700px] md:max-h-[600px] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div

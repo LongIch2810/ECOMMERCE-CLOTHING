@@ -1,5 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addColor, getColors, getFilterColors } from "./colorThunk";
+import {
+  addColor,
+  deleteColor,
+  editColor,
+  getColorById,
+  getColors,
+  getFilterColors,
+} from "./colorThunk";
 
 const colorSlice = createSlice({
   name: "color",
@@ -10,11 +17,18 @@ const colorSlice = createSlice({
     total_colors: null,
     current_page: 1,
     message: null,
+    colorById: null,
     isSuccess: false,
   },
   reducers: {
     setCurrentPage: (state, action) => {
       state.current_page = action.payload;
+    },
+    setColorById: (state, action) => {
+      state.colorById = action.payload;
+    },
+    setIsSuccess: (state, action) => {
+      state.isSuccess = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -56,9 +70,55 @@ const colorSlice = createSlice({
         state.loading = false;
         state.isSuccess = false;
         state.message = action.payload?.message;
+      })
+      .addCase(editColor.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+      })
+      .addCase(editColor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.filterColors = action.payload?.dataColors.results.colors;
+        state.current_page = action.payload?.dataColors.results.current_page;
+        state.total_colors = action.payload?.dataColors.results.total_colors;
+        state.message = action.payload?.dataEditColor.message;
+      })
+      .addCase(editColor.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+        state.isSuccess = false;
+      })
+      .addCase(deleteColor.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+      })
+      .addCase(deleteColor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.filterColors = action.payload?.dataColors.results.colors;
+        state.current_page = action.payload?.dataColors.results.current_page;
+        state.total_colors = action.payload?.dataColors.results.total_colors;
+        state.message = action.payload?.dataEditColor.message;
+      })
+      .addCase(deleteColor.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+        state.isSuccess = false;
+      })
+      .addCase(getColorById.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getColorById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.colorById = action.payload?.color;
+      })
+      .addCase(getColorById.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       });
   },
 });
 
-export const { setCurrentPage } = colorSlice.actions;
+export const { setCurrentPage, setColorById, setIsSuccess } =
+  colorSlice.actions;
 export default colorSlice.reducer;

@@ -1,7 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addTypeProductAPI,
+  deleteTypeProductAPI,
+  editTypeProductAPI,
   getFilterTypeProductsAPI,
+  getTypeProductByIdAPI,
   getTypeProductsAPI,
 } from "./typeProductAPI";
 import { toast } from "react-toastify";
@@ -56,4 +59,69 @@ const addTypeProduct = createAsyncThunk(
     }
   }
 );
-export { getTypeProducts, getFilterTypeProducts, addTypeProduct };
+
+const editTypeProduct = createAsyncThunk(
+  "typeProduct/edit-type-product",
+  async (data) => {
+    try {
+      const dataEditTypeProduct = await editTypeProductAPI(data);
+      const dataTypeProducts = await getFilterTypeProductsAPI();
+      toast.success(dataEditTypeProduct.message);
+      return { dataEditTypeProduct, dataTypeProducts };
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        console.log(error.response.data.message);
+        toast.error(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
+const deleteTypeProduct = createAsyncThunk(
+  "typeProduct/delete-type-product",
+  async (typeProductId) => {
+    try {
+      const dataDeleteTypeProduct = await deleteTypeProductAPI(typeProductId);
+      const dataTypeProducts = await getFilterTypeProductsAPI();
+      toast.success(dataDeleteTypeProduct.message);
+      return { dataDeleteTypeProduct, dataTypeProducts };
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        console.log(error.response.data.message);
+        toast.error(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
+const getTypeProductById = createAsyncThunk(
+  "typeProduct/get-type-product-id",
+  async (typeProductId) => {
+    try {
+      const data = await getTypeProductByIdAPI(typeProductId);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        console.log(error.response.data.message);
+        toast.error(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+export {
+  getTypeProducts,
+  getFilterTypeProducts,
+  addTypeProduct,
+  editTypeProduct,
+  deleteTypeProduct,
+  getTypeProductById,
+};

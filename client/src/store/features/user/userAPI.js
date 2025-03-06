@@ -46,6 +46,34 @@ const addUserAPI = async (data) => {
   return response?.data;
 };
 
+const editUserAPI = async ({
+  user_id,
+  name,
+  password,
+  phone,
+  fullname,
+  email,
+}) => {
+  const response = await instanceAxios.put(`user/edit/${user_id}`, {
+    name,
+    password,
+    phone,
+    email,
+    fullname,
+  });
+  return response?.data;
+};
+
+const deleteUserAPI = async (user_id) => {
+  const response = await instanceAxios.delete(`user/delete/${user_id}`);
+  return response?.data;
+};
+
+const getUserByIdAPI = async (user_id) => {
+  const response = await instanceAxios.get(`user/get-user/${user_id}`);
+  return response?.data;
+};
+
 export {
   getUserInfoAPI,
   saveVoucherAPI,
@@ -54,4 +82,7 @@ export {
   updateAvatarAPI,
   getUsersAPI,
   addUserAPI,
+  editUserAPI,
+  deleteUserAPI,
+  getUserByIdAPI,
 };
