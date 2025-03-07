@@ -34,10 +34,10 @@ const ProductCard = ({
               {item.name}
             </span>
             <div className="flex items-center space-x-1 rtl:space-x-reverse">
-              <span className="flex items-center">
+              <div className="flex items-center">
                 <StarRating rating={item.averageReview}></StarRating>
                 <span className="ml-3 text-gray-600">{item.averageReview}</span>
-              </span>
+              </div>
             </div>
             <span className="text-lg font-bold text-secondary dark:text-white">
               {formatCurrency(item.price)}

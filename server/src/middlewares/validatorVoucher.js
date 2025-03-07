@@ -8,17 +8,7 @@ const validatorVoucher = [
     .withMessage("Số lượng phải là số nguyên lớn hơn 0"),
   body("code").notEmpty().withMessage("Mã giảm giá không được để trống"),
   body("description").notEmpty().withMessage("Mô tả không được để trống"),
-  body("end_date")
-    .isISO8601()
-    .withMessage("Ngày kết thúc không hợp lệ")
-    .custom((value) => {
-      const now = new Date();
-      const selectedDate = new Date(value);
-      if (selectedDate <= now) {
-        throw new Error("Ngày kết thúc phải lớn hơn ngày hiện tại");
-      }
-      return true;
-    }),
+  body("end_date").isISO8601().withMessage("Ngày kết thúc không hợp lệ"),
   body("unit")
     .isIn(["%", "VND"])
     .withMessage("Đơn vị chỉ được là '%' hoặc 'VND'"),

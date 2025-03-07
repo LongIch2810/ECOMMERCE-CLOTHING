@@ -37,7 +37,7 @@ const getProductsService = async ({ page = 1, limit = 5, name }) => {
 
 const getFilterProductsService = async ({
   page = 1,
-  limit = 10,
+  limit = 8,
   genders,
   typeProducts,
   brands,
@@ -47,10 +47,10 @@ const getFilterProductsService = async ({
   colors,
   search,
 }) => {
-  console.log(">>> min_price : ", min_price);
-  console.log(max_price, " ", typeof max_price);
   const skip = (page - 1) * limit;
-  console.log(colors);
+  console.log(">>> brands : ", brands);
+  console.log(">>> typeProducts : ", typeProducts);
+  console.log(">>> genders : ", genders);
   try {
     const pipeline = [
       {
@@ -71,7 +71,7 @@ const getFilterProductsService = async ({
       {
         $group: {
           _id: "$_id",
-          name: { $first: "$name" }, // Giữ nguyên name của sản phẩm
+          name: { $first: "$name" },
           price: { $first: "$price" },
           brand: { $first: "$brand" },
           type_product: { $first: "$type_product" },
@@ -79,7 +79,7 @@ const getFilterProductsService = async ({
           images: { $first: "$images" },
           averageReview: { $first: "$averageReview" },
           description: { $first: "$description" },
-          color_ids: { $addToSet: "$stock.sizes.color" }, // Gom nhóm các màu sắc
+          color_ids: { $addToSet: "$stock.sizes.color" },
         },
       },
       {
@@ -90,7 +90,6 @@ const getFilterProductsService = async ({
           as: "colors",
         },
       },
-
       {
         $project: {
           _id: 1,
@@ -116,41 +115,6 @@ const getFilterProductsService = async ({
       },
     ];
 
-    const filter = {};
-
-    //Lọc theo giá
-    if (min_price || max_price) {
-      filter.price = {};
-
-      if (min_price) filter.price.$gte = min_price;
-
-      if (max_price) {
-        filter.price.$lte = max_price; // Chỉ thêm điều kiện này nếu max_price không phải Infinity
-      }
-    }
-
-    //Lọc theo loại sản phẩm
-    if (typeProducts && typeProducts.length > 0) {
-      filter.type_product = { $in: typeProducts };
-    }
-
-    //Lọc theo giới tính
-    if (genders && genders.length > 0) {
-      filter.gender = { $in: genders };
-    }
-
-    if (brands && brands.length > 0) {
-      filter.brand = { $in: brands };
-    }
-
-    if (search) {
-      filter.name = {};
-      filter.name.$regex = `.*${search}.*`;
-      filter.name.$options = "i";
-    }
-
-    pipeline.push({ $match: filter });
-
     const sortOptions = {
       newest: { createdAt: -1 },
       price_asc: { price: 1 },
@@ -158,17 +122,44 @@ const getFilterProductsService = async ({
     };
 
     if (sortOptions[sort]) {
+      console.log(sortOptions[sort]);
       pipeline.push({ $sort: sortOptions[sort] });
     }
 
-    if (colors && colors.length > 0) {
-      const objectIds = colors.map((id) => new mongoose.Types.ObjectId(id));
+    const filter = {};
 
-      pipeline.push({
-        $match: {
-          "colors._id": { $in: objectIds },
-        },
-      });
+    if (min_price || max_price) {
+      filter.price = {};
+      if (min_price) filter.price.$gte = min_price;
+      if (max_price) filter.price.$lte = max_price;
+    }
+
+    if (typeProducts?.length) {
+      const objectIds = typeProducts.map(
+        (id) => new mongoose.Types.ObjectId(id)
+      );
+      filter.type_product = { $in: objectIds };
+    }
+
+    if (genders?.length) {
+      const objectIds = genders.map((id) => new mongoose.Types.ObjectId(id));
+      filter.gender = { $in: objectIds };
+    }
+
+    if (brands?.length) {
+      const objectIds = brands.map((id) => new mongoose.Types.ObjectId(id));
+      filter.brand = { $in: objectIds };
+    }
+
+    if (search) {
+      filter.name = { $regex: `.*${search}.*`, $options: "i" };
+    }
+
+    pipeline.push({ $match: filter });
+
+    if (colors?.length) {
+      const objectIds = colors.map((id) => new mongoose.Types.ObjectId(id));
+      pipeline.push({ $match: { "colors._id": { $in: objectIds } } });
     }
 
     pipeline.push({
@@ -185,7 +176,6 @@ const getFilterProductsService = async ({
               as: "type_product",
             },
           },
-
           {
             $lookup: {
               from: "brands",
@@ -194,7 +184,6 @@ const getFilterProductsService = async ({
               as: "brand",
             },
           },
-
           {
             $lookup: {
               from: "genders",
@@ -203,7 +192,6 @@ const getFilterProductsService = async ({
               as: "gender",
             },
           },
-
           {
             $unwind: {
               path: "$type_product",
@@ -215,11 +203,10 @@ const getFilterProductsService = async ({
         ],
       },
     });
+
     const result = await Product.aggregate(pipeline);
-    const total_products = result[0]?.total_count?.length
-      ? result[0].total_count[0].count
-      : 0;
-    console.log(result);
+    const total_products = result[0]?.total_count?.[0]?.count || 0;
+
     return {
       SC: 200,
       success: true,
@@ -227,11 +214,11 @@ const getFilterProductsService = async ({
         total_products,
         total_pages: Math.ceil(total_products / limit),
         current_page: page,
-        products: result[0].paginated_products,
+        products: result[0]?.paginated_products || [],
       },
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { SC: 500, success: false, message: error.message };
   }
 };

@@ -7,7 +7,7 @@ const StarRating = ({ rating }) => {
   const emptyStars = Math.floor(5 - rating); // Sao rỗng
 
   return (
-    <div className="flex">
+    <div className="flex items-center">
       {/* Hiển thị sao đầy */}
       {Array(fullStars)
         .fill(0)

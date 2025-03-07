@@ -24,7 +24,7 @@ import { toast } from "react-toastify";
 const Product = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { products, total_products, current_page } = useSelector(
+  const { filterProducts, total_products, current_page } = useSelector(
     (state) => state.product
   );
 
@@ -40,7 +40,7 @@ const Product = () => {
   const [typeProductsFilter, setTypeProductsFilter] = useState([]);
   const [brandsFilter, setBrandsFilter] = useState([]);
   const [colorsFilter, setColorsFilter] = useState([]);
-  const [sort, setSort] = useState(1);
+  const [sort, setSort] = useState("price_asc");
   const [search, setSearch] = useState("");
   const [min_price, setMinPrice] = useState(null);
   const [max_price, setMaxPrice] = useState(null);
@@ -131,9 +131,20 @@ const Product = () => {
       getFilterProducts({
         min_price: minPrice,
         max_price: maxPrice,
+        page: currentPage,
+        limit,
+        typeProducts: typeProductsFilter,
+        genders: gendersFilter,
+        brands: brandsFilter,
+        sort,
+        colors: colorsFilter,
+        search,
       })
     );
   };
+
+  console.log(">>> filterProducts : ", filterProducts);
+  console.log(">>> total_products : ", total_products);
 
   return (
     <Layout>
@@ -182,7 +193,7 @@ const Product = () => {
                   <option value={16}>16 sản phẩm</option>
                 </select>
                 <select
-                  onChange={(e) => setSort(Number(e.target.value))}
+                  onChange={(e) => setSort(e.target.value)}
                   className="p-1.5 md:p-2 border rounded-lg cursor-pointer  bg-primary text-main text-sm md:text-base"
                 >
                   <option value={"price_asc"}>Thấp đến cao</option>
@@ -266,7 +277,7 @@ const Product = () => {
                     </div>
                   </div>
                   <div className="flex flex-col mb-10 gap-y-3">
-                    <span className="text-lg font-medium">Màu sắc</span>
+                    <span className="text-lg font-medium">Giá</span>
                     <div className="flex-col inline-block">
                       <div className="inline-flex items-center mb-2 gap-x-5">
                         <input
@@ -315,9 +326,9 @@ const Product = () => {
               <IconFilter />
             </div>
 
-            {products?.length > 0 ? (
+            {filterProducts?.length > 0 ? (
               <div className="grid grid-cols-1 gap-10 mb-10 md:grid-cols-3 lg:grid-cols-4 justify-items-center">
-                {products.map((item) => (
+                {filterProducts.map((item) => (
                   <ProductCard
                     key={item._id}
                     item={item}
@@ -333,7 +344,7 @@ const Product = () => {
               </div>
             )}
 
-            {products?.length > 0 && (
+            {filterProducts?.length > 0 && (
               <div className="flex items-center justify-center">
                 <Pagination
                   current={currentPage}

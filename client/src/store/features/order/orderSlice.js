@@ -7,6 +7,7 @@ import {
   changeStatusSuccessfully,
   changeStatus,
   exportExcel,
+  fetchOrderDetail,
 } from "./orderThunk";
 import { getVoucher } from "../user/userThunk";
 
@@ -23,6 +24,7 @@ const orderSlice = createSlice({
     total_price: null,
     shippingMethod: null,
     isExportExcel: false,
+    orderDetail: null,
   },
   reducers: {
     setAddOrderSuccess: (state, action) => {
@@ -108,6 +110,17 @@ const orderSlice = createSlice({
       .addCase(exportExcel.rejected, (state, action) => {
         state.loading = false;
         state.isExportExcel = false;
+      })
+      .addCase(fetchOrderDetail.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(fetchOrderDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orderDetail = action.payload?.order;
+      })
+      .addCase(fetchOrderDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       });
   },
 });

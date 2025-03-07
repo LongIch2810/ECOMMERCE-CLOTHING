@@ -35,6 +35,7 @@ import { getUserInfo } from "./store/features/user/userThunk";
 import Payment from "./pages/Payment";
 import ForgotPassword from "./pages/ForgotPassword";
 import { AddColor, ColorList } from "./admin/src/pages/ColorManagement";
+import OrderDetail from "./pages/OrderDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ function App() {
       <Route path="/product" element={<Product />}></Route>
       <Route path="/voucher" element={<Voucher />}></Route>
       <Route path="/payment" element={<Payment />}></Route>
+      <Route path="/order/:orderId" element={<OrderDetail />}></Route>
 
       {/* User Routes */}
       <Route path="/user">

@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 
 const formatCurrency = (price) => {
   return new Intl.NumberFormat("vi-VN", {
@@ -8,9 +8,11 @@ const formatCurrency = (price) => {
 };
 
 const formatDate = (date) => {
-  const tempDate = moment(date).utc(); // Giữ nguyên thời gian UTC
-  const formattedDate = tempDate.format("DD/MM/YYYY HH:mm:ss");
-  return formattedDate;
+  return moment(date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm:ss");
 };
 
-export { formatCurrency, formatDate };
+const formatInputDate = (date) => {
+  return moment.utc(date).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+};
+
+export { formatCurrency, formatDate, formatInputDate };

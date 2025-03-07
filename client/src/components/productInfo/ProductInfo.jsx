@@ -138,15 +138,15 @@ const ProductInfo = ({ id }) => {
             <p className="mb-1 text-xl font-medium text-gray-900 md:text-3xl title-font">
               {productInfo.product.name}
             </p>
-            <div className="flex mb-4">
-              <span className="flex items-center">
+            <div className="flex items-start mb-4">
+              <div className="flex items-center">
                 <StarRating
                   rating={productInfo.product.averageReview}
                 ></StarRating>
                 <span className="ml-3 text-gray-600">
                   {productInfo.product.averageReview}
                 </span>
-              </span>
+              </div>
             </div>
             <p className="text-sm leading-relaxed text-gray-primary md:text-lg">
               {productInfo.product.description}

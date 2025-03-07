@@ -3,6 +3,7 @@ import Layout from "../layout/Layout";
 import LayoutInfo from "../layout/LayoutInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrdersByUserId } from "@/store/features/order/orderThunk";
+import OrderDetailCard from "@/components/card/OrderDetailCard";
 import OrderCard from "@/components/card/OrderCard";
 
 const Order = () => {

@@ -1,12 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import LayoutAdmin from "../components/LayoutAdmin";
 import Table from "../components/Table";
 import Title from "@/components/title/Title";
 import { useDispatch, useSelector } from "react-redux";
-import { addVoucher, getVouchers } from "@/store/features/voucher/voucherThunk";
+import {
+  addVoucher,
+  deleteVoucher,
+  getFilterVouchers,
+  getVouchers,
+} from "@/store/features/voucher/voucherThunk";
 import Tr from "../components/Tr";
 import Td from "../components/Td";
-import { formatCurrency } from "@/utils/format";
+import { formatCurrency, formatDate } from "@/utils/format";
 import Button from "@/components/button/Button";
 import { UNIT } from "@/utils/constant";
 import GroupForm from "@/components/group/GroupForm";
@@ -18,6 +23,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Textarea from "@/components/input/Textarea";
 import { toast } from "react-toastify";
+import { setCurrentPage } from "@/store/features/voucher/voucherSlice";
+import IconSearch from "@/components/icons/IconSearch";
+import ModalEditVoucher from "@/components/modal/ModalEditVoucher";
 
 const schema = yup
   .object({
@@ -66,28 +74,79 @@ const schema = yup
 
 const VoucherList = () => {
   const dispatch = useDispatch();
-  const { vouchers } = useSelector((state) => state.voucher);
+  const { filterVouchers, total_vouchers, current_page } = useSelector(
+    (state) => state.voucher
+  );
+
+  const [search, setSearch] = useState("");
+  const [voucherId, setVoucherId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleSearch = (e) => {
+    dispatch(setCurrentPage(1));
+    setSearch(e.target.value);
+  };
+
+  const handleDeleteVoucher = (voucherId) => {
+    dispatch(deleteVoucher(voucherId));
+  };
+
+  const handleEditVoucher = (supplierId) => {
+    setVoucherId(supplierId);
+    setIsOpen(true);
+  };
+
   useEffect(() => {
-    dispatch(getVouchers());
-  }, []);
+    dispatch(getFilterVouchers({ page: current_page, limit: 5, code: search }));
+  }, [current_page, search]);
+
   return (
-    <>
+    <div>
+      <div className="flex items-center justify-center my-8">
+        <div className="relative w-full md:w-3/4">
+          <input
+            type="text"
+            placeholder="Nhập code giảm giá ..."
+            onChange={handleSearch}
+            className="w-full p-2 pr-10 border-2 border-gray-300 rounded-md shadow-xs outline-none text-primary"
+          />
+          <span className="absolute inset-y-0 grid w-10 end-0 place-content-center">
+            <IconSearch></IconSearch>
+          </span>
+        </div>
+      </div>
       <Title text="Danh sách mã giảm giá" className="text-2xl"></Title>
-      {vouchers?.length > 0 ? (
-        <Table ths={Object.keys(vouchers[0])}>
-          {vouchers.map((item) => (
+      {filterVouchers?.length > 0 ? (
+        <Table
+          ths={Object.keys(filterVouchers[0])}
+          total_items={total_vouchers}
+          currentPage={current_page}
+          setCurrentPage={setCurrentPage}
+        >
+          {filterVouchers.map((item) => (
             <Tr key={item._id}>
               <Td>{item._id}</Td>
               <Td>{item.title}</Td>
               <Td>{item.number_of_use}</Td>
               <Td>{item.code}</Td>
+              <Td>{formatDate(item.end_date)}</Td>
               <Td>{formatCurrency(item.max_discount)}</Td>
               <Td>{formatCurrency(item.min_order_price)}</Td>
               <Td>{item.status}</Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">
-                  <Button className="p-2 bg-foreign text-main">Edit</Button>
-                  <Button className="p-2 bg-secondary text-main">Delete</Button>
+                  <Button
+                    onClick={() => handleEditVoucher(item._id)}
+                    className="p-2 bg-foreign text-main"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteVoucher(item._id)}
+                    className="p-2 bg-secondary text-main"
+                  >
+                    Delete
+                  </Button>
                 </div>
               </Td>
             </Tr>
@@ -100,7 +159,8 @@ const VoucherList = () => {
           </p>
         </div>
       )}
-    </>
+      {isOpen && <ModalEditVoucher id={voucherId} setIsOpen={setIsOpen} />}
+    </div>
   );
 };
 

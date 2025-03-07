@@ -386,6 +386,24 @@ const statisticalRevenueMonthService = async ({ month, year }) => {
   }
 };
 
+const fetchOrderDetailService = async (orderId) => {
+  try {
+    const order = await Order.findById(orderId)
+      .populate("products.product")
+      .populate("products.color")
+      .populate("voucher")
+      .populate("shipping")
+      .populate("address");
+    if (!order) {
+      return { SC: 404, success: false, message: "Không tìm thấy đơn hàng" };
+    }
+    return { SC: 200, success: true, order };
+  } catch (error) {
+    console.error(error);
+    return { SC: 500, success: false, message: "Lỗi server" };
+  }
+};
+
 module.exports = {
   addOrderService,
   getOrdersByUserIdService,
@@ -397,4 +415,5 @@ module.exports = {
   statisticalStatusOrderDateService,
   statisticalRevenueYearService,
   statisticalRevenueMonthService,
+  fetchOrderDetailService,
 };

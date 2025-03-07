@@ -12,6 +12,7 @@ const {
   statisticalStatusOrderMonth,
   statisticalStatusOrderDate,
   exportExcel,
+  fetchOrderDetail,
 } = require("../controllers/orderController");
 const checkAdmin = require("../middlewares/checkAdmin");
 
@@ -61,6 +62,8 @@ orderRouter.post(
   checkAdmin,
   statisticalRevenueMonth
 );
+
+orderRouter.get("/get-order-id/:orderId", verifyToken, fetchOrderDetail);
 
 orderRouter.get("/export-excel", verifyToken, checkAdmin, exportExcel);
 

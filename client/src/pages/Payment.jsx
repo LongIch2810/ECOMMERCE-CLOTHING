@@ -174,12 +174,17 @@ const Payment = () => {
                 ))}
               </div>
             ) : (
-              <Button
-                onClick={() => navigate("/user/address")}
-                className="px-4 py-2 text-white rounded-lg shadow-md bg-foreign hover:bg-foreign"
-              >
-                Đi tới trang địa chỉ của bạn
-              </Button>
+              <div className="flex flex-col items-center justify-center h-64 p-6 bg-gray-100 rounded-lg shadow-md">
+                <p className="mb-4 text-lg text-gray-700">
+                  Hiện tại bạn không có địa chỉ nào.
+                </p>
+                <Button
+                  onClick={() => navigate("/user/address")}
+                  className="px-4 py-2 text-white rounded-lg shadow-md bg-foreign hover:bg-foreign"
+                >
+                  Đi tới trang địa chỉ của bạn
+                </Button>
+              </div>
             )}
           </div>
         )}

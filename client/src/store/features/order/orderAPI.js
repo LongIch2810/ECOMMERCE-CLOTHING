@@ -36,6 +36,11 @@ const exportExcelAPI = async () => {
   return response.data;
 };
 
+const fetchOrderDetailAPI = async (orderId) => {
+  const response = await instanceAxios.get(`/order/get-order-id/${orderId}`);
+  return response.data;
+};
+
 export {
   addOrderAPI,
   getOrdersByUserIdAPI,
@@ -43,4 +48,5 @@ export {
   changeStatusAPI,
   cancelOrderAPI,
   exportExcelAPI,
+  fetchOrderDetailAPI,
 };

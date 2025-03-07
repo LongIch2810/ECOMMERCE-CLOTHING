@@ -5,6 +5,7 @@ import {
   cancelOrderAPI,
   changeStatusAPI,
   exportExcelAPI,
+  fetchOrderDetailAPI,
   getOrdersAPI,
   getOrdersByUserIdAPI,
 } from "./orderAPI";
@@ -136,6 +137,24 @@ const exportExcel = createAsyncThunk("order/export-excel", async () => {
   }
 });
 
+const fetchOrderDetail = createAsyncThunk(
+  "order/get-order-id",
+  async (orderId) => {
+    try {
+      const data = await fetchOrderDetailAPI(orderId);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        console.log(error.response.data.message);
+        toast.error(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
 export {
   addOrder,
   getOrdersByUserId,
@@ -144,4 +163,5 @@ export {
   changeStatusSuccessfully,
   cancelOrder,
   exportExcel,
+  fetchOrderDetail,
 };

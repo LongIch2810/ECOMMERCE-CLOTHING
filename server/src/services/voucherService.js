@@ -1,4 +1,5 @@
 const Voucher = require("../models/voucherModel");
+const moment = require("moment-timezone");
 
 const getVouchersService = async () => {
   try {
@@ -6,6 +7,35 @@ const getVouchersService = async () => {
       "_id title number_of_use code status max_discount min_order_price"
     );
     return { SC: 200, success: true, vouchers };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const getFilterVouchersService = async ({ page = 1, limit = 5, code }) => {
+  try {
+    const filter = {};
+    if (code) {
+      filter.code = {};
+      filter.code.$regex = `.*${code}.*`;
+      filter.code.$options = "i";
+    }
+    const results = {};
+    const skip = (page - 1) * limit;
+    const vouchers = await Voucher.find(filter)
+      .limit(limit)
+      .skip(skip)
+      .select(
+        "_id title number_of_use code status max_discount min_order_price end_date"
+      );
+    const total_vouchers = await Voucher.countDocuments(filter);
+    const total_pages = Math.ceil(total_vouchers / limit);
+    results.total_vouchers = total_vouchers;
+    results.total_pages = total_pages;
+    results.current_page = page;
+    results.vouchers = vouchers;
+    return { SC: 200, success: true, results };
   } catch (error) {
     console.log(error);
     return { SC: 500, success: false, message: error.message };
@@ -28,6 +58,9 @@ const editVoucherService = async ({
   title,
   number_of_use,
   code,
+  end_date,
+  value,
+  unit,
   max_discount,
   min_order_price,
 }) => {
@@ -61,8 +94,17 @@ const editVoucherService = async ({
       });
     }
 
+    const convertedDate = moment
+      .tz(end_date, "UTC")
+      .tz("Asia/Ho_Chi_Minh")
+      .toDate();
+
+    console.log(convertedDate);
+    existingVoucher.end_date = convertedDate;
     existingVoucher.title = title;
     existingVoucher.number_of_use = number_of_use;
+    existingVoucher.value = value;
+    existingVoucher.unit = unit;
     existingVoucher.max_discount = max_discount;
     existingVoucher.min_order_price = min_order_price;
     await existingVoucher.save();
@@ -116,10 +158,24 @@ const getVoucherByIdService = async (voucherId) => {
   }
 };
 
+const getVouchersNotExpiredService = async () => {
+  try {
+    const vouchers = await Voucher.find({ status: "Còn hạn" }).select(
+      "_id title number_of_use code status max_discount min_order_price"
+    );
+    return { SC: 200, success: true, vouchers };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 module.exports = {
   getVouchersService,
   addVoucherService,
   editVoucherService,
   deleteVoucherService,
   getVoucherByIdService,
+  getVouchersNotExpiredService,
+  getFilterVouchersService,
 };

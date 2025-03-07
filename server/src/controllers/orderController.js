@@ -9,6 +9,7 @@ const {
   statisticalStatusOrderYearService,
   statisticalStatusOrderMonthService,
   statisticalStatusOrderDateService,
+  fetchOrderDetailService,
 } = require("../services/orderService");
 
 const ExcelJS = require("exceljs");
@@ -197,6 +198,22 @@ const exportExcel = async (req, res) => {
   }
 };
 
+const fetchOrderDetail = async (req, res) => {
+  const { orderId } = req.params;
+
+  console.log(orderId);
+  const result = await fetchOrderDetailService(orderId);
+
+  if (result.SC === 200 && result?.order) {
+    return res
+      .status(200)
+      .json({ success: result.success, order: result.order });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
 module.exports = {
   addOrder,
   getOrdersByUserId,
@@ -209,4 +226,5 @@ module.exports = {
   statisticalRevenueYear,
   statisticalRevenueMonth,
   exportExcel,
+  fetchOrderDetail,
 };
