@@ -125,7 +125,7 @@ const items = [
     children: [
       { id: 48, text: "Thống kê doanh thu", to: "/admin/statistical/" },
       { id: 49, text: "Thống kê lợi nhuận", to: "/admin/statistical/" },
-      { id: 50, text: "Thống kê tồn kho", to: "/admin/statistical/" },
+      { id: 50, text: "Thống kê tồn kho", to: "/admin/statistical/in-stock" },
     ],
   },
 ];

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  statisticalInStockAPI,
   statisticalRevenueMonthAPI,
   statisticalRevenueYearAPI,
   statisticalStatusOrderDateAPI,
@@ -85,10 +86,27 @@ const statisticalRevenueMonth = createAsyncThunk(
   }
 );
 
+const statisticalInStock = createAsyncThunk(
+  "stock/statistical-in-stock",
+  async (data) => {
+    try {
+      const result = await statisticalInStockAPI(data);
+      return result;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
 export {
   statisticalStatusOrderYear,
   statisticalStatusOrderDate,
   statisticalStatusOrderMonth,
   statisticalRevenueYear,
   statisticalRevenueMonth,
+  statisticalInStock,
 };

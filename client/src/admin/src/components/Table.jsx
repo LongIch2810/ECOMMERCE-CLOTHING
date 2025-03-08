@@ -8,6 +8,7 @@ const Table = ({
   children,
   total_items,
   currentPage,
+  limit,
   setCurrentPage = () => {},
 }) => {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ const Table = ({
         <Pagination
           current={currentPage}
           total={total_items}
-          pageSize={5}
+          pageSize={limit || 5}
           onChange={handleChangePage}
         />
       </div>

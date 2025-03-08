@@ -51,16 +51,18 @@ const orderSlice = createSlice({
     builder
       .addCase(addOrder.pending, (state, action) => {
         state.loading = true;
+        state.addOrder = false;
       })
       .addCase(addOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.addOrderSuccess = action.payload?.dataAddOrder?.success;
+        state.addOrderSuccess = true;
         state.orders = action.payload?.dataOrders?.orders;
         state.message = action.payload?.dataAddOrder?.message;
       })
       .addCase(addOrder.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
+        state.addOrderSuccess = false;
       })
       .addCase(getVoucher.fulfilled, (state, action) => {
         state.loading = false;

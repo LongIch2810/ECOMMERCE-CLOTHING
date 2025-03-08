@@ -205,8 +205,8 @@ const Product = () => {
 
             {/*--------------------------------------------------------- Bộ lọc sản phẩm -------------------------------------------------------- */}
             {isOpen && (
-              <div className="flex justify-center">
-                <div className="flex flex-col w-full p-5 mb-10 border-2 border-gray-300 rounded-lg gap-y-5">
+              <div>
+                <div className="flex flex-col w-full p-10 mb-10 border-2 border-gray-300 rounded-lg gap-y-5">
                   <div className="flex flex-col gap-y-3">
                     <span className="text-lg font-medium">Giới tính</span>
                     <div>

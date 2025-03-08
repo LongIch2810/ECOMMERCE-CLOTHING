@@ -40,10 +40,19 @@ const statisticalRevenueMonthAPI = async (data) => {
   return response.data;
 };
 
+const statisticalInStockAPI = async (data) => {
+  const response = await instanceAxios.post(
+    "/stock/statistical-in-stock",
+    data
+  );
+  return response.data;
+};
+
 export {
   statisticalStatusOrderYearAPI,
   statisticalStatusOrderDateAPI,
   statisticalStatusOrderMonthAPI,
   statisticalRevenueYearAPI,
   statisticalRevenueMonthAPI,
+  statisticalInStockAPI,
 };

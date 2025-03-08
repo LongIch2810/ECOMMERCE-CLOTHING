@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  statisticalInStock,
   statisticalRevenueMonth,
   statisticalRevenueYear,
   statisticalStatusOrderDate,
@@ -20,6 +21,9 @@ const statisticalSlice = createSlice({
     dataStatisticalStatusOrder: [],
     dataStatisticalRevenueYear: [],
     dataStatisticalRevenueMonth: [],
+    dataStatisticalInStock: [],
+    current_page: 1,
+    total_items: null,
     message: null,
   },
   reducers: {
@@ -40,6 +44,9 @@ const statisticalSlice = createSlice({
     },
     setMonthRevenue: (state, action) => {
       state.monthRevenue = action.payload;
+    },
+    setCurrentPage: (state, action) => {
+      state.current_page = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -98,6 +105,19 @@ const statisticalSlice = createSlice({
       .addCase(statisticalRevenueMonth.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
+      })
+      .addCase(statisticalInStock.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(statisticalInStock.fulfilled, (state, action) => {
+        state.loading = false;
+        state.dataStatisticalInStock = action.payload?.stock;
+        state.current_page = action.payload?.current_page;
+        state.total_items = action.payload?.total_items;
+      })
+      .addCase(statisticalInStock.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       });
   },
 });
@@ -109,5 +129,6 @@ export const {
   setYearStatusOrder,
   setYearRevenue,
   setMonthRevenue,
+  setCurrentPage,
 } = statisticalSlice.actions;
 export default statisticalSlice.reducer;

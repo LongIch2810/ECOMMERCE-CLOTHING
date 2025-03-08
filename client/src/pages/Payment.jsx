@@ -80,7 +80,7 @@ const Payment = () => {
       dispatch(setVoucher(null));
       navigate("/user/order");
     }
-  }, [addOrderSuccess, dispatch, navigate]);
+  }, [addOrderSuccess]);
 
   /** 🌟 Cập nhật tổng giá */
   useEffect(() => {

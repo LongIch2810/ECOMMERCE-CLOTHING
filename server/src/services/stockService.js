@@ -84,4 +84,77 @@ const refundQuantityService = async ({ product_id, quantity, size }) => {
   }
 };
 
-module.exports = { updateStockAfterOrderService, refundQuantityService };
+const statisticalInStockService = async ({ page = 1, limit = 50 }) => {
+  try {
+    const skip = (page - 1) * limit;
+
+    const stockData = await Stock.aggregate([
+      { $unwind: "$sizes" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "product",
+          foreignField: "_id",
+          as: "productInfo",
+        },
+      },
+      { $unwind: "$productInfo" },
+      {
+        $lookup: {
+          from: "colors",
+          localField: "sizes.color",
+          foreignField: "_id",
+          as: "colorInfo",
+        },
+      },
+      { $unwind: "$colorInfo" },
+      {
+        $project: {
+          _id: 0,
+          productName: "$productInfo.name",
+          size: "$sizes.size",
+          color: "$colorInfo.name",
+          quantity: "$sizes.quantity",
+        },
+      },
+      { $sort: { productName: 1, size: 1, color: 1 } }, // Sắp xếp
+      { $skip: skip }, // Bỏ qua (page - 1) * limit bản ghi
+      { $limit: limit }, // Giới hạn số bản ghi trên mỗi trang
+    ]);
+
+    const totalItems = await Stock.aggregate([
+      { $unwind: "$sizes" },
+      { $count: "total" },
+    ]);
+
+    console.log(totalItems);
+
+    const current_page = page;
+    const total_pages = Math.ceil((totalItems[0]?.total || 0) / limit);
+    const total_items = totalItems[0]?.total || 0;
+
+    console.log(total_pages);
+    console.log(total_items);
+
+    return {
+      SC: 200,
+      success: true,
+      stock: stockData,
+      current_page,
+      total_items,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      SC: 500,
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+module.exports = {
+  updateStockAfterOrderService,
+  refundQuantityService,
+  statisticalInStockService,
+};
