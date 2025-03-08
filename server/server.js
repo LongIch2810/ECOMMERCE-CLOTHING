@@ -22,6 +22,7 @@ const colorRouter = require("./src/routes/colorRoute");
 const importReceiptRouter = require("./src/routes/importReceiptRoute");
 const startCronJob = require("./src/utils/schedule");
 const cloudinary = require("./src/configs/cloudinary");
+const statisticalRouter = require("./src/routes/statisticalRoute");
 
 //create app
 const app = express();
@@ -57,5 +58,6 @@ app.use("/api/supplier", supplierRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/color", colorRouter);
 app.use("/api/import-receipt", importReceiptRouter);
+app.use("/api/statistical", statisticalRouter);
 
 app.listen(PORT, () => console.log(`Server is now running on ${PORT}`));

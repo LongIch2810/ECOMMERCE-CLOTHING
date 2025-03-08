@@ -347,9 +347,7 @@ const statisticalRevenueYearService = async ({ year }) => {
             $gte: startOfYear,
             $lte: endOfYear,
           },
-          status: {
-            $ne: "Hủy bỏ",
-          },
+          status: "Giao hàng thành công",
         },
       },
       {
@@ -398,9 +396,7 @@ const statisticalRevenueYearDetailService = async ({ year }) => {
             $gte: startOfYear,
             $lte: endOfYear,
           },
-          status: {
-            $ne: "Hủy bỏ",
-          },
+          status: "Giao hàng thành công",
         },
       },
       {
@@ -423,9 +419,7 @@ const statisticalRevenueYearDetailService = async ({ year }) => {
             $lt: endOfYear,
           },
 
-          status: {
-            $ne: "Hủy bỏ",
-          },
+          status: "Giao hàng thành công",
         },
       },
       {
@@ -466,9 +460,7 @@ const statisticalRevenueMonthService = async ({ month, year }) => {
             $gte: startOfMonth,
             $lte: endOfMonth,
           },
-          status: {
-            $ne: "Hủy bỏ",
-          },
+          status: "Giao hàng thành công",
         },
       },
       {
@@ -517,9 +509,7 @@ const statisticalRevenueMonthDetailService = async ({ month, year }) => {
             $gte: startOfMonth,
             $lte: endOfMonth,
           },
-          status: {
-            $ne: "Hủy bỏ",
-          },
+          status: "Giao hàng thành công",
         },
       },
       {
@@ -541,9 +531,7 @@ const statisticalRevenueMonthDetailService = async ({ month, year }) => {
             $gte: startOfMonth,
             $lt: endOfMonth,
           },
-          status: {
-            $ne: "Hủy bỏ",
-          },
+          status: "Giao hàng thành công",
         },
       },
       {
@@ -587,9 +575,7 @@ const statisticalRevenueDateDetailService = async ({ startDate, endDate }) => {
             $gte: start,
             $lte: end,
           },
-          status: {
-            $ne: "Hủy bỏ",
-          },
+          status: "Giao hàng thành công",
         },
       },
       {
@@ -611,9 +597,7 @@ const statisticalRevenueDateDetailService = async ({ startDate, endDate }) => {
             $gte: start,
             $lte: end,
           },
-          status: {
-            $ne: "Hủy bỏ",
-          },
+          status: "Giao hàng thành công",
         },
       },
       {

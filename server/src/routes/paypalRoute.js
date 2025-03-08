@@ -8,7 +8,6 @@ const Cart = require("../models/cartModel");
 const { updateStockAfterOrderService } = require("../services/stockService");
 const User = require("../models/userModel");
 const sendMail = require("../configs/email");
-const Voucher = require("../models/voucherModel");
 
 const paypalRouter = express.Router();
 

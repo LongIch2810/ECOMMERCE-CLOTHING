@@ -38,6 +38,7 @@ import { AddColor, ColorList } from "./admin/src/pages/ColorManagement";
 import OrderDetail from "./pages/OrderDetail";
 import StatisticalInStock from "./admin/src/pages/StatisticalInStock";
 import StatisticalRevenueDetail from "./admin/src/pages/StatisticalRevenueDetail";
+import StatisticalProfit from "./admin/src/pages/StatisticalProfit";
 
 function App() {
   const dispatch = useDispatch();
@@ -97,6 +98,7 @@ function App() {
           path="statistical/revenue-detail"
           element={<StatisticalRevenueDetail />}
         />
+        <Route path="statistical/profit" element={<StatisticalProfit />} />
       </Route>
 
       {/* Not Found */}

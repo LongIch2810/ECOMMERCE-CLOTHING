@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   statisticalInStock,
+  statisticalProfitDate,
+  statisticalProfitMonth,
+  statisticalProfitYear,
   statisticalRevenueDateDetail,
   statisticalRevenueMonth,
   statisticalRevenueMonthDetail,
@@ -29,6 +32,8 @@ const statisticalSlice = createSlice({
     totalRevenue: 0,
     current_page: 1,
     total_items: null,
+    totalCost: 0,
+    totalProfit: 0,
     message: null,
   },
   reducers: {
@@ -52,6 +57,9 @@ const statisticalSlice = createSlice({
     },
     setCurrentPage: (state, action) => {
       state.current_page = action.payload;
+    },
+    setTotalRevenue: (state, action) => {
+      state.totalRevenue = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -159,6 +167,45 @@ const statisticalSlice = createSlice({
       .addCase(statisticalRevenueYearDetail.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
+      })
+      .addCase(statisticalProfitYear.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(statisticalProfitYear.fulfilled, (state, action) => {
+        state.loading = false;
+        state.totalRevenue = action.payload?.totalRevenue;
+        state.totalCost = action.payload?.totalCost;
+        state.totalProfit = action.payload?.totalProfit;
+      })
+      .addCase(statisticalProfitYear.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(statisticalProfitMonth.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(statisticalProfitMonth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.totalRevenue = action.payload?.totalRevenue;
+        state.totalCost = action.payload?.totalCost;
+        state.totalProfit = action.payload?.totalProfit;
+      })
+      .addCase(statisticalProfitMonth.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(statisticalProfitDate.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(statisticalProfitDate.fulfilled, (state, action) => {
+        state.loading = false;
+        state.totalRevenue = action.payload?.totalRevenue;
+        state.totalCost = action.payload?.totalCost;
+        state.totalProfit = action.payload?.totalProfit;
+      })
+      .addCase(statisticalProfitDate.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       });
   },
 });
@@ -171,5 +218,6 @@ export const {
   setYearRevenue,
   setMonthRevenue,
   setCurrentPage,
+  setTotalRevenue,
 } = statisticalSlice.actions;
 export default statisticalSlice.reducer;

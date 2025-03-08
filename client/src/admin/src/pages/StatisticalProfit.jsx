@@ -1,5 +1,8 @@
 import Button from "@/components/button/Button";
 import {
+  statisticalProfitDate,
+  statisticalProfitMonth,
+  statisticalProfitYear,
   statisticalRevenueDateDetail,
   statisticalRevenueMonthDetail,
   statisticalRevenueYearDetail,
@@ -11,8 +14,8 @@ import Td from "../components/Td";
 import { toast } from "react-toastify";
 import { setTotalRevenue } from "@/store/features/statistical/statisticalSlice";
 
-const StatisticalRevenueDetail = () => {
-  const { orders, totalRevenue, loading } = useSelector(
+const StatisticalProfit = () => {
+  const { orders, totalRevenue, totalCost, totalProfit, loading } = useSelector(
     (state) => state.statistical
   );
   const dispatch = useDispatch();
@@ -26,16 +29,16 @@ const StatisticalRevenueDetail = () => {
 
   useEffect(() => {
     dispatch(setTotalRevenue(0));
-    dispatch(statisticalRevenueYearDetail({ year }));
+    dispatch(statisticalProfitYear({ year }));
   }, []);
 
-  const handleFilterStatisticalRevenue = () => {
+  const handleFilterStatisticalProfit = () => {
     if (option === "year") {
-      dispatch(statisticalRevenueYearDetail({ year }));
+      dispatch(statisticalProfitYear({ year }));
     } else if (option === "month") {
       const date = new Date(month);
       dispatch(
-        statisticalRevenueMonthDetail({
+        statisticalProfitMonth({
           month: date.getMonth() + 1,
           year: date.getFullYear(),
         })
@@ -54,13 +57,13 @@ const StatisticalRevenueDetail = () => {
         return;
       }
 
-      dispatch(statisticalRevenueDateDetail({ startDate, endDate }));
+      dispatch(statisticalProfitDate({ startDate, endDate }));
     }
   };
 
   return (
     <div>
-      <div className="inline-flex flex-col justify-center mb-3 gap-y-3">
+      <div className="inline-flex flex-col justify-center mb-5 gap-y-3">
         <div className="flex items-center gap-x-3">
           <span>Loại thống kê:</span>
           <select
@@ -114,57 +117,46 @@ const StatisticalRevenueDetail = () => {
                 ? "bg-gray-400 opacity-60 cursor-not-allowed text-black"
                 : "bg-foreign text-main"
             }`}
-            onClick={handleFilterStatisticalRevenue}
+            onClick={handleFilterStatisticalProfit}
           >
             {loading ? "Đang xử lý ..." : "Lọc"}
           </Button>
         </div>
       </div>
 
-      <div className="mb-20">
-        {orders?.length > 0 ? (
-          <table className="min-w-full text-sm bg-white divide-y-2 divide-gray-200">
-            <thead className="ltr:text-left rtl:text-right">
-              <tr>
-                <th className="px-4 py-2">STT</th>
-                {Object.keys(orders[0]).map((item, index) => (
-                  <th
-                    key={index}
-                    className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    {item}
-                  </th>
-                ))}
+      <div className="p-6 bg-white shadow-lg rounded-xl">
+        <h2 className="mb-4 text-3xl font-bold text-center text-gray-800">
+          📊 Báo Cáo Lợi Nhuận
+        </h2>
 
-                <th className="px-4 py-2"></th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-gray-200">
-              {orders.map((item, index) => (
-                <tr key={item._id}>
-                  <Td>{index + 1}</Td>
-                  <Td>{item._id}</Td>
-                  <Td className="text-secondary">
-                    {formatCurrency(item.total_price)}
-                  </Td>
-                  <Td>{formatDate(item.createdAt)}</Td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-64 p-6 bg-gray-100 rounded-lg shadow-md">
-            <p className="mb-4 text-lg text-gray-700">Không có kết quả nào.</p>
+        <div className="grid grid-cols-3 gap-6">
+          {/* Tổng doanh thu */}
+          <div className="p-4 bg-blue-100 rounded-lg shadow">
+            <p className="text-lg text-gray-700">📈 Tổng Doanh Thu</p>
+            <p className="text-2xl font-bold text-blue-600">
+              {formatCurrency(totalRevenue)}
+            </p>
           </div>
-        )}
-        <div className="p-5 mt-4 text-lg font-bold text-right border-t-2 border-gray-300">
-          Tổng doanh thu:{" "}
-          <span className="text-secondary">{formatCurrency(totalRevenue)}</span>
+
+          {/* Tổng giá nhập */}
+          <div className="p-4 bg-red-100 rounded-lg shadow">
+            <p className="text-lg text-gray-700">💰 Tổng Giá Nhập</p>
+            <p className="text-2xl font-bold text-red-500">
+              {formatCurrency(totalCost)}
+            </p>
+          </div>
+
+          {/* Lợi nhuận */}
+          <div className="p-4 bg-green-100 rounded-lg shadow">
+            <p className="text-lg text-gray-700">🚀 Lợi Nhuận</p>
+            <p className="text-2xl font-bold text-green-600">
+              {formatCurrency(totalProfit)}
+            </p>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default StatisticalRevenueDetail;
+export default StatisticalProfit;

@@ -55,6 +55,7 @@ const statisticalRevenueDateDetailAPI = async (data) => {
   );
   return response.data;
 };
+
 const statisticalRevenueMonthDetailAPI = async (data) => {
   const response = await instanceAxios.post(
     "/order/statistical-revenue-month-detail",
@@ -62,9 +63,32 @@ const statisticalRevenueMonthDetailAPI = async (data) => {
   );
   return response.data;
 };
+
 const statisticalRevenueYearDetailAPI = async (data) => {
   const response = await instanceAxios.post(
     "/order/statistical-revenue-year-detail",
+    data
+  );
+  return response.data;
+};
+
+const statisticalProfitYearAPI = async (data) => {
+  const response = await instanceAxios.post(
+    "/statistical/statistical-profit-year",
+    data
+  );
+  return response.data;
+};
+const statisticalProfitMonthAPI = async (data) => {
+  const response = await instanceAxios.post(
+    "/statistical/statistical-profit-month",
+    data
+  );
+  return response.data;
+};
+const statisticalProfitDateAPI = async (data) => {
+  const response = await instanceAxios.post(
+    "/statistical/statistical-profit-date",
     data
   );
   return response.data;
@@ -80,4 +104,7 @@ export {
   statisticalRevenueDateDetailAPI,
   statisticalRevenueMonthDetailAPI,
   statisticalRevenueYearDetailAPI,
+  statisticalProfitYearAPI,
+  statisticalProfitMonthAPI,
+  statisticalProfitDateAPI,
 };

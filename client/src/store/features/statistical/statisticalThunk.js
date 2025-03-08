@@ -1,6 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   statisticalInStockAPI,
+  statisticalProfitDateAPI,
+  statisticalProfitMonthAPI,
+  statisticalProfitYearAPI,
   statisticalRevenueDateDetailAPI,
   statisticalRevenueMonthAPI,
   statisticalRevenueMonthDetailAPI,
@@ -153,6 +156,54 @@ const statisticalRevenueYearDetail = createAsyncThunk(
   }
 );
 
+const statisticalProfitYear = createAsyncThunk(
+  "stock/statistical-profit-year",
+  async (data) => {
+    try {
+      const result = await statisticalProfitYearAPI(data);
+      return result;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
+const statisticalProfitMonth = createAsyncThunk(
+  "stock/statistical-profit-month",
+  async (data) => {
+    try {
+      const result = await statisticalProfitMonthAPI(data);
+      return result;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
+const statisticalProfitDate = createAsyncThunk(
+  "stock/statistical-profit-date",
+  async (data) => {
+    try {
+      const result = await statisticalProfitDateAPI(data);
+      return result;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
 export {
   statisticalStatusOrderYear,
   statisticalStatusOrderDate,
@@ -163,4 +214,7 @@ export {
   statisticalRevenueDateDetail,
   statisticalRevenueMonthDetail,
   statisticalRevenueYearDetail,
+  statisticalProfitDate,
+  statisticalProfitMonth,
+  statisticalProfitYear,
 };
