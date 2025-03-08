@@ -17,7 +17,7 @@ const OrderCard = ({ order }) => {
       <p className="text-gray-600">
         Ngày đặt hàng: {formatDate(order.createdAt)}
       </p>
-      <p className="text-gray-600">Tổng sản phẩm: {order?.products.length}</p>
+      <p className="text-gray-600">Tổng sản phẩm: {order?.products?.length}</p>
       <p className="text-secondary">
         Tổng tiền: {formatCurrency(order.total_price)}
       </p>

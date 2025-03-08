@@ -19,6 +19,8 @@ const seedBrand = require("./brandSeed");
 const Brand = require("../models/brandModel");
 const Color = require("../models/colorModel");
 const seedColor = require("./colorSeed");
+const ImportReceipt = require("../models/importReceiptModel");
+const seedImportReceipts = require("./importReceiptSeed");
 
 const seed = async () => {
   try {
@@ -78,6 +80,11 @@ const seed = async () => {
     if ((await countDocuments(Voucher)) === 0) {
       console.log("Seeding Vouchers...");
       await seedVoucher();
+    }
+
+    if ((await countDocuments(ImportReceipt)) === 0) {
+      console.log("Seeding Import receipt...");
+      await seedImportReceipts();
     }
 
     console.log("Seeding process completed.");

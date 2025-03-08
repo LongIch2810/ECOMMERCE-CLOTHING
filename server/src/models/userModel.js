@@ -19,7 +19,7 @@ const userSchema = new Schema(
       enum: ["Customer", "Admin"],
       default: "Customer",
     },
-    phone: { type: String, default: "", unique: true },
+    phone: { type: String, default: "" },
     vouchers: {
       type: [
         {

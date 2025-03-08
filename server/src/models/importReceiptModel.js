@@ -12,6 +12,11 @@ const importReceiptSchema = new Schema(
           ref: "Product",
           required: true,
         },
+        size: {
+          type: String,
+          enum: ["XS", "S", "M", "L", "XL", "XXL"],
+          required: true,
+        },
         quantity: { type: Number, required: true },
         color: { type: mongoose.Types.ObjectId, required: true },
         import_price: { type: Number, required: true },

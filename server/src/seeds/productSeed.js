@@ -904,4 +904,5 @@ const seedWomenProduct = async () => {
     return false;
   }
 };
+
 module.exports = seedProduct;
