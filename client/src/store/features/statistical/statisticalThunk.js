@@ -1,8 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   statisticalInStockAPI,
+  statisticalRevenueDateDetailAPI,
   statisticalRevenueMonthAPI,
+  statisticalRevenueMonthDetailAPI,
   statisticalRevenueYearAPI,
+  statisticalRevenueYearDetailAPI,
   statisticalStatusOrderDateAPI,
   statisticalStatusOrderMonthAPI,
   statisticalStatusOrderYearAPI,
@@ -102,6 +105,54 @@ const statisticalInStock = createAsyncThunk(
   }
 );
 
+const statisticalRevenueDateDetail = createAsyncThunk(
+  "stock/statistical-revenue-date-detail",
+  async (data) => {
+    try {
+      const result = await statisticalRevenueDateDetailAPI(data);
+      return result;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
+const statisticalRevenueMonthDetail = createAsyncThunk(
+  "stock/statistical-revenue-month-detail",
+  async (data) => {
+    try {
+      const result = await statisticalRevenueMonthDetailAPI(data);
+      return result;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
+const statisticalRevenueYearDetail = createAsyncThunk(
+  "stock/statistical-revenue-year-detail",
+  async (data) => {
+    try {
+      const result = await statisticalRevenueYearDetailAPI(data);
+      return result;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
+
 export {
   statisticalStatusOrderYear,
   statisticalStatusOrderDate,
@@ -109,4 +160,7 @@ export {
   statisticalRevenueYear,
   statisticalRevenueMonth,
   statisticalInStock,
+  statisticalRevenueDateDetail,
+  statisticalRevenueMonthDetail,
+  statisticalRevenueYearDetail,
 };

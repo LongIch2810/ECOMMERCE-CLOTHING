@@ -4,6 +4,7 @@ import {
   addOrderAPI,
   cancelOrderAPI,
   changeStatusAPI,
+  confirmReceivedAPI,
   exportExcelAPI,
   fetchOrderDetailAPI,
   getOrdersAPI,
@@ -75,14 +76,14 @@ const changeStatus = createAsyncThunk(
   }
 );
 
-const changeStatusSuccessfully = createAsyncThunk(
-  "order/change-status-successfully",
-  async ({ order_id, status }) => {
+const confirmReceived = createAsyncThunk(
+  "order/confirm-received",
+  async ({ order_id }) => {
     try {
-      const dataChangeStatus = await changeStatusAPI({ order_id, status });
-      const dataOrdersByUserId = await getOrdersByUserIdAPI();
-      toast.success(dataChangeStatus.message);
-      return { dataChangeStatus, dataOrdersByUserId };
+      const dataConfirmReceived = await confirmReceivedAPI({ order_id });
+      const dataOrderDetail = await fetchOrderDetailAPI(order_id);
+      toast.success(dataConfirmReceived.message);
+      return { dataConfirmReceived, dataOrderDetail };
     } catch (error) {
       if (error.response && error.response.data.message) {
         console.log(error.response.data.message);
@@ -98,9 +99,9 @@ const changeStatusSuccessfully = createAsyncThunk(
 const cancelOrder = createAsyncThunk("order/cancel", async ({ order_id }) => {
   try {
     const dataCancelOrder = await cancelOrderAPI({ order_id });
-    const dataOrdersByUserId = await getOrdersByUserIdAPI();
+    const dataOrderDetail = await fetchOrderDetailAPI(order_id);
     toast.success(dataCancelOrder.message);
-    return { dataCancelOrder, dataOrdersByUserId };
+    return { dataCancelOrder, dataOrderDetail };
   } catch (error) {
     if (error.response && error.response.data.message) {
       console.log(error.response.data.message);
@@ -160,7 +161,7 @@ export {
   getOrdersByUserId,
   getOrders,
   changeStatus,
-  changeStatusSuccessfully,
+  confirmReceived,
   cancelOrder,
   exportExcel,
   fetchOrderDetail,

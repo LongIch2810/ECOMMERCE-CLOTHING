@@ -120,7 +120,9 @@ const getOrdersService = async ({ page = 1, limit = 10, order_id, status }) => {
       .limit(limit)
       .skip(skip)
       .populate("shipping")
-      .select("_id total_price payment_method status createdAt shipping");
+      .select(
+        "_id total_price payment_method payment_status status createdAt shipping"
+      );
     const total_orders = await Order.countDocuments(filter);
     const total_pages = Math.ceil(total_orders / limit);
     results.total_orders = total_orders;
@@ -148,6 +150,36 @@ const changeStatusService = async ({ order_id, status }) => {
   }
 };
 
+const confirmReceivedService = async ({ order_id }) => {
+  try {
+    const order = await Order.findByIdAndUpdate(order_id, {
+      status: "Giao hàng thành công",
+    });
+
+    if (!order) {
+      return { SC: 400, success: false, message: "Đơn hàng không tồn tại !" };
+    }
+
+    if (!order.products || order.products.length === 0) {
+      return {
+        SC: 400,
+        success: false,
+        message: "Đơn hàng không có sản phẩm!",
+      };
+    }
+
+    if (order.payment_method !== "paypal") {
+      order.payment_status = "COMPLETED";
+      await order.save();
+    }
+
+    return { SC: 200, success: true, message: "Xác nhận đã nhận hàng !" };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 const cancelOrderService = async ({ order_id }) => {
   try {
     const order = await Order.findByIdAndUpdate(order_id, { status: "Hủy bỏ" });
@@ -163,6 +195,10 @@ const cancelOrderService = async ({ order_id }) => {
         message: "Đơn hàng không có sản phẩm!",
       };
     }
+
+    order.payment_status = "FAILED";
+
+    await order.save();
 
     const results = await Promise.all(
       order.products.map(async (item) => {
@@ -201,8 +237,10 @@ const cancelOrderService = async ({ order_id }) => {
 
 const statisticalStatusOrderYearService = async ({ year }) => {
   try {
-    const startOfYear = new Date(`${year}-01-01`);
-    const endOfYear = new Date(`${year + 1}-01-01`);
+    const startOfYear = new Date(year, 0, 1); // 01/01 của năm
+    const endOfYear = new Date(year, 11, 31); // 31/12 của năm
+    endOfYear.setUTCHours(23, 59, 59, 999); // Đảm bảo lấy đủ dữ liệu ngày cuối cùng
+
     console.log(">>> startOfYear : ", startOfYear);
     console.log(">>> endOfYear : ", endOfYear);
     const result = await Order.aggregate([
@@ -234,6 +272,8 @@ const statisticalStatusOrderMonthService = async ({ month, year }) => {
   try {
     const startOfMonth = new Date(year, month - 1, 1);
     const endOfMonth = new Date(year, month, 1);
+    endOfMonth.setUTCHours(23, 59, 59, 999);
+
     console.log(">>> startOfMonth : ", startOfMonth);
     console.log(">>> endOfMonth : ", endOfMonth);
     const result = await Order.aggregate([
@@ -241,7 +281,7 @@ const statisticalStatusOrderMonthService = async ({ month, year }) => {
         $match: {
           createdAt: {
             $gte: startOfMonth,
-            $lt: endOfMonth,
+            $lte: endOfMonth,
           },
         },
       },
@@ -264,10 +304,10 @@ const statisticalStatusOrderMonthService = async ({ month, year }) => {
 const statisticalStatusOrderDateService = async ({ startDate, endDate }) => {
   try {
     const start = new Date(startDate);
-    const end = new Date(endDate);
+    start.setUTCHours(0, 0, 0, 0);
 
-    console.log(">>> start : ", start);
-    console.log(">>> end : ", end);
+    const end = new Date(endDate);
+    end.setUTCHours(23, 59, 59, 999);
 
     const result = await Order.aggregate([
       {
@@ -296,17 +336,19 @@ const statisticalStatusOrderDateService = async ({ startDate, endDate }) => {
 
 const statisticalRevenueYearService = async ({ year }) => {
   try {
-    const startOfYear = new Date(`${year}-01-01`);
-    const endOfYear = new Date(`${year + 1}-01-01`);
-    console.log(">>> startOfYear : ", startOfYear);
-    console.log(">>> endOfYear : ", endOfYear);
+    const startOfYear = new Date(year, 0, 1); // 01/01 của năm
+    const endOfYear = new Date(year, 11, 31); // 31/12 của năm
+    endOfYear.setUTCHours(23, 59, 59, 999); // Đảm bảo lấy đủ dữ liệu ngày cuối cùng
 
     const result = await Order.aggregate([
       {
         $match: {
           createdAt: {
             $gte: startOfYear,
-            $lt: endOfYear,
+            $lte: endOfYear,
+          },
+          status: {
+            $ne: "Hủy bỏ",
           },
         },
       },
@@ -332,7 +374,77 @@ const statisticalRevenueYearService = async ({ year }) => {
       fullYearData[item._id - 1].doanhThu = item.doanhThu;
     });
 
-    return { SC: 200, success: true, result: fullYearData };
+    return {
+      SC: 200,
+      success: true,
+      result: fullYearData,
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const statisticalRevenueYearDetailService = async ({ year }) => {
+  try {
+    const startOfYear = new Date(year, 0, 1); // 01/01 của năm
+    const endOfYear = new Date(year, 11, 31); // 31/12 của năm
+    endOfYear.setUTCHours(23, 59, 59, 999); // Đảm bảo lấy đủ dữ liệu ngày cuối cùng
+
+    const dataRevenueDetail = await Order.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startOfYear,
+            $lte: endOfYear,
+          },
+          status: {
+            $ne: "Hủy bỏ",
+          },
+        },
+      },
+      {
+        $sort: { createdAt: 1 }, // Sắp xếp theo thời gian
+      },
+      {
+        $project: {
+          _id: 1,
+          createdAt: 1,
+          total_price: 1,
+        },
+      },
+    ]);
+
+    const total = await Order.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startOfYear,
+            $lt: endOfYear,
+          },
+
+          status: {
+            $ne: "Hủy bỏ",
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$total_price" },
+        },
+      },
+    ]);
+
+    const orders = dataRevenueDetail;
+    const totalRevenue = total.length ? total[0].totalRevenue : 0;
+
+    return {
+      SC: 200,
+      success: true,
+      orders,
+      totalRevenue,
+    };
   } catch (error) {
     console.log(error);
     return { SC: 500, success: false, message: error.message };
@@ -343,6 +455,7 @@ const statisticalRevenueMonthService = async ({ month, year }) => {
   try {
     const startOfMonth = new Date(year, month - 1, 1);
     const endOfMonth = new Date(year, month, 1);
+    endOfMonth.setUTCHours(23, 59, 59, 999);
     console.log(">>> startOfMonth : ", startOfMonth);
     console.log(">>> endOfMonth : ", endOfMonth);
 
@@ -351,7 +464,10 @@ const statisticalRevenueMonthService = async ({ month, year }) => {
         $match: {
           createdAt: {
             $gte: startOfMonth,
-            $lt: endOfMonth,
+            $lte: endOfMonth,
+          },
+          status: {
+            $ne: "Hủy bỏ",
           },
         },
       },
@@ -386,6 +502,146 @@ const statisticalRevenueMonthService = async ({ month, year }) => {
   }
 };
 
+const statisticalRevenueMonthDetailService = async ({ month, year }) => {
+  try {
+    const startOfMonth = new Date(year, month - 1, 1);
+    const endOfMonth = new Date(year, month, 1);
+    endOfMonth.setUTCHours(23, 59, 59, 999);
+    console.log(">>> startOfMonth : ", startOfMonth);
+    console.log(">>> endOfMonth : ", endOfMonth);
+
+    const dataRevenueDetail = await Order.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startOfMonth,
+            $lte: endOfMonth,
+          },
+          status: {
+            $ne: "Hủy bỏ",
+          },
+        },
+      },
+      {
+        $sort: { createdAt: 1 }, // Sắp xếp theo thời gian
+      },
+      {
+        $project: {
+          _id: 1,
+          createdAt: 1,
+          total_price: 1,
+        },
+      },
+    ]);
+
+    const total = await Order.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startOfMonth,
+            $lt: endOfMonth,
+          },
+          status: {
+            $ne: "Hủy bỏ",
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$total_price" },
+        },
+      },
+    ]);
+
+    const orders = dataRevenueDetail;
+    const totalRevenue = total.length ? total[0].totalRevenue : 0;
+
+    console.log(">>> orders : ", orders);
+    console.log(">>> totalRevenue : ", totalRevenue);
+
+    return {
+      SC: 200,
+      success: true,
+      orders,
+      totalRevenue,
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
+const statisticalRevenueDateDetailService = async ({ startDate, endDate }) => {
+  try {
+    const start = new Date(startDate);
+    start.setUTCHours(0, 0, 0, 0);
+
+    const end = new Date(endDate);
+    end.setUTCHours(23, 59, 59, 999);
+
+    const dataRevenueDetail = await Order.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+          status: {
+            $ne: "Hủy bỏ",
+          },
+        },
+      },
+      {
+        $sort: { createdAt: 1 }, // Sắp xếp theo thời gian
+      },
+      {
+        $project: {
+          _id: 1,
+          createdAt: 1,
+          total_price: 1,
+        },
+      },
+    ]);
+
+    const total = await Order.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+          status: {
+            $ne: "Hủy bỏ",
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$total_price" },
+        },
+      },
+    ]);
+
+    const orders = dataRevenueDetail;
+    const totalRevenue = total.length ? total[0].totalRevenue : 0;
+
+    console.log(">>> orders : ", orders);
+    console.log(">>> totalRevenue : ", totalRevenue);
+
+    return {
+      SC: 200,
+      success: true,
+      orders,
+      totalRevenue,
+    };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 const fetchOrderDetailService = async (orderId) => {
   try {
     const order = await Order.findById(orderId)
@@ -409,11 +665,15 @@ module.exports = {
   getOrdersByUserIdService,
   getOrdersService,
   changeStatusService,
+  confirmReceivedService,
   cancelOrderService,
   statisticalStatusOrderYearService,
   statisticalStatusOrderMonthService,
   statisticalStatusOrderDateService,
   statisticalRevenueYearService,
+  statisticalRevenueYearDetailService,
   statisticalRevenueMonthService,
+  statisticalRevenueMonthDetailService,
+  statisticalRevenueDateDetailService,
   fetchOrderDetailService,
 };

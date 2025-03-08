@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   statisticalInStock,
+  statisticalRevenueDateDetail,
   statisticalRevenueMonth,
+  statisticalRevenueMonthDetail,
   statisticalRevenueYear,
+  statisticalRevenueYearDetail,
   statisticalStatusOrderDate,
   statisticalStatusOrderMonth,
   statisticalStatusOrderYear,
@@ -22,6 +25,8 @@ const statisticalSlice = createSlice({
     dataStatisticalRevenueYear: [],
     dataStatisticalRevenueMonth: [],
     dataStatisticalInStock: [],
+    orders: [],
+    totalRevenue: 0,
     current_page: 1,
     total_items: null,
     message: null,
@@ -116,6 +121,42 @@ const statisticalSlice = createSlice({
         state.total_items = action.payload?.total_items;
       })
       .addCase(statisticalInStock.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(statisticalRevenueDateDetail.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(statisticalRevenueDateDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload?.orders;
+        state.totalRevenue = action.payload?.totalRevenue;
+      })
+      .addCase(statisticalRevenueDateDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(statisticalRevenueMonthDetail.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(statisticalRevenueMonthDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload?.orders;
+        state.totalRevenue = action.payload?.totalRevenue;
+      })
+      .addCase(statisticalRevenueMonthDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(statisticalRevenueYearDetail.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(statisticalRevenueYearDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload?.orders;
+        state.totalRevenue = action.payload?.totalRevenue;
+      })
+      .addCase(statisticalRevenueYearDetail.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
       });

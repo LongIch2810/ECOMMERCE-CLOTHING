@@ -122,6 +122,7 @@ const OrderList = () => {
               <Td>{formatCurrency(item.total_price)}</Td>
               <Td>{item.status}</Td>
               <Td>{item.payment_method}</Td>
+              <Td>{item.payment_status}</Td>
               <Td>{item.shipping.shipping_method}</Td>
               <Td>{formatDate(item.createdAt)}</Td>
               <Td>

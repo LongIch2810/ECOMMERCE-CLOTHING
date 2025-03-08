@@ -22,6 +22,13 @@ const changeStatusAPI = async ({ order_id, status }) => {
   return response.data;
 };
 
+const confirmReceivedAPI = async ({ order_id }) => {
+  const response = await instanceAxios.put(
+    `/order/confirm-received/${order_id}`
+  );
+  return response.data;
+};
+
 const cancelOrderAPI = async ({ order_id }) => {
   const response = await instanceAxios.put(
     `/order/change-status-cancel/${order_id}`
@@ -46,6 +53,7 @@ export {
   getOrdersByUserIdAPI,
   getOrdersAPI,
   changeStatusAPI,
+  confirmReceivedAPI,
   cancelOrderAPI,
   exportExcelAPI,
   fetchOrderDetailAPI,

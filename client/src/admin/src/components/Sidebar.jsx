@@ -123,7 +123,11 @@ const items = [
     to: "/admin/statistical",
     icon: <ChartArea size={20} />,
     children: [
-      { id: 48, text: "Thống kê doanh thu", to: "/admin/statistical/" },
+      {
+        id: 48,
+        text: "Thống kê doanh thu",
+        to: "/admin/statistical/revenue-detail",
+      },
       { id: 49, text: "Thống kê lợi nhuận", to: "/admin/statistical/" },
       { id: 50, text: "Thống kê tồn kho", to: "/admin/statistical/in-stock" },
     ],

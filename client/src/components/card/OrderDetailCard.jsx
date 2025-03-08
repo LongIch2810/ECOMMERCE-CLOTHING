@@ -5,16 +5,14 @@ import { bgColorStatusOrder, textColorStatusOrder } from "@/utils/constant";
 import { useDispatch } from "react-redux";
 import {
   cancelOrder,
-  changeStatusSuccessfully,
+  confirmReceived,
 } from "@/store/features/order/orderThunk";
 
 const OrderDetailCard = ({ order }) => {
   const dispatch = useDispatch();
 
   const handleReceived = (order_id) => {
-    dispatch(
-      changeStatusSuccessfully({ order_id, status: "Giao hàng thành công" })
-    );
+    dispatch(confirmReceived({ order_id }));
   };
 
   const handleCancel = (order_id) => {

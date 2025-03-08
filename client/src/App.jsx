@@ -37,6 +37,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import { AddColor, ColorList } from "./admin/src/pages/ColorManagement";
 import OrderDetail from "./pages/OrderDetail";
 import StatisticalInStock from "./admin/src/pages/StatisticalInStock";
+import StatisticalRevenueDetail from "./admin/src/pages/StatisticalRevenueDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -92,6 +93,10 @@ function App() {
         <Route path="stock-in/list" element={<ReceiptList />} />
         <Route path="stock-in/add-receipt" element={<AddReceipt />} />
         <Route path="statistical/in-stock" element={<StatisticalInStock />} />
+        <Route
+          path="statistical/revenue-detail"
+          element={<StatisticalRevenueDetail />}
+        />
       </Route>
 
       {/* Not Found */}

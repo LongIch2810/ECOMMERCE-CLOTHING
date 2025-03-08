@@ -48,6 +48,28 @@ const statisticalInStockAPI = async (data) => {
   return response.data;
 };
 
+const statisticalRevenueDateDetailAPI = async (data) => {
+  const response = await instanceAxios.post(
+    "/order/statistical-revenue-date-detail",
+    data
+  );
+  return response.data;
+};
+const statisticalRevenueMonthDetailAPI = async (data) => {
+  const response = await instanceAxios.post(
+    "/order/statistical-revenue-month-detail",
+    data
+  );
+  return response.data;
+};
+const statisticalRevenueYearDetailAPI = async (data) => {
+  const response = await instanceAxios.post(
+    "/order/statistical-revenue-year-detail",
+    data
+  );
+  return response.data;
+};
+
 export {
   statisticalStatusOrderYearAPI,
   statisticalStatusOrderDateAPI,
@@ -55,4 +77,7 @@ export {
   statisticalRevenueYearAPI,
   statisticalRevenueMonthAPI,
   statisticalInStockAPI,
+  statisticalRevenueDateDetailAPI,
+  statisticalRevenueMonthDetailAPI,
+  statisticalRevenueYearDetailAPI,
 };

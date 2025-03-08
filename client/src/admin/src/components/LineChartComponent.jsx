@@ -31,7 +31,7 @@ const LineChartComponent = ({ data, COLOR, title }) => {
           />
         </LineChart>
       </ResponsiveContainer>
-      <h2 className="mb-4 text-xl italic font-medium text-gray-400">{title}</h2>
+      <h2 className="mb-4 text-xl italic font-medium">{title}</h2>
     </div>
   );
 };

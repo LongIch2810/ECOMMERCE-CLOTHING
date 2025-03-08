@@ -4,10 +4,10 @@ import {
   getOrders,
   getOrdersByUserId,
   cancelOrder,
-  changeStatusSuccessfully,
   changeStatus,
   exportExcel,
   fetchOrderDetail,
+  confirmReceived,
 } from "./orderThunk";
 import { getVoucher } from "../user/userThunk";
 
@@ -92,15 +92,29 @@ const orderSlice = createSlice({
         state.total_orders = action.payload?.dataOrders.results.total_orders;
         state.message = action.payload?.dataChangeStatus.message;
       })
-      .addCase(changeStatusSuccessfully.fulfilled, (state, action) => {
+      .addCase(confirmReceived.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(confirmReceived.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload?.dataOrdersByUserId.orders;
-        state.message = action.payload?.dataChangeStatus.message;
+        state.orderDetail = action.payload?.dataOrderDetail.order;
+        state.message = action.payload?.dataConfirmReceived.message;
+      })
+      .addCase(confirmReceived.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(cancelOrder.pending, (state, action) => {
+        state.loading = true;
       })
       .addCase(cancelOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload?.dataOrdersByUserId.orders;
+        state.orderDetail = action.payload?.dataOrderDetail.order;
         state.message = action.payload?.dataCancelOrder.message;
+      })
+      .addCase(cancelOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       })
       .addCase(exportExcel.pending, (state, action) => {
         state.loading = true;

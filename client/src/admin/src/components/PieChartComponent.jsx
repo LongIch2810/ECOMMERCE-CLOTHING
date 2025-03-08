@@ -26,7 +26,7 @@ const PieChartComponent = ({ data, COLORS, title }) => {
             fill="#8884d8"
             dataKey="value"
           >
-            {data.map((entry, index) => (
+            {data.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
@@ -38,7 +38,7 @@ const PieChartComponent = ({ data, COLORS, title }) => {
         </PieChart>
       </ResponsiveContainer>
 
-      <h2 className="mb-4 text-xl italic font-medium text-gray-400">{title}</h2>
+      <h2 className="mb-4 text-xl italic font-medium">{title}</h2>
     </div>
   );
 };

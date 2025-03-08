@@ -10,6 +10,10 @@ const {
   statisticalStatusOrderMonthService,
   statisticalStatusOrderDateService,
   fetchOrderDetailService,
+  statisticalRevenueYearDetailService,
+  statisticalRevenueMonthDetailService,
+  statisticalRevenueDateDetailService,
+  confirmReceivedService,
 } = require("../services/orderService");
 
 const ExcelJS = require("exceljs");
@@ -87,13 +91,18 @@ const changeStatus = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
+const confirmReceived = async (req, res) => {
+  const { id: order_id } = req.params;
+
+  const data = await confirmReceivedService({ order_id });
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
 const changeStatusCancel = async (req, res) => {
   const { id: order_id } = req.params;
-  if (!order_id) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Đơn hàng không tồn tại !" });
-  }
+
   const data = await cancelOrderService({ order_id });
   return res
     .status(data.SC)
@@ -144,11 +153,61 @@ const statisticalRevenueYear = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
+const statisticalRevenueYearDetail = async (req, res) => {
+  const { year } = req.body;
+  const data = await statisticalRevenueYearDetailService({
+    year: Number(year),
+  });
+  if (data.SC === 200 && data?.orders) {
+    return res.status(200).json({
+      success: true,
+      orders: data.orders,
+      totalRevenue: data.totalRevenue,
+    });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
 const statisticalRevenueMonth = async (req, res) => {
   const { month, year } = req.body;
   const data = await statisticalRevenueMonthService({ month, year });
   if (data.SC === 200 && data?.result) {
     return res.status(200).json({ success: true, dataRevenue: data.result });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
+const statisticalRevenueMonthDetail = async (req, res) => {
+  const { month, year } = req.body;
+  const data = await statisticalRevenueMonthDetailService({ month, year });
+  if (data.SC === 200 && data?.orders) {
+    return res.status(200).json({
+      success: true,
+      orders: data.orders,
+      totalRevenue: data.totalRevenue,
+    });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
+const statisticalRevenueDateDetail = async (req, res) => {
+  const { startDate, endDate } = req.body;
+  const data = await statisticalRevenueDateDetailService({
+    startDate,
+    endDate,
+  });
+  if (data.SC === 200 && data?.orders) {
+    return res.status(200).json({
+      success: true,
+      orders: data.orders,
+      totalRevenue: data.totalRevenue,
+    });
   }
   return res
     .status(data.SC)
@@ -219,12 +278,16 @@ module.exports = {
   getOrdersByUserId,
   getOrders,
   changeStatus,
+  confirmReceived,
   changeStatusCancel,
   statisticalStatusOrderYear,
   statisticalStatusOrderMonth,
   statisticalStatusOrderDate,
   statisticalRevenueYear,
+  statisticalRevenueYearDetail,
   statisticalRevenueMonth,
+  statisticalRevenueMonthDetail,
+  statisticalRevenueDateDetail,
   exportExcel,
   fetchOrderDetail,
 };
