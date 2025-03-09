@@ -1,6 +1,7 @@
 const {
   addImportReceiptService,
   getFilterImportReceiptsService,
+  fetchImportReceiptDetailService,
 } = require("../services/importReceipt");
 
 const addImportReceipt = async (req, res) => {
@@ -42,4 +43,24 @@ const getFilterImportReceipts = async (req, res) => {
     .status(data.SC)
     .json({ success: data.success, message: data.message });
 };
-module.exports = { addImportReceipt, getFilterImportReceipts };
+
+const fetchImportReceiptDetail = async (req, res) => {
+  const { importReceiptId } = req.params;
+
+  const result = await fetchImportReceiptDetailService(importReceiptId);
+
+  if (result.SC === 200 && result?.importReceipt) {
+    return res
+      .status(200)
+      .json({ success: result.success, importReceipt: result.importReceipt });
+  }
+  return res
+    .status(data.SC)
+    .json({ success: data.success, message: data.message });
+};
+
+module.exports = {
+  addImportReceipt,
+  getFilterImportReceipts,
+  fetchImportReceiptDetail,
+};

@@ -13,4 +13,15 @@ const getFilterImportReceiptsAPI = async (data) => {
   return response.data;
 };
 
-export { addImportReceiptAPI, getFilterImportReceiptsAPI };
+const fetchImportReceiptDetailAPI = async (importReceiptId) => {
+  const response = await instanceAxios.get(
+    `/import-receipt/get-importReceipt-id/${importReceiptId}`
+  );
+  return response.data;
+};
+
+export {
+  addImportReceiptAPI,
+  getFilterImportReceiptsAPI,
+  fetchImportReceiptDetailAPI,
+};

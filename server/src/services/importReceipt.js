@@ -69,6 +69,7 @@ const getFilterImportReceiptsService = async ({ page = 1, limit = 5, id }) => {
       .limit(limit)
       .select("-deleted -updatedAt -__v -products")
       .populate("supplier")
+      .populate("user")
       .skip(skip);
     const total_importReceipts = await ImportReceipt.countDocuments(filter);
     const total_pages = Math.ceil(total_importReceipts / limit);
@@ -83,4 +84,25 @@ const getFilterImportReceiptsService = async ({ page = 1, limit = 5, id }) => {
   }
 };
 
-module.exports = { addImportReceiptService, getFilterImportReceiptsService };
+const fetchImportReceiptDetailService = async (importReceiptId) => {
+  try {
+    const importReceipt = await ImportReceipt.findById(importReceiptId)
+      .populate("products.product")
+      .populate("products.color")
+      .populate("supplier")
+      .populate("user");
+    if (!importReceipt) {
+      return { SC: 404, success: false, message: "Không tìm thấy đơn hàng" };
+    }
+    return { SC: 200, success: true, importReceipt };
+  } catch (error) {
+    console.error(error);
+    return { SC: 500, success: false, message: "Lỗi server" };
+  }
+};
+
+module.exports = {
+  addImportReceiptService,
+  getFilterImportReceiptsService,
+  fetchImportReceiptDetailService,
+};

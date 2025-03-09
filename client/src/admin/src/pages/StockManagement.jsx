@@ -3,7 +3,7 @@ import Table from "../components/Table";
 import Title from "@/components/title/Title";
 import ProductSelect from "@/components/input/ProductSelect";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import GroupForm from "@/components/group/GroupForm";
@@ -24,6 +24,7 @@ import { setCurrentPage } from "@/store/features/importReceipt/importReceiptSlic
 import IconSearch from "@/components/icons/IconSearch";
 import Tr from "../components/Tr";
 import Td from "../components/Td";
+import ModalImportReceiptDetail from "@/components/modal/ModalImportReceiptDetail";
 
 const schema = yup.object().shape({
   product: yup.object().required("Vui lòng chọn sản phẩm"),
@@ -49,6 +50,8 @@ const ReceiptList = () => {
     useSelector((state) => state.importReceipt);
 
   const [search, setSearch] = useState("");
+  const [importReceiptId, setImportReceiptId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getFilterImportReceipts({ page: current_page, id: search }));
@@ -59,7 +62,10 @@ const ReceiptList = () => {
     setSearch(e.target.value);
   };
 
-  console.log(importReceipts);
+  const handleDetail = (importReceiptId) => {
+    setImportReceiptId(importReceiptId);
+    setIsOpen(true);
+  };
 
   return (
     <div>
@@ -90,11 +96,17 @@ const ReceiptList = () => {
               <Td>{item._id}</Td>
               <Td>{item.supplier.name}</Td>
               <Td>{formatCurrency(item.total_price)}</Td>
+              <Td>{item.user?.name}</Td>
               <Td>{item.note}</Td>
               <Td>{formatDate(item.createdAt)}</Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">
-                  <Button className="p-2 bg-foreign text-main">Detail</Button>
+                  <Button
+                    onClick={() => handleDetail(item._id)}
+                    className="p-2 bg-foreign text-main"
+                  >
+                    Detail
+                  </Button>
                 </div>
               </Td>
             </Tr>
@@ -104,6 +116,12 @@ const ReceiptList = () => {
         <div className="flex flex-col items-center justify-center h-64 p-6 bg-gray-100 rounded-lg shadow-md">
           <p className="mb-4 text-lg text-gray-700">Không có phiếu nhập nào.</p>
         </div>
+      )}
+      {isOpen && (
+        <ModalImportReceiptDetail
+          importReceiptId={importReceiptId}
+          setIsOpen={setIsOpen}
+        />
       )}
     </div>
   );

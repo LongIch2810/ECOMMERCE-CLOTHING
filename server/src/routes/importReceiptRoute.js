@@ -4,6 +4,7 @@ const checkAdmin = require("../middlewares/checkAdmin");
 const {
   addImportReceipt,
   getFilterImportReceipts,
+  fetchImportReceiptDetail,
 } = require("../controllers/importReceiptController");
 
 const importReceiptRouter = express.Router();
@@ -20,6 +21,13 @@ importReceiptRouter.post(
   verifyToken,
   checkAdmin,
   getFilterImportReceipts
+);
+
+importReceiptRouter.get(
+  "/get-importReceipt-id/:importReceiptId",
+  verifyToken,
+  checkAdmin,
+  fetchImportReceiptDetail
 );
 
 module.exports = importReceiptRouter;

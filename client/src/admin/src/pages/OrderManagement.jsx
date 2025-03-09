@@ -19,12 +19,15 @@ import { formatCurrency, formatDate } from "@/utils/format";
 import { orderStatus } from "@/utils/constant";
 import { bgColorStatusOrder } from "@/utils/constant";
 import { toast } from "react-toastify";
+import ModalOrderDetail from "@/components/modal/ModalOrderDetail";
 const OrderList = () => {
   const dispatch = useDispatch();
   const { orders, total_orders, current_page, isExportExcel, loading } =
     useSelector((state) => state.order);
 
   const [search, setSearch] = useState("");
+  const [orderId, setOrderId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -48,6 +51,11 @@ const OrderList = () => {
 
   const handleExportExcel = () => {
     dispatch(exportExcel());
+  };
+
+  const handleDetail = (orderId) => {
+    setOrderId(orderId);
+    setIsOpen(true);
   };
 
   useEffect(() => {
@@ -127,7 +135,12 @@ const OrderList = () => {
               <Td>{formatDate(item.createdAt)}</Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">
-                  <Button className="p-2 bg-foreign text-main">Detail</Button>
+                  <Button
+                    onClick={() => handleDetail(item._id)}
+                    className="p-2 bg-foreign text-main"
+                  >
+                    Detail
+                  </Button>
                   {orderStatus.filter(
                     (statusItem) => statusItem.status === item.status
                   )[0].adminButton && (
@@ -159,6 +172,7 @@ const OrderList = () => {
           <p className="mb-4 text-lg text-gray-700">Không có đơn hàng nào.</p>
         </div>
       )}
+      {isOpen && <ModalOrderDetail orderId={orderId} setIsOpen={setIsOpen} />}
     </div>
   );
 };

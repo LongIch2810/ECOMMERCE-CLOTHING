@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addImportReceipt,
+  fetchImportReceiptDetail,
   getFilterImportReceipts,
 } from "./importReceiptThunk";
 
@@ -12,6 +13,7 @@ const importReceiptSlice = createSlice({
     total_importReceipts: 0,
     current_page: 1,
     message: null,
+    importReceiptDetail: null,
     isSuccess: false,
   },
   reducers: {
@@ -46,6 +48,17 @@ const importReceiptSlice = createSlice({
         state.current_page = action.payload?.results.current_page;
       })
       .addCase(getFilterImportReceipts.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
+      })
+      .addCase(fetchImportReceiptDetail.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(fetchImportReceiptDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.importReceiptDetail = action.payload?.importReceipt;
+      })
+      .addCase(fetchImportReceiptDetail.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
       });
