@@ -93,8 +93,8 @@ const Product = () => {
     setTypeProductsFilter([]);
     setGendersFilter([]);
     setBrandsFilter([]);
-    setMinPrice(null);
-    setMaxPrice(null);
+    setMinPrice("");
+    setMaxPrice("");
   };
 
   useEffect(() => {
@@ -150,7 +150,7 @@ const Product = () => {
     <Layout>
       <section>
         <div className="flex flex-col px-4 md:px-8 lg:px-16">
-          <div className="flex items-center justify-center my-8">
+          <div className="flex items-center justify-center my-3 md:my-8">
             <Title className="text-4xl font-bold" text="Sản phẩm"></Title>
           </div>
           <div className="flex items-center justify-center my-8">
@@ -225,7 +225,7 @@ const Product = () => {
                   </div>
                   <div className="flex flex-col gap-y-3">
                     <span className="text-lg font-medium">Thương hiệu</span>
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
                       {brands?.length > 0 &&
                         brands.map((item) => (
                           <Checkbox
@@ -241,7 +241,7 @@ const Product = () => {
                   </div>
                   <div className="flex flex-col gap-y-3">
                     <span className="text-lg font-medium">Loại sản phẩm</span>
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
                       {typeProducts?.length > 0 &&
                         typeProducts.map((item) => (
                           <Checkbox
@@ -257,7 +257,7 @@ const Product = () => {
                   </div>
                   <div className="flex flex-col gap-y-3">
                     <span className="text-lg font-medium">Màu sắc</span>
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                       {colors?.length > 0 &&
                         colors.map((item) => (
                           <Checkbox
@@ -282,12 +282,14 @@ const Product = () => {
                       <div className="inline-flex items-center mb-2 gap-x-5">
                         <input
                           type="number"
+                          value={min_price}
                           onChange={(e) => setMinPrice(e.target.value)}
                           className="w-full p-2 border rounded-md shadow-lg outline-none"
                           placeholder="MIN"
                         />
                         <input
                           type="number"
+                          value={max_price}
                           onChange={(e) => setMaxPrice(e.target.value)}
                           className="w-full p-2 border rounded-md shadow-lg outline-none"
                           placeholder="MAX"
@@ -305,7 +307,7 @@ const Product = () => {
                   </div>
                   <div>
                     <Button
-                      className="flex items-center p-5 bg-purple-500 text-main gap-x-3"
+                      className="flex items-center justify-center w-full p-5 bg-purple-500 md:w-auto text-main gap-x-3"
                       onClick={handleRefresh}
                     >
                       <IconRefresh className="size-6" />
@@ -318,7 +320,7 @@ const Product = () => {
 
             <div
               className="flex mb-10 md:hidden justify-end items-center p-1.5 md:p-2 border rounded-lg cursor-pointer border-main gap-x-1"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsOpen((prev) => !prev)}
             >
               <span className="text-sm underline md:text-base">
                 {isOpen ? "Ẩn" : "Hiển thị"} bộ lọc

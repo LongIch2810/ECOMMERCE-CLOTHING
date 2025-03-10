@@ -85,7 +85,7 @@ const ProductDetail = () => {
       {loading ? <p>Loading ...</p> : ""}
       {productInfo && !loading && (
         <section>
-          <div className="flex flex-col items-center mt-20 overflow-hidden body-font">
+          <div className="flex flex-col items-center gap-5 mt-20 overflow-hidden body-font">
             <Title
               className="text-2xl font-bold md:text-3xl lg:text-4xl"
               text="Chi tiết sản phẩm"

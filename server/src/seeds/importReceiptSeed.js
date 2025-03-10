@@ -34,7 +34,7 @@ const seedImportReceipts = async () => {
           productEntries.push({
             product: product._id,
             size,
-            quantity: 10, // Số lượng ngẫu nhiên (5 - 25)
+            quantity: 100,
             color: color._id,
             import_price: Math.floor(Math.random() * 50000) + 150000, // Giá nhập từ 150k - 200k
           });

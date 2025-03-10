@@ -26,12 +26,12 @@ const Address = () => {
         <div className="flex items-center justify-end mb-3 gap-x-3">
           <Button
             onClick={() => setIsOpen(true)}
-            className="flex items-center p-2 text-sm bg-primary text-main gap-x-3"
+            className="flex items-center p-2 bg-primary text-main gap-x-3"
           >
             <span>
               <IconAdd></IconAdd>
             </span>
-            <span>Thêm địa chỉ</span>
+            <span className="text-xs md:text-sm">Thêm địa chỉ</span>
           </Button>
         </div>
         <div className="flex flex-col w-full overflow-y-scroll max-h-[500px] gap-y-3">
@@ -41,7 +41,7 @@ const Address = () => {
                 <AddressCard item={item}></AddressCard>
                 <Button
                   onClick={() => dispatch(setAddressDefault(item._id))}
-                  className={`p-2 text-sm text-main  gap-x-3 ${
+                  className={`hidden md:inline-block p-2 text-sm text-main  gap-x-3 ${
                     item.isDefault
                       ? "bg-gray-300 cursor-not-allowed"
                       : "bg-delivered"
