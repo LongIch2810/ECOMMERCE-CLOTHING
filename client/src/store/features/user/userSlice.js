@@ -16,10 +16,10 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     loading: false,
-    user: null,
+    user: JSON.parse(localStorage.getItem("user")) || null,
+    role: JSON.parse(localStorage.getItem("user"))?.role || null,
     userById: null,
     message: null,
-    role: null,
     current_page: 1,
     total_users: 0,
     isSuccess: false,
@@ -35,6 +35,10 @@ const userSlice = createSlice({
     setIsSuccess: (state, action) => {
       state.isSuccess = action.payload;
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -44,6 +48,7 @@ const userSlice = createSlice({
       .addCase(getUserInfo.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload?.user;
+        localStorage.setItem("user", JSON.stringify(action.payload?.user));
       })
       .addCase(getUserInfo.rejected, (state, action) => {
         state.loading = false;
@@ -54,6 +59,10 @@ const userSlice = createSlice({
         state.message = null;
         state.user = action.payload?.dataUserInfo?.user;
         state.role = action.payload?.dataUserInfo?.user.role;
+        localStorage.setItem(
+          "user",
+          JSON.stringify(action.payload?.dataUserInfo?.user)
+        );
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
@@ -65,11 +74,16 @@ const userSlice = createSlice({
         state.loading = false;
         state.message = action.payload?.data?.message;
         state.user = action.payload?.dataUserInfo?.user;
+        localStorage.setItem(
+          "user",
+          JSON.stringify(action.payload?.dataUserInfo?.user)
+        );
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.loading = false;
         state.user = null;
         state.role = null;
+        localStorage.removeItem("user");
       })
       .addCase(updateAvatar.pending, (state, action) => {
         state.loading = true;
@@ -77,6 +91,7 @@ const userSlice = createSlice({
       .addCase(updateAvatar.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload?.user;
+        localStorage.setItem("user", JSON.stringify(action.payload?.user));
       })
       .addCase(updateAvatar.rejected, (state, action) => {
         state.loading = false;
@@ -88,6 +103,7 @@ const userSlice = createSlice({
       .addCase(updateInfo.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload?.user;
+        localStorage.setItem("user", JSON.stringify(action.payload?.user));
       })
       .addCase(updateInfo.rejected, (state, action) => {
         state.loading = false;
@@ -167,6 +183,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setVoucherInfo, setCurrentPage, setIsSuccess } =
+export const { setVoucherInfo, setCurrentPage, setIsSuccess, setUser } =
   userSlice.actions;
 export default userSlice.reducer;

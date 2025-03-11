@@ -46,15 +46,14 @@ const SignIn = () => {
   }, [errors]);
 
   useEffect(() => {
-    console.log(user);
-    if (isLoggedIn && user) {
-      if (user?.role === "Admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
+    if (!user) {
+      navigate("/sign-in", { replace: true });
+    } else if (user.role === "Admin") {
+      navigate("/admin/dashboard", { replace: true });
+    } else {
+      navigate("/", { replace: true });
     }
-  }, [user, isLoggedIn]);
+  }, [user, navigate]);
 
   const handleSignIn = (values) => {
     if (!isValid) return;

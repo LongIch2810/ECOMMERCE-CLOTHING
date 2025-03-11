@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { login, logout, register, resetPassword, sendOTP } from "./authThunk";
+
+// Lấy trạng thái đăng nhập từ localStorage
+const storedUser = JSON.parse(localStorage.getItem("user")) || null;
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     loading: false,
     message: null,
-    isLoggedIn: false,
+    isLoggedIn: !!storedUser,
     isResetPassword: false,
     isSendOTP: false,
     savedEmail: "",
@@ -55,6 +59,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.isLoggedIn = false;
         state.message = action.payload?.data?.message;
+        localStorage.removeItem("user");
       })
       .addCase(sendOTP.pending, (state, action) => {
         state.loading = true;

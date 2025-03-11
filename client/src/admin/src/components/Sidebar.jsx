@@ -2,7 +2,6 @@ import {
   Boxes,
   FilePlus,
   Home,
-  MapPin,
   PackageSearch,
   Palette,
   ShoppingCart,
@@ -21,7 +20,7 @@ const items = [
   {
     id: 1,
     text: "Dashboard",
-    to: "/admin",
+    to: "/admin/dashboard",
     icon: <Home size={20} />,
   },
   {

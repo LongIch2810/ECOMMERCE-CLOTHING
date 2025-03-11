@@ -10,6 +10,7 @@ import TooltipCartDetail from "@/components/tooltip/TooltipCartDetail";
 import TooltipUserDetail from "@/components/tooltip/TooltipUserDetail";
 import { logout } from "@/store/features/auth/authThunk";
 import { getProducts } from "@/store/features/cart/cartThunk";
+import { setUser } from "@/store/features/user/userSlice";
 import { getUserInfo } from "@/store/features/user/userThunk";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,7 +54,6 @@ const Header = () => {
   }, [user?._id]);
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/sign-in");
   };
   return (
     <>
