@@ -8,6 +8,7 @@ const {
   editTypeProduct,
   deleteTypeProduct,
   getTypeProductById,
+  getTypeProductsByCategory,
 } = require("../controllers/typeProductController");
 
 const typeProductRouter = express.Router();
@@ -42,6 +43,11 @@ typeProductRouter.get(
   verifyToken,
   checkAdmin,
   getTypeProductById
+);
+
+typeProductRouter.get(
+  "/get-typeProducts-by-category/:category_id",
+  getTypeProductsByCategory
 );
 
 module.exports = typeProductRouter;

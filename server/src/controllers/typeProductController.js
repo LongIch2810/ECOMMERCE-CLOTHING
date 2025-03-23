@@ -5,6 +5,7 @@ const {
   editTypeProductService,
   deleteTypeProductService,
   getTypeProductByIdService,
+  getTypeProductsByCategoryService,
 } = require("../services/typeProductService");
 const generateSlug = require("../utils/generateSlug");
 const Category = require("../models/categoryModel");
@@ -108,6 +109,24 @@ const getTypeProductById = async (req, res) => {
     .json({ success: result.success, message: result.message });
 };
 
+const getTypeProductsByCategory = async (req, res) => {
+  const { category_id } = req.params;
+  if (!category_id) {
+    return res
+      .status(400)
+      .json({ message: "Mã danh mục không được để trống !" });
+  }
+  const result = await getTypeProductsByCategoryService(category_id);
+  if (result.SC === 200 && result?.typeProducts) {
+    return res
+      .status(200)
+      .json({ success: true, typeProducts: result.typeProducts });
+  }
+  return res
+    .status(result.SC)
+    .json({ success: result.success, message: result.message });
+};
+
 module.exports = {
   getTypeProducts,
   getFilterTypeProducts,
@@ -115,4 +134,5 @@ module.exports = {
   editTypeProduct,
   deleteTypeProduct,
   getTypeProductById,
+  getTypeProductsByCategory,
 };

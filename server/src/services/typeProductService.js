@@ -153,6 +153,20 @@ const getTypeProductByIdService = async (typeProductId) => {
   }
 };
 
+const getTypeProductsByCategoryService = async (category_id) => {
+  try {
+    const category = await Category.findById(category_id);
+    if (!category) {
+      return { SC: 404, success: false, message: "Danh mục không tồn tại !" };
+    }
+    const typeProducts = await TypeProduct.find({ category: category_id });
+    return { SC: 200, success: true, typeProducts };
+  } catch (error) {
+    console.log(error);
+    return { SC: 500, success: false, message: error.message };
+  }
+};
+
 module.exports = {
   getTypeProductsService,
   getFilterTypeProductsService,
@@ -160,4 +174,5 @@ module.exports = {
   editTypeProductService,
   deleteTypeProductService,
   getTypeProductByIdService,
+  getTypeProductsByCategoryService,
 };
