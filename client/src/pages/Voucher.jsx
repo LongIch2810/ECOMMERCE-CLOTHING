@@ -18,7 +18,10 @@ const Voucher = () => {
   return (
     <Layout>
       <div className="flex items-center justify-center my-8">
-        <Title className="text-4xl font-bold" text="Mã giảm giá"></Title>
+        <Title
+          className="text-2xl font-bold md:text-3xl lg:text-4xl"
+          text="Mã giảm giá"
+        ></Title>
       </div>
       {vouchers?.length > 0 && (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">

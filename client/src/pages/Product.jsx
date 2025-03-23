@@ -61,6 +61,30 @@ const Product = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const typeProductsFromUrl = params.get("typeProducts")?.split("-") || [];
+    const gendersFromUrl = params.get("genders")?.split("-") || [];
+    const brandsFromUrl = params.get("brands")?.split("-") || [];
+    const colorsFromUrl = params.get("colors")?.split("-") || [];
+    const searchFromUrl = params.get("search") || "";
+    const sortFromUrl = params.get("sort") || "price_asc";
+    const limitFromUrl = Number(params.get("limit")) || 8;
+    const minPriceFromUrl = params.get("min_price") || "";
+    const maxPriceFromUrl = params.get("max_price") || "";
+
+    setTypeProductsFilter(typeProductsFromUrl);
+    setGendersFilter(gendersFromUrl);
+    setBrandsFilter(brandsFromUrl);
+    setColorsFilter(colorsFromUrl);
+    setSearch(searchFromUrl);
+    setSort(sortFromUrl);
+    setLimit(limitFromUrl);
+    setMinPrice(minPriceFromUrl);
+    setMaxPrice(maxPriceFromUrl);
+  }, []);
+
+  useEffect(() => {
     dispatch(
       getFilterProducts({
         page: currentPage,
@@ -83,32 +107,6 @@ const Product = () => {
     colorsFilter,
     search,
   ]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-
-    const typeProductsFromUrl = params.get("typeProducts")?.split("-") || [];
-    const gendersFromUrl = params.get("genders")?.split("-") || [];
-    const brandsFromUrl = params.get("brands")?.split("-") || [];
-    const colorsFromUrl = params.get("colors")?.split("-") || [];
-    const searchFromUrl = params.get("search") || "";
-    const sortFromUrl = params.get("sort") || "price_asc";
-    const limitFromUrl = Number(params.get("limit")) || 8;
-    const currentPageFromUrl = Number(params.get("page")) || 1;
-    const minPriceFromUrl = params.get("min_price") || "";
-    const maxPriceFromUrl = params.get("max_price") || "";
-
-    setTypeProductsFilter(typeProductsFromUrl);
-    setGendersFilter(gendersFromUrl);
-    setBrandsFilter(brandsFromUrl);
-    setColorsFilter(colorsFromUrl);
-    setSearch(searchFromUrl);
-    setSort(sortFromUrl);
-    setLimit(limitFromUrl);
-    setCurrentPage(currentPageFromUrl);
-    setMinPrice(minPriceFromUrl);
-    setMaxPrice(maxPriceFromUrl);
-  }, []);
 
   console.log(">>> typeProducts : ", typeProductsFilter);
   console.log(">>> genders : ", gendersFilter);
@@ -210,7 +208,10 @@ const Product = () => {
       <section>
         <div className="flex flex-col px-4 md:px-8 lg:px-16">
           <div className="flex items-center justify-center my-3 md:my-8">
-            <Title className="text-4xl font-bold" text="Sản phẩm"></Title>
+            <Title
+              className="text-2xl font-bold md:text-3xl lg:text-4xl"
+              text="Sản phẩm"
+            ></Title>
           </div>
           <div className="flex items-center justify-center my-8">
             <div className="relative w-full md:w-3/4">

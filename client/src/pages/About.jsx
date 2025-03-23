@@ -12,7 +12,10 @@ const About = () => {
     <Layout>
       {/* Tiêu đề */}
       <div className="flex items-center justify-center my-8">
-        <Title className="text-4xl font-bold" text="Giới thiệu"></Title>
+        <Title
+          className="text-2xl font-bold md:text-3xl lg:text-4xl"
+          text="Giới thiệu"
+        ></Title>
       </div>
 
       {/* Nội dung chính */}

@@ -21,7 +21,7 @@ const Contact = () => {
       <div className="flex flex-col items-center py-10 space-y-8">
         {/* Tiêu đề */}
         <Title
-          className="text-4xl font-bold text-center"
+          className="text-2xl font-bold text-center md:text-3xl lg:text-4xl"
           text="Liên hệ với chúng tôi"
         />
 
@@ -37,7 +37,10 @@ const Contact = () => {
               icon={<IconMail />}
               content="ichtrachuylong.91.04@gmail.com"
             />
-            <Title className="text-lg font-semibold" text="Giờ làm việc" />
+            <Title
+              className="text-base font-semibold text-center lg:text-lg"
+              text="Giờ làm việc"
+            />
             <p className="text-gray-700">Thứ Hai - Thứ Sáu: 08:00 - 18:00</p>
             <p className="text-gray-700">Thứ Bảy: 09:00 - 16:00</p>
             <p className="text-gray-700">Chủ Nhật: Nghỉ</p>

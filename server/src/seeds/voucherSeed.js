@@ -7,7 +7,7 @@ const vouchers = [
     code: "KM50PERCENT",
     description:
       "Nhân dịp đầu năm mới shop sẽ chúc mừng năm mới các thành viên bằng cách tặng 10 vé voucher 50% cho 10 thành viên nhanh tay.",
-    end_date: new Date("2025-03-20T23:59:59.999Z"),
+    end_date: new Date("2025-05-29T23:59:59.999Z"),
     value: 50,
     max_discount: 100000,
     min_order_price: 300000,
@@ -20,7 +20,7 @@ const vouchers = [
     code: "GG100VND",
     description:
       "Nhân dịp đầu năm mới shop sẽ chúc mừng năm mới các thành viên bằng cách tặng 10 vé voucher 100k cho 10 thành viên nhanh tay.",
-    end_date: new Date("2025-03-20T23:59:59.999Z"),
+    end_date: new Date("2025-05-29T23:59:59.999Z"),
     value: 100000,
     max_discount: 100000,
     min_order_price: 200000,
