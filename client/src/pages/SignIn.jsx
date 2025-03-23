@@ -35,7 +35,6 @@ const SignIn = () => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {

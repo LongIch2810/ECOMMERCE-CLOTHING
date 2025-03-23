@@ -1,18 +1,23 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useSearchParams } from "react-router-dom";
 
-const HeaderItem = ({ children, to = "", onClick = () => {} }) => {
+const HeaderItem = ({
+  children,
+  to = "",
+  onClick = () => {},
+  onMouseEnter = () => {},
+  onMouseLeave = () => {},
+}) => {
+  const [searchParams] = useSearchParams();
+  const currentTypeProduct = searchParams.get("typeProduct");
+
   return (
     <NavLink
       to={to}
       onClick={onClick}
-      className={({ isActive }) =>
-        `text-lg font-semibold cursor-pointer p-2 hover:text-orange-500 ${
-          isActive
-            ? "border-b-2 border-primary"
-            : " border-b-2 border-gray-300 md:border-b-0"
-        }`
-      }
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={`text-lg cursor-pointer p-2 hover:text-orange-500`}
     >
       {children}
     </NavLink>

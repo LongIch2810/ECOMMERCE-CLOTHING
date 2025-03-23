@@ -6,6 +6,7 @@ import {
   getFilterTypeProducts,
   getTypeProductById,
   getTypeProducts,
+  getTypeProductsByCategory,
 } from "./typeProductThunk";
 
 const typeProductSlice = createSlice({
@@ -18,6 +19,7 @@ const typeProductSlice = createSlice({
     current_page: 1,
     isSuccess: false,
     typeProductById: null,
+    typeProductsByCategory: null,
     message: null,
   },
   reducers: {
@@ -29,6 +31,9 @@ const typeProductSlice = createSlice({
     },
     setIsSuccess: (state, action) => {
       state.isSuccess = action.payload;
+    },
+    setTypeProductsByCategory: (state, action) => {
+      state.typeProductsByCategory = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -127,10 +132,25 @@ const typeProductSlice = createSlice({
       .addCase(getTypeProductById.rejected, (state, action) => {
         state.loading = false;
         state.message = action.payload?.message;
+      })
+      .addCase(getTypeProductsByCategory.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getTypeProductsByCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.typeProductsByCategory = action.payload?.typeProducts;
+      })
+      .addCase(getTypeProductsByCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.message = action.payload?.message;
       });
   },
 });
 
-export const { setCurrentPage, setIsSuccess, setTypeProductById } =
-  typeProductSlice.actions;
+export const {
+  setCurrentPage,
+  setIsSuccess,
+  setTypeProductById,
+  setTypeProductsByCategory,
+} = typeProductSlice.actions;
 export default typeProductSlice.reducer;

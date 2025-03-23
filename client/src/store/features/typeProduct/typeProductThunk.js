@@ -6,6 +6,7 @@ import {
   getFilterTypeProductsAPI,
   getTypeProductByIdAPI,
   getTypeProductsAPI,
+  getTypeProductsByCategoryAPI,
 } from "./typeProductAPI";
 import { toast } from "react-toastify";
 
@@ -117,6 +118,24 @@ const getTypeProductById = createAsyncThunk(
     }
   }
 );
+
+const getTypeProductsByCategory = createAsyncThunk(
+  "typeProduct/get-typeProducts-by-category",
+  async (category_id) => {
+    try {
+      const data = await getTypeProductsByCategoryAPI(category_id);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        console.log(error.response.data.message);
+        toast.error(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      console.log(error);
+      return thunkAPI.rejectWithValue({ message: "Unexpected error occurred" });
+    }
+  }
+);
 export {
   getTypeProducts,
   getFilterTypeProducts,
@@ -124,4 +143,5 @@ export {
   editTypeProduct,
   deleteTypeProduct,
   getTypeProductById,
+  getTypeProductsByCategory,
 };

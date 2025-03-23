@@ -8,7 +8,7 @@ import {
 } from "@/store/features/product/productThunk";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "rc-pagination";
 import IconFilter from "@/components/icons/IconFilter";
 import IconSearch from "@/components/icons/IconSearch";
@@ -45,6 +45,8 @@ const Product = () => {
   const [min_price, setMinPrice] = useState(null);
   const [max_price, setMaxPrice] = useState(null);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleChangePage = (page) => {
     setCurrentPage(page);
   };
@@ -56,7 +58,7 @@ const Product = () => {
     dispatch(getColors());
     dispatch(getMaxPrice());
     dispatch(getMinPrice());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -81,6 +83,32 @@ const Product = () => {
     colorsFilter,
     search,
   ]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const typeProductsFromUrl = params.get("typeProducts")?.split("-") || [];
+    const gendersFromUrl = params.get("genders")?.split("-") || [];
+    const brandsFromUrl = params.get("brands")?.split("-") || [];
+    const colorsFromUrl = params.get("colors")?.split("-") || [];
+    const searchFromUrl = params.get("search") || "";
+    const sortFromUrl = params.get("sort") || "price_asc";
+    const limitFromUrl = Number(params.get("limit")) || 8;
+    const currentPageFromUrl = Number(params.get("page")) || 1;
+    const minPriceFromUrl = params.get("min_price") || "";
+    const maxPriceFromUrl = params.get("max_price") || "";
+
+    setTypeProductsFilter(typeProductsFromUrl);
+    setGendersFilter(gendersFromUrl);
+    setBrandsFilter(brandsFromUrl);
+    setColorsFilter(colorsFromUrl);
+    setSearch(searchFromUrl);
+    setSort(sortFromUrl);
+    setLimit(limitFromUrl);
+    setCurrentPage(currentPageFromUrl);
+    setMinPrice(minPriceFromUrl);
+    setMaxPrice(maxPriceFromUrl);
+  }, []);
 
   console.log(">>> typeProducts : ", typeProductsFilter);
   console.log(">>> genders : ", gendersFilter);
@@ -146,6 +174,37 @@ const Product = () => {
   console.log(">>> filterProducts : ", filterProducts);
   console.log(">>> total_products : ", total_products);
 
+  const updateFiltersInUrl = () => {
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (sort) params.set("sort", sort);
+    if (limit) params.set("limit", limit);
+    if (gendersFilter.length > 0)
+      params.set("genders", gendersFilter.join("-"));
+    if (typeProductsFilter.length > 0)
+      params.set("typeProducts", typeProductsFilter.join("-"));
+    if (brandsFilter.length > 0) params.set("brands", brandsFilter.join("-"));
+    if (colorsFilter.length > 0) params.set("colors", colorsFilter.join("-"));
+    if (min_price) params.set("min_price", min_price);
+    if (max_price) params.set("max_price", max_price);
+
+    setSearchParams(params);
+  };
+
+  useEffect(() => {
+    updateFiltersInUrl();
+  }, [
+    search,
+    sort,
+    limit,
+    gendersFilter,
+    typeProductsFilter,
+    brandsFilter,
+    colorsFilter,
+    min_price,
+    max_price,
+  ]);
+
   return (
     <Layout>
       <section>
@@ -170,7 +229,7 @@ const Product = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="flex flex-col w-full p-3 mb-10 md:flex-row md:justify-end gap-y-1 md:gap-x-3 text-main">
+            <div className="flex flex-col w-full p-3 mb-10 md:flex-row md:justify-center gap-y-1 md:gap-x-3 text-main">
               <div
                 className="hidden md:flex items-center p-1.5 md:p-2 md:gap-x-1 border rounded-lg cursor-pointer bg-primary text-main"
                 onClick={() => setIsOpen((prev) => !prev)}
@@ -186,6 +245,7 @@ const Product = () => {
                     setCurrentPage(1);
                     setLimit(Number(e.target.value));
                   }}
+                  value={limit}
                   className="p-1.5 md:p-2 border rounded-lg cursor-pointer  bg-primary text-main text-sm md:text-base"
                 >
                   <option value={8}>8 sản phẩm</option>
@@ -194,6 +254,7 @@ const Product = () => {
                 </select>
                 <select
                   onChange={(e) => setSort(e.target.value)}
+                  value={sort}
                   className="p-1.5 md:p-2 border rounded-lg cursor-pointer  bg-primary text-main text-sm md:text-base"
                 >
                   <option value={"price_asc"}>Thấp đến cao</option>
@@ -208,7 +269,7 @@ const Product = () => {
               <div>
                 <div className="flex flex-col w-full p-10 mb-10 border-2 border-gray-300 rounded-lg gap-y-5">
                   <div className="flex flex-col gap-y-3">
-                    <span className="text-lg font-medium">Giới tính</span>
+                    <span className="text-lg font-semibold">Giới tính</span>
                     <div>
                       {genders?.length > 0 &&
                         genders.map((item) => (
@@ -224,7 +285,7 @@ const Product = () => {
                     </div>
                   </div>
                   <div className="flex flex-col gap-y-3">
-                    <span className="text-lg font-medium">Thương hiệu</span>
+                    <span className="text-lg font-semibold">Thương hiệu</span>
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
                       {brands?.length > 0 &&
                         brands.map((item) => (
@@ -240,7 +301,7 @@ const Product = () => {
                     </div>
                   </div>
                   <div className="flex flex-col gap-y-3">
-                    <span className="text-lg font-medium">Loại sản phẩm</span>
+                    <span className="text-lg font-semibold">Loại sản phẩm</span>
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
                       {typeProducts?.length > 0 &&
                         typeProducts.map((item) => (
@@ -256,7 +317,7 @@ const Product = () => {
                     </div>
                   </div>
                   <div className="flex flex-col gap-y-3">
-                    <span className="text-lg font-medium">Màu sắc</span>
+                    <span className="text-lg font-semibold">Màu sắc</span>
                     <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                       {colors?.length > 0 &&
                         colors.map((item) => (
@@ -277,7 +338,7 @@ const Product = () => {
                     </div>
                   </div>
                   <div className="flex flex-col mb-10 gap-y-3">
-                    <span className="text-lg font-medium">Giá</span>
+                    <span className="text-lg font-semibold">Giá</span>
                     <div className="flex-col inline-block">
                       <div className="inline-flex items-center mb-2 gap-x-5">
                         <input
@@ -307,7 +368,7 @@ const Product = () => {
                   </div>
                   <div>
                     <Button
-                      className="flex items-center justify-center w-full p-5 bg-purple-500 md:w-auto text-main gap-x-3"
+                      className="flex items-center justify-center w-full p-5 bg-primary md:w-auto text-main gap-x-3"
                       onClick={handleRefresh}
                     >
                       <IconRefresh className="size-6" />

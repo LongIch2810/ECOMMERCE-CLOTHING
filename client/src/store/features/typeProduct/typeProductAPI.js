@@ -39,6 +39,13 @@ const getTypeProductByIdAPI = async (typeProductId) => {
   );
   return response.data;
 };
+
+const getTypeProductsByCategoryAPI = async (category_id) => {
+  const response = await instanceAxios.get(
+    `/type-product/get-typeProducts-by-category/${category_id}`
+  );
+  return response.data;
+};
 export {
   getTypeProductsAPI,
   getFilterTypeProductsAPI,
@@ -46,4 +53,5 @@ export {
   editTypeProductAPI,
   deleteTypeProductAPI,
   getTypeProductByIdAPI,
+  getTypeProductsByCategoryAPI,
 };
