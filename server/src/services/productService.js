@@ -48,11 +48,43 @@ const getFilterProductsService = async ({
   search,
 }) => {
   const skip = (page - 1) * limit;
-  console.log(">>> brands : ", brands);
-  console.log(">>> typeProducts : ", typeProducts);
-  console.log(">>> genders : ", genders);
+
   try {
+    const filter = {};
+
+    // Áp dụng bộ lọc trước khi `$lookup` để tối ưu truy vấn
+    if (min_price || max_price) {
+      filter.price = {};
+      if (min_price) filter.price.$gte = min_price;
+      if (max_price) filter.price.$lte = max_price;
+    }
+
+    if (typeProducts?.length > 0) {
+      console.log(">>> typeProducts if is : ", typeProducts);
+      const objectIds = typeProducts.map(
+        (id) => new mongoose.Types.ObjectId(id)
+      );
+      filter.type_product = { $in: objectIds };
+    }
+
+    if (genders?.length > 0) {
+      filter.gender = {
+        $in: genders.map((id) => new mongoose.Types.ObjectId(id)),
+      };
+    }
+
+    if (brands?.length > 0) {
+      filter.brand = {
+        $in: brands.map((id) => new mongoose.Types.ObjectId(id)),
+      };
+    }
+
+    if (search) {
+      filter.name = { $regex: `.*${search}.*`, $options: "i" };
+    }
+
     const pipeline = [
+      { $match: filter }, // Áp dụng bộ lọc ngay từ đầu
       {
         $lookup: {
           from: "stocks",
@@ -62,9 +94,7 @@ const getFilterProductsService = async ({
         },
       },
       {
-        $match: {
-          "stock.0": { $exists: true },
-        },
+        $match: { "stock.0": { $exists: true } }, // Lọc sản phẩm có tồn kho
       },
       { $unwind: "$stock" },
       { $unwind: "$stock.sizes" },
@@ -115,53 +145,28 @@ const getFilterProductsService = async ({
       },
     ];
 
+    // Thêm bộ lọc màu sắc sau khi join
+    if (colors?.length) {
+      pipeline.push({
+        $match: {
+          "colors._id": {
+            $in: colors.map((id) => new mongoose.Types.ObjectId(id)),
+          },
+        },
+      });
+    }
+
+    // Thêm sắp xếp
     const sortOptions = {
       newest: { createdAt: -1 },
       price_asc: { price: 1 },
       price_desc: { price: -1 },
     };
-
     if (sortOptions[sort]) {
-      console.log(sortOptions[sort]);
       pipeline.push({ $sort: sortOptions[sort] });
     }
 
-    const filter = {};
-
-    if (min_price || max_price) {
-      filter.price = {};
-      if (min_price) filter.price.$gte = min_price;
-      if (max_price) filter.price.$lte = max_price;
-    }
-
-    if (typeProducts?.length) {
-      const objectIds = typeProducts.map(
-        (id) => new mongoose.Types.ObjectId(id)
-      );
-      filter.type_product = { $in: objectIds };
-    }
-
-    if (genders?.length) {
-      const objectIds = genders.map((id) => new mongoose.Types.ObjectId(id));
-      filter.gender = { $in: objectIds };
-    }
-
-    if (brands?.length) {
-      const objectIds = brands.map((id) => new mongoose.Types.ObjectId(id));
-      filter.brand = { $in: objectIds };
-    }
-
-    if (search) {
-      filter.name = { $regex: `.*${search}.*`, $options: "i" };
-    }
-
-    pipeline.push({ $match: filter });
-
-    if (colors?.length) {
-      const objectIds = colors.map((id) => new mongoose.Types.ObjectId(id));
-      pipeline.push({ $match: { "colors._id": { $in: objectIds } } });
-    }
-
+    // Phân trang
     pipeline.push({
       $facet: {
         total_count: [{ $count: "count" }],
@@ -204,9 +209,10 @@ const getFilterProductsService = async ({
       },
     });
 
+    // Chạy truy vấn
     const result = await Product.aggregate(pipeline);
     const total_products = result[0]?.total_count?.[0]?.count || 0;
-
+    console.log(">>> result : ", result[0]?.paginated_products);
     return {
       SC: 200,
       success: true,
@@ -218,7 +224,7 @@ const getFilterProductsService = async ({
       },
     };
   } catch (error) {
-    console.error(error);
+    console.error("Lỗi khi lấy sản phẩm:", error);
     return { SC: 500, success: false, message: error.message };
   }
 };

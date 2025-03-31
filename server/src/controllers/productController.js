@@ -39,6 +39,7 @@ const getFilterProducts = async (req, res) => {
     colors,
     search,
   } = req.body;
+  console.log(">>> typeProducts: ", typeProducts);
   const data = await getFilterProductsService({
     page,
     limit,
