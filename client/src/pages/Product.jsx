@@ -42,10 +42,11 @@ const Product = () => {
   const [colorsFilter, setColorsFilter] = useState([]);
   const [sort, setSort] = useState("price_asc");
   const [search, setSearch] = useState("");
-  const [min_price, setMinPrice] = useState(null);
-  const [max_price, setMaxPrice] = useState(null);
+  const [min_price, setMinPrice] = useState("");
+  const [max_price, setMaxPrice] = useState("");
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const [urlParamsLoaded, setUrlParamsLoaded] = useState(false);
 
   const handleChangePage = (page) => {
     setCurrentPage(page);
@@ -86,41 +87,57 @@ const Product = () => {
     setLimit(limitFromUrl);
     setMinPrice(minPriceFromUrl);
     setMaxPrice(maxPriceFromUrl);
-  }, [
-    setTypeProductsFilter,
-    setGendersFilter,
-    setBrandsFilter,
-    setColorsFilter,
-    setLimit,
-    setSort,
-    setSearch,
-    setMaxPrice,
-    setMinPrice,
-  ]);
 
-  useEffect(() => {
-    console.log(typeProductsFilter);
     dispatch(
       getFilterProducts({
         page: currentPage,
-        limit,
-        typeProducts: typeProductsFilter,
-        genders: gendersFilter,
-        brands: brandsFilter,
-        sort,
-        colors: colorsFilter,
-        search,
+        limit: limitFromUrl,
+        typeProducts: typeProductsFromUrl,
+        genders: gendersFromUrl,
+        brands: brandsFromUrl,
+        colors: colorsFromUrl,
+        sort: sortFromUrl,
+        search: searchFromUrl,
+        min_price: minPriceFromUrl,
+        max_price: maxPriceFromUrl,
       })
     );
+
+    setUrlParamsLoaded(true);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!urlParamsLoaded) return;
+    const delayDebounceFn = setTimeout(() => {
+      dispatch(
+        getFilterProducts({
+          page: currentPage,
+          limit,
+          typeProducts: typeProductsFilter,
+          genders: gendersFilter,
+          brands: brandsFilter,
+          colors: colorsFilter,
+          sort,
+          search,
+          min_price,
+          max_price,
+        })
+      );
+    }, 500); // Đợi 500ms trước khi gọi API
+
+    return () => clearTimeout(delayDebounceFn);
   }, [
+    urlParamsLoaded,
     currentPage,
     limit,
     typeProductsFilter,
     gendersFilter,
     brandsFilter,
-    sort,
     colorsFilter,
+    sort,
     search,
+    min_price,
+    max_price,
     dispatch,
   ]);
 
@@ -140,30 +157,13 @@ const Product = () => {
   };
 
   const handleApplyPrice = () => {
-    if (!min_price) {
-      toast.error("Vui lòng nhập giá tối thiểu!");
-      return;
-    }
-
     const minPrice = Number(min_price);
-    const maxPrice = max_price ? Number(max_price) : Infinity; // Nếu không nhập max_price thì lấy Infinity
+    const maxPrice = max_price ? Number(max_price) : Infinity;
 
-    if (minPrice < 0) {
-      toast.error("Giá tối thiểu không thể là số âm!");
+    if (!min_price || minPrice < 0 || maxPrice < 0 || minPrice > maxPrice) {
+      toast.error("Vui lòng nhập giá hợp lệ!");
       return;
     }
-
-    if (maxPrice < 0) {
-      toast.error("Giá tối đa không thể là số âm!");
-      return;
-    }
-
-    if (minPrice > maxPrice) {
-      toast.error("Giá tối thiểu không thể lớn hơn giá tối đa!");
-      return;
-    }
-    console.log(">>> min_price:", minPrice);
-    console.log(">>> max_price:", maxPrice);
 
     dispatch(
       getFilterProducts({
@@ -186,19 +186,22 @@ const Product = () => {
 
   const updateFiltersInUrl = () => {
     const params = new URLSearchParams();
+
     if (search) params.set("search", search);
     if (sort) params.set("sort", sort);
     if (limit) params.set("limit", limit);
-    if (gendersFilter.length > 0)
-      params.set("genders", gendersFilter.join("-"));
-    if (typeProductsFilter.length > 0)
+    if (gendersFilter.length) params.set("genders", gendersFilter.join("-"));
+    if (typeProductsFilter.length)
       params.set("typeProducts", typeProductsFilter.join("-"));
-    if (brandsFilter.length > 0) params.set("brands", brandsFilter.join("-"));
-    if (colorsFilter.length > 0) params.set("colors", colorsFilter.join("-"));
+    if (brandsFilter.length) params.set("brands", brandsFilter.join("-"));
+    if (colorsFilter.length) params.set("colors", colorsFilter.join("-"));
     if (min_price) params.set("min_price", min_price);
     if (max_price) params.set("max_price", max_price);
 
-    setSearchParams(params);
+    const newParams = params.toString();
+    if (newParams !== searchParams.toString()) {
+      setSearchParams(params);
+    }
   };
 
   useEffect(() => {
