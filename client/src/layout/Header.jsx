@@ -70,6 +70,11 @@ const Header = () => {
     dispatch(logout());
   };
 
+  const handleRedirect = (e, path) => {
+    e.preventDefault();
+    window.location.href = path;
+  };
+
   const toggleCategory = (categoryId) => {
     if (openCategory === categoryId) {
       setOpenCategory(null);
@@ -106,7 +111,10 @@ const Header = () => {
                 <div className="absolute left-0 flex-col hidden p-2 bg-white rounded-lg shadow-md w-60 group-hover:flex">
                   {typeProductsByCategory.map((item) => (
                     <HeaderItem
-                      to={handleSelectTypeProduct(item._id)}
+                      to={`/product?typeProducts=${item._id}`}
+                      onClick={(e) =>
+                        handleRedirect(e, `/product?typeProducts=${item._id}`)
+                      }
                       key={item._id}
                     >
                       {item.name}
@@ -187,6 +195,12 @@ const Header = () => {
                       {typeProductsByCategory.map((item) => (
                         <HeaderItem
                           to={`/product?typeProducts=${item._id}`}
+                          onClick={(e) =>
+                            handleRedirect(
+                              e,
+                              `/product?typeProducts=${item._id}`
+                            )
+                          }
                           key={item._id}
                         >
                           {item.name}

@@ -52,6 +52,10 @@ const Product = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     dispatch(getBrands());
     dispatch(getTypeProducts());
     dispatch(getGenders());
@@ -82,9 +86,20 @@ const Product = () => {
     setLimit(limitFromUrl);
     setMinPrice(minPriceFromUrl);
     setMaxPrice(maxPriceFromUrl);
-  }, []);
+  }, [
+    setTypeProductsFilter,
+    setGendersFilter,
+    setBrandsFilter,
+    setColorsFilter,
+    setLimit,
+    setSort,
+    setSearch,
+    setMaxPrice,
+    setMinPrice,
+  ]);
 
   useEffect(() => {
+    console.log(typeProductsFilter);
     dispatch(
       getFilterProducts({
         page: currentPage,
@@ -106,6 +121,7 @@ const Product = () => {
     sort,
     colorsFilter,
     search,
+    dispatch,
   ]);
 
   console.log(">>> typeProducts : ", typeProductsFilter);
@@ -122,10 +138,6 @@ const Product = () => {
     setMinPrice("");
     setMaxPrice("");
   };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const handleApplyPrice = () => {
     if (!min_price) {

@@ -12,12 +12,21 @@ import {
 } from "./userThunk";
 import { login, logout, register } from "../auth/authThunk";
 import { addOrder } from "../order/orderThunk";
+const safeParse = (data) => {
+  if (!data) return null;
+  try {
+    return JSON.parse(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const userData = localStorage.getItem("user");
 const userSlice = createSlice({
   name: "user",
   initialState: {
     loading: false,
-    user: JSON.parse(localStorage.getItem("user")) || null,
-    role: JSON.parse(localStorage.getItem("user"))?.role || null,
+    user: userData ? safeParse(userData) : null,
+    role: userData ? safeParse(userData)?.role : null,
     userById: null,
     message: null,
     current_page: 1,

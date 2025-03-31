@@ -1,8 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { login, logout, register, resetPassword, sendOTP } from "./authThunk";
-
+const safeParse = (data) => {
+  if (!data) return null;
+  try {
+    return JSON.parse(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const userData = localStorage.getItem("user");
 // Lấy trạng thái đăng nhập từ localStorage
-const storedUser = JSON.parse(localStorage.getItem("user")) || null;
+const storedUser = userData ? safeParse(userData) : null;
 
 const authSlice = createSlice({
   name: "auth",

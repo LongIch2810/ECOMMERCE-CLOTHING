@@ -6,19 +6,26 @@ import { setUser } from "@/store/features/user/userSlice";
 
 const ProtectedRoute = ({ roleRequired }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const { isLoggedIn } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
 
   console.log("isLoggedIn:", isLoggedIn);
   console.log("role:", user?.role);
-
+  const safeParse = (data) => {
+    if (!data) return null;
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const userData = localStorage.getItem("user");
+    const storedUser = userData ? safeParse(userData) : null;
     if (!isLoggedIn && storedUser) {
-      dispatch(setUser(storedUser)); // ✅ Nếu mất Redux, lấy lại từ localStorage
+      dispatch(setUser(storedUser));
     } else if (!isLoggedIn) {
-      dispatch(getUserInfo()); // 🔄 Nếu chưa có thông tin user, gọi API
+      dispatch(getUserInfo());
     }
   }, [dispatch, isLoggedIn]);
 
