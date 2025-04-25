@@ -1,15 +1,27 @@
 const Stock = require("../models/stockModel");
 
-const updateStockAfterOrderService = async ({ product_id, size, quantity }) => {
+const updateStockAfterOrderService = async ({
+  product_id,
+  color,
+  size,
+  quantity,
+}) => {
   try {
     const stock = await Stock.findOne({ product: product_id });
     if (!stock) {
       throw new Error("Không tìm thấy sản phẩm trong kho.");
     }
 
-    const sizeItem = stock.sizes.find((item) => item.size === size);
+    console.log(">>> stock : ", stock);
+
+    const sizeItem = stock.sizes.find(
+      (item) => item.size === size && item.color.equals(color)
+    );
+
     if (!sizeItem) {
-      throw new Error(`Không tìm thấy kích thước ${size} trong kho.`);
+      throw new Error(
+        `Không tìm thấy kích thước ${size} có màu ${color} trong kho.`
+      );
     }
 
     if (sizeItem.quantity < quantity) {
@@ -38,7 +50,7 @@ const updateStockAfterOrderService = async ({ product_id, size, quantity }) => {
   }
 };
 
-const refundQuantityService = async ({ product_id, quantity, size }) => {
+const refundQuantityService = async ({ product_id, quantity, size, color }) => {
   try {
     // Tìm sản phẩm trong kho với `product_id`
     const stock = await Stock.findOne({ product: product_id });
@@ -51,7 +63,9 @@ const refundQuantityService = async ({ product_id, quantity, size }) => {
     }
 
     // Tìm kích thước phù hợp trong danh sách kích thước
-    const sizeIndex = stock.sizes.findIndex((item) => item.size === size);
+    const sizeIndex = stock.sizes.findIndex(
+      (item) => item.size === size && item.color.equals(color)
+    );
     if (sizeIndex === -1) {
       return {
         SC: 400,

@@ -131,7 +131,7 @@ const OrderList = () => {
               <Td>{item.status}</Td>
               <Td>{item.payment_method}</Td>
               <Td>{item.payment_status}</Td>
-              <Td>{item.shipping.shipping_method}</Td>
+              <Td>{item.shipping?.shipping_method}</Td>
               <Td>{formatDate(item.createdAt)}</Td>
               <Td>
                 <div className="flex items-center justify-center gap-x-3">

@@ -148,7 +148,7 @@ const SignUp = () => {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <Button className="inline-block px-12 py-3 text-sm bg-primary border-primary shrink-0 ">
+                <Button className="inline-block px-12 py-3 text-sm bg-primary border-primary text-main shrink-0 ">
                   Tạo tài khoản
                 </Button>
 

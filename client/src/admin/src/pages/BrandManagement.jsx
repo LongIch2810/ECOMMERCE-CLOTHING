@@ -76,7 +76,7 @@ const BrandList = () => {
         <div className="relative w-full md:w-3/4">
           <input
             type="text"
-            placeholder="Nhập tên loại sản phẩm ..."
+            placeholder="Nhập tên thương hiệu ..."
             onChange={handleSearch}
             className="w-full p-2 pr-10 border-2 border-gray-300 rounded-md shadow-xs outline-none text-primary"
           />

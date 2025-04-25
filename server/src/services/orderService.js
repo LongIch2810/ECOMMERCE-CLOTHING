@@ -206,6 +206,7 @@ const cancelOrderService = async ({ order_id }) => {
           const result = await refundQuantityService({
             product_id: item.product,
             size: item.size,
+            color: item.color,
             quantity: item.quantity,
           });
           return result.success;

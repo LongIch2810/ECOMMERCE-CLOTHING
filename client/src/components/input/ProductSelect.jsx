@@ -1,5 +1,8 @@
 import { setCurrentPage } from "@/store/features/product/productSlice";
-import { getFilterProducts } from "@/store/features/product/productThunk";
+import {
+  getFilterProducts,
+  getProducts,
+} from "@/store/features/product/productThunk";
 import Pagination from "rc-pagination";
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
@@ -30,13 +33,22 @@ const ProductSelect = ({ control, name, errors = {} }) => {
 
   // Debounce search input (500ms)
   useEffect(() => {
-    const handler = setTimeout(() => setDebouncedSearch(field.value), 500);
+    field.value?.name
+      ? setSelectedProduct(field.value.name)
+      : setSelectedProduct(field.value);
+    const handler = setTimeout(() => {
+      setDebouncedSearch(field.value?.name ? field.value.name : field.value);
+    }, 500);
+
     return () => clearTimeout(handler);
   }, [field.value]);
 
+  console.log(">>> selectedProduct : ", selectedProduct);
+  console.log(">>> debounceSearch : ", debouncedSearch);
+
   // Fetch products when searchTerm or page changes
   useEffect(() => {
-    dispatch(getFilterProducts({ page: current_page, name: debouncedSearch }));
+    dispatch(getProducts({ page: current_page, name: debouncedSearch }));
   }, [debouncedSearch, current_page]);
 
   // Click ngoài dropdown thì đóng lại
@@ -58,8 +70,7 @@ const ProductSelect = ({ control, name, errors = {} }) => {
 
   // Handle select product
   const handleSelect = (product) => {
-    setSelectedProduct(product);
-    field.onChange({ _id: product._id, name: product.name }); // Cập nhật giá trị vào React Hook Form
+    field.onChange({ _id: product._id, name: product.name });
     setIsOpen(false);
   };
 
@@ -85,10 +96,10 @@ const ProductSelect = ({ control, name, errors = {} }) => {
           hasError ? "border-red-500" : "border-gray-300"
         }`}
         placeholder="Tìm kiếm sản phẩm..."
-        value={selectedProduct?.name || ""}
+        value={selectedProduct}
         autoComplete="off"
         onChange={(e) => {
-          field.onChange(e.target.value); // Cập nhật giá trị vào form
+          field.onChange(e.target.value); // Cập nhật giá trị vào react-hook-form
           setIsOpen(true);
         }}
         onClick={() => setIsOpen(true)}
