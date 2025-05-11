@@ -9,6 +9,7 @@ const {
 
 const statisticalRouter = express.Router();
 
+//Thống kê lợi nhuận theo năm
 statisticalRouter.post(
   "/statistical-profit-year",
   verifyToken,
@@ -16,6 +17,7 @@ statisticalRouter.post(
   statisticalProfitYear
 );
 
+//Thống kê lợi nhuận theo tháng
 statisticalRouter.post(
   "/statistical-profit-month",
   verifyToken,
@@ -23,6 +25,7 @@ statisticalRouter.post(
   statisticalProfitMonth
 );
 
+//Thống kê lợi nhuận theo (ngày bắt đầu - ngày kết thúc)
 statisticalRouter.post(
   "/statistical-profit-date",
   verifyToken,

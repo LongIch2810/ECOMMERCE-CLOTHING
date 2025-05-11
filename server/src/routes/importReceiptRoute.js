@@ -9,6 +9,7 @@ const {
 
 const importReceiptRouter = express.Router();
 
+//Thêm phiếu nhập
 importReceiptRouter.post(
   "/add-import-receipt",
   verifyToken,
@@ -16,6 +17,7 @@ importReceiptRouter.post(
   addImportReceipt
 );
 
+//Lấy danh sách phiếu nhập có điều kiện lọc
 importReceiptRouter.post(
   "/filter",
   verifyToken,
@@ -23,6 +25,7 @@ importReceiptRouter.post(
   getFilterImportReceipts
 );
 
+//Chi tiết phiếu nhập
 importReceiptRouter.get(
   "/get-importReceipt-id/:importReceiptId",
   verifyToken,

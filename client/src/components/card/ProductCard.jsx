@@ -51,7 +51,7 @@ const ProductCard = ({
                 setIsOpen(true);
               }}
             >
-              <span>Mua nhanh</span>
+              <span>Thêm giỏ hàng</span>
               <span>
                 <IconCart></IconCart>
               </span>

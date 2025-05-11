@@ -13,8 +13,10 @@ const {
 
 const typeProductRouter = express.Router();
 
+//Lấy danh sách loại sản phẩm
 typeProductRouter.get("/list", getTypeProducts);
 
+//Lấy danh sách loại sản phẩm có điều kiện lọc
 typeProductRouter.post(
   "/filter",
   verifyToken,
@@ -22,6 +24,7 @@ typeProductRouter.post(
   getFilterTypeProducts
 );
 
+//Thêm loại sản phẩm
 typeProductRouter.post(
   "/add-type-product",
   verifyToken,
@@ -29,8 +32,10 @@ typeProductRouter.post(
   addTypeProduct
 );
 
+//Sửa loại sản phẩm
 typeProductRouter.put("/edit/:id", verifyToken, checkAdmin, editTypeProduct);
 
+//Xóa loại sản phẩm
 typeProductRouter.delete(
   "/delete/:id",
   verifyToken,
@@ -38,6 +43,7 @@ typeProductRouter.delete(
   deleteTypeProduct
 );
 
+//Lấy chi tiết loại sản phẩm
 typeProductRouter.get(
   "/get-type-product/:id",
   verifyToken,
@@ -45,6 +51,7 @@ typeProductRouter.get(
   getTypeProductById
 );
 
+//Lấy danh sách loại sản phẩm theo danh mục
 typeProductRouter.get(
   "/get-typeProducts-by-category/:category_id",
   getTypeProductsByCategory

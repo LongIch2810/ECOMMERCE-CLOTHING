@@ -13,10 +13,13 @@ const upload = require("../middlewares/multer");
 
 const brandRouter = express.Router();
 
+//Route lấy danh sách thương hiệu
 brandRouter.get("/list", getBrands);
 
+//Route lấy danh sách thương hiệu có điều kiện lọc
 brandRouter.post("/filter", verifyToken, checkAdmin, getFilterBrands);
 
+//Route thêm thương hiệu
 brandRouter.post(
   "/add-brand",
   verifyToken,
@@ -25,6 +28,7 @@ brandRouter.post(
   addBrand
 );
 
+//Route sửa thương hiệu
 brandRouter.put(
   "/edit/:id",
   verifyToken,
@@ -33,8 +37,10 @@ brandRouter.put(
   editBrand
 );
 
+//Route xóa thương hiệu
 brandRouter.delete("/delete/:id", verifyToken, checkAdmin, deleteBrand);
 
+//Lấy chi tiết thương hiệu
 brandRouter.get("/get-brand/:id", verifyToken, checkAdmin, getBrandById);
 
 module.exports = brandRouter;

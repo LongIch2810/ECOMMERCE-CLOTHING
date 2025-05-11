@@ -8,8 +8,10 @@ const {
 
 const stockRouter = express.Router();
 
+//Hoàn trả số lượng
 stockRouter.post("/refund-quantity", verifyToken, refundQuantity);
 
+//Thống kê tồn kho
 stockRouter.post(
   "/statistical-in-stock",
   verifyToken,

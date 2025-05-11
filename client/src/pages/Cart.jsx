@@ -1,30 +1,16 @@
 import Button from "@/components/button/Button";
 import CartItem from "@/components/cart/CartItem";
-import IconCash from "@/components/icons/IconCash";
-import IconPaymentMethod from "@/components/icons/IconPaymentMethod";
-import IconPaypal from "@/components/icons/IconPaypal";
 import ModalVoucherDetail from "@/components/modal/ModalVoucherDetail";
-import Radio from "@/components/radio/Radio";
-import SubTitle from "@/components/title/SubTitle";
 import Layout from "@/layout/Layout";
 import { getAddressesByUserId } from "@/store/features/address/addressThunk";
-import {
-  setAddOrderSuccess,
-  setTotalPrice,
-  setVoucher,
-} from "@/store/features/order/orderSlice";
+import { setTotalPrice, setVoucher } from "@/store/features/order/orderSlice";
 import { getShipping } from "@/store/features/shipping/shippingThunk";
 import { calculateTotal } from "@/utils/calculate";
 import { formatCurrency } from "@/utils/format";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { setAddressItem } from "@/store/features/address/addressSlice";
-import PayPalButton from "@/components/paypal/PaypalButton";
-import { addOrder } from "@/store/features/order/orderThunk";
 import Title from "@/components/title/Title";
-import AddressRadio from "@/components/radio/AddressRadio";
 
 const Cart = () => {
   const navigate = useNavigate();

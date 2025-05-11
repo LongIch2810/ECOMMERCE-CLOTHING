@@ -56,6 +56,7 @@ const addImportReceiptService = async (data) => {
   }
 };
 
+//Lấy danh sách phiếu nhập có điều kiện lọc
 const getFilterImportReceiptsService = async ({ page = 1, limit = 5, id }) => {
   try {
     const filter = {};
@@ -84,6 +85,7 @@ const getFilterImportReceiptsService = async ({ page = 1, limit = 5, id }) => {
   }
 };
 
+//Lấy chi tiết phiếu lọc
 const fetchImportReceiptDetailService = async (importReceiptId) => {
   try {
     const importReceipt = await ImportReceipt.findById(importReceiptId)

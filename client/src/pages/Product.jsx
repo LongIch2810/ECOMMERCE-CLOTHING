@@ -405,6 +405,7 @@ const Product = () => {
               <IconFilter />
             </div>
 
+            {/*---------------------------------------------- Hiển thị danh sách sản phẩm ----------------------------------------*/}
             {filterProducts?.length > 0 ? (
               <div className="grid grid-cols-1 gap-10 mb-10 md:grid-cols-3 lg:grid-cols-4 justify-items-center">
                 {filterProducts.map((item) => (

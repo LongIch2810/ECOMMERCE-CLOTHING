@@ -11,6 +11,7 @@ const sendMail = require("../configs/email");
 
 const paypalRouter = express.Router();
 
+//Tạo đơn hàng ở paypal
 const createOrder = async (products) => {
   const total_price = await convertVNDToUSD(
     products?.reduce((acc, item) => {
@@ -36,6 +37,7 @@ const createOrder = async (products) => {
     const { body, ...httpResponse } = await ordersController.ordersCreate(
       collect
     );
+
     return {
       jsonResponse: JSON.parse(body),
       httpStatusCode: httpResponse.statusCode,
@@ -49,7 +51,7 @@ const createOrder = async (products) => {
   }
 };
 
-// Route tạo đơn hàng mới
+// Route tạo đơn hàng mới ở paypal
 paypalRouter.post("/create-order", verifyToken, async (req, res) => {
   try {
     const { products } = req.body;
@@ -62,6 +64,7 @@ paypalRouter.post("/create-order", verifyToken, async (req, res) => {
   }
 });
 
+//Xác nhận đơn hàng dựa vào orderId (được tạo ở và trả ra ở hàm createOrder trên)
 const captureOrder = async (orderID) => {
   const collect = {
     id: orderID,

@@ -37,9 +37,6 @@ const addAddress = async (req, res) => {
     .json({ success: data.success, message: data.message });
 };
 
-const updateAddress = (req, res) => {};
-const deleteAddress = (req, res) => {};
-
 const getAddressesByUserId = async (req, res) => {
   const { id: user_id } = req.user;
   const data = await getAddressesByUserIdService({ user_id });
@@ -91,8 +88,6 @@ const setAddressDefault = async (req, res) => {
 
 module.exports = {
   addAddress,
-  updateAddress,
-  deleteAddress,
   getAddressesByUserId,
   getAddressDefault,
   getAddresses,
