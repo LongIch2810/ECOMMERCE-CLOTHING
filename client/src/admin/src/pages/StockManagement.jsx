@@ -146,6 +146,7 @@ const AddReceipt = () => {
   const { colors } = useSelector((state) => state.color);
   const { suppliers } = useSelector((state) => state.supplier);
   const { loading, isSuccess } = useSelector((state) => state.importReceipt);
+  const { user } = useSelector((state) => state.user);
 
   const handleAddProduct = (values) => {
     if (!isValid) return;
@@ -177,7 +178,14 @@ const AddReceipt = () => {
       color: item.color._id,
     }));
 
-    dispatch(addImportReceipt({ products: tempProducts, supplier, note }));
+    dispatch(
+      addImportReceipt({
+        products: tempProducts,
+        supplier,
+        note,
+        user: user._id,
+      })
+    );
   };
 
   useEffect(() => {

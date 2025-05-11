@@ -5,7 +5,7 @@ const {
 } = require("../services/importReceipt");
 
 const addImportReceipt = async (req, res) => {
-  const { products, note, supplier } = req.body;
+  const { products, note, supplier, user } = req.body;
 
   if (!products || products.length <= 0)
     return res.status(400).json({
@@ -22,6 +22,7 @@ const addImportReceipt = async (req, res) => {
     total_price,
     note,
     supplier,
+    user,
   });
 
   return res

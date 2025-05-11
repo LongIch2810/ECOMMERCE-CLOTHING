@@ -52,7 +52,6 @@ const createOrder = async (products) => {
 // Route tạo đơn hàng mới
 paypalRouter.post("/create-order", verifyToken, async (req, res) => {
   try {
-    // use the cart information passed from the front-end to calculate the order amount detals
     const { products } = req.body;
     console.log(products);
     const { jsonResponse, httpStatusCode } = await createOrder(products);
@@ -84,6 +83,7 @@ const captureOrder = async (orderID) => {
   }
 };
 
+//Route xác nhận thanh toán
 paypalRouter.post("/capture-payment", verifyToken, async (req, res) => {
   try {
     const { id: user_id } = req.user;
